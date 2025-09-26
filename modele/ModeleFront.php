@@ -43,8 +43,9 @@ class ModeleFront extends Modele{
 	{
 		try 
 		{
-        $req = 'SELECT id, libelle FROM categorie WHERE id="'.$idCategorie.'"';
-		$res = $this->executerRequete($req);
+        $req = 'SELECT id, libelle FROM categorie WHERE id=:idCategorie';
+		$tab=array('idCategorie' => $idCategorie);
+		$res = $this->executerRequete($req,$tab);
 		$laLigne = $res->fetch(PDO::FETCH_OBJ);
 		return $laLigne;
 		} 
@@ -66,8 +67,9 @@ class ModeleFront extends Modele{
 	{
 		try 
 		{
-	    $req='select id, description, prix, image, idCategorie from produit where idCategorie ="'.$idCategorie.'"';
-		$res = $this->executerRequete($req);
+	    $req='select id, description, prix, image, idCategorie from produit where idCategorie =:idCategorie';
+		$tab=array('idCategorie' => $idCategorie);
+		$res = $this->executerRequete($req,$tab);
 		$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
 		return $lesLignes; 
 		} 
@@ -75,6 +77,22 @@ class ModeleFront extends Modele{
 		{
         print "Erreur !: " . $e->getMessage();
         die();
+		}
+	}
+
+	public function getTousLesProduits()
+	{
+		try 
+		{
+	    $req='select id, description, prix, image, idCategorie from produit';
+		$res = $this->executerRequete($req);
+		$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
+		return $lesLignes; 
+		} 
+		catch (PDOException $e) 
+		{
+		print "Erreur !: " . $e->getMessage();
+		die();
 		}
 	}
 /**

@@ -1,3 +1,7 @@
+<?php //var_dump($lesProduits); ?>
+<?php if(empty($laCategorie)){
+	echo '<h2>Nos Produits :</h2>';
+} ?>
 <div id="produits">
 <?php
 // parcours du tableau contenant les produits à afficher

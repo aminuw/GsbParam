@@ -26,9 +26,17 @@ class ControleurVoirProduits{
 	*/
     public function voirProduits($categ){
 		$lesProduits=$this->modeleFront->getLesProduitsDeCategorie($categ);
+        $laCategorie=$this->modeleFront->getLesInfosCategorie($categ);
+       // var_dump($laCategorie);
         $lesCategories=$this->modeleFront->getLesCategories();
         
         include("vues/v_choixCategorie.php");
+        include("vues/v_produits.php");
+    }
+
+    public function voirTousProduits(){
+        $lesProduits=$this->modeleFront->getTousLesProduits();
+        $lesCategories=$this->modeleFront->getLesCategories();
         include("vues/v_produits.php");
     }
 	/**
@@ -38,6 +46,8 @@ class ControleurVoirProduits{
 		$lesCategories=$this->modeleFront->getLesCategories();
         include("vues/v_choixCategorie.php");
 	}
+
+    
 }
 
 ?>

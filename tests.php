@@ -1,7 +1,7 @@
 <?php
+//test des méthodes de ModèleFront
 require_once 'modele/modele.php';
 require_once 'modele/modeleFront.php';
-//$bdd=getBdd();
 
 $modele= new ModeleFront();
 $categorie=$modele->getLesCategories();
