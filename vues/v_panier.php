@@ -1,6 +1,8 @@
 <div class="alert alert-light" role="alert" id="panier">Votre panier :</div>
 <div id="produits">
 <?php
+				var_dump($_SESSION['produits']);
+
 foreach( $lesProduitsDuPanier as $unProduit) 
 {
 	// récupération des données d'un produit

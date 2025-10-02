@@ -32,9 +32,10 @@ class ControleurGererPanier{
 		if(!isset($_SESSION['produits']))
 		{
 			$_SESSION['produits']= array();
+
 		}
-	}
-	/**
+	}	/**
+	
 	 * Voir le panier
 	 *
 	 * permet d'afficher les produits contenus dans le panier
@@ -87,7 +88,21 @@ class ControleurGererPanier{
 		}
 		$this->voirPanier();
 	}
-		
+
+		function supprimerUnProduit($idProduit){
+			//var_dump($idProduit);
+			$key= array_search($idProduit,$_SESSION['produits']);
+			//var_dump($key);
+			if(is_int($key)){
+				unset($_SESSION['produits'][$key]);
+			}
+			else{
+				$msgErreurs[]='Ce produit ne peut pas être supprimé.';
+				include("vues/v_erreurs.php");
+			}
+		$this->voirPanier();
+
+		}
 	/**
 	 * Retourne les produits du panier
 	 *
