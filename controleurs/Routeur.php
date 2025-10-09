@@ -51,6 +51,7 @@ class Routeur{
                 case 'viderPanier' : {$this->ctrlGererPanier->viderPanier();break;}
                 case 'passerCommande' : $this->ctrlGererPanier->passerCommande();break;
                 case 'confirmerCommande' : $this->ctrlGererPanier->confirmerCommande();break;
+                case 'viderPanier' : $this->ctrlGererPanier->viderPanier();break;
                 default: {$this->ctrlGererPanier->voirPanier();break;}
             }; break;
         case 'administrer' :  // TODO Créer un contrôleur spécial pour l'administration du site

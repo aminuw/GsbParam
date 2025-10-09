@@ -155,18 +155,27 @@ class ModeleFront extends Modele{
 		$maxi = $laLigne['maxi'] ;// on place le dernier id de commande dans $maxi
 		$idCommande = $maxi+1; // on augmente le dernier id de commande de 1 pour avoir le nouvel idCommande
 		$date = date('Y/m/d'); // récupération de la date système
-		$req = "insert into commande values ('$idCommande','$date','$nom','$rue','$cp','$ville','$mail')";
-		$res = $this->executerRequete($req);
+		$req = "insert into commande values (:id,:date,:nom,:rue,:cp,:ville,:mail)";
+		$tab=array('id'=>$idCommande,'date'=>$date,'nom'=>$nom,'rue'=>$rue,'cp'=>$cp,'ville'=>$ville,'mail'=>$mail);
+		$res = $this->executerRequete($req,$tab);
 		// insertion produits commandés
 		foreach($lesIdProduit as $unIdProduit)
 		{
-			$req = "insert into contenir values ('$idCommande','$unIdProduit')";
-			$res = $this->executerRequete($req);
+			$req = "insert into contenir values (:idCommande,:idProduit)";
+			$tab2=array('idCommande'=>$idCommande,'idProduit'=>$unIdProduit);
+			$res = $this->executerRequete($req,$tab2);
 		}
+		return $res;
 		}
 		catch (PDOException $e) 
 		{
-        print "Erreur !: " . $e->getMessage();
+			//return false;
+			/*
+        $msgErreurs[]= 'Erreur !: Vérifier vos informations saisies ! Redirection vers formulaire commande ... ';
+		sleep(2);
+		echo "<script>window.location.href = 'index.php?uc=gererPanier&action=passerCommande';</script>";*/
+		//header('Location: http://localhost/gsbparam/index.php?uc=gererPanier&action=passerCommande');
+		print "Erreur !: " . $e->getMessage();
         die();
 		}
 	}

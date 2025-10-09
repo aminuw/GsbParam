@@ -27,4 +27,5 @@ foreach( $lesProduitsDuPanier as $unProduit)
 </div>
 <div class="contenuCentre">
 <a href="index.php?uc=gererPanier&action=passerCommande"><button type="button" class="btn btn-primary">Commander</button></a>
+<a href="index.php?uc=gererPanier&action=viderPanier"><button type="button" class="btn btn-primary">Vider Panier</button></a>
 </div>

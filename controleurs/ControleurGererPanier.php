@@ -65,6 +65,7 @@ class ControleurGererPanier{
 	function viderPanier()
 	{
 		unset($_SESSION['produits']);
+		$this->voirPanier();
 	}
 	/**
 	 * Ajoute un produit au panier
@@ -168,9 +169,17 @@ class ControleurGererPanier{
 			else
 			{
 				$lesIdProduits = $this->getLesIdProduitsDuPanier();
-				$this->modeleFront->creerCommande($nom,$rue,$cp,$ville,$mail, $lesIdProduits );
-				$message = "La commande a été enregistrée. Merci de votre visite.";
+				if($this->modeleFront->creerCommande($nom,$rue,$cp,$ville,$mail, $lesIdProduits )){
+					$message = "La commande a été enregistrée. Merci de votre visite.";
 				$this->supprimerPanier();
+				}else{
+					
+					$message= "La commande n'a pas été enregistrée, vérifier vos informations. Redirection automatique vers formulaire ...";
+					sleep(2);
+					echo "<script>window.location.href = 'index.php?uc=gererPanier&action=passerCommande';</script>";
+					$this->voirPanier();
+				}
+
 				include ("vues/v_message.php");
 			}
 		}
