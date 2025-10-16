@@ -72,12 +72,8 @@ INSERT INTO categorie (id, libelle) VALUES
 DROP TABLE IF EXISTS commande;
 CREATE TABLE IF NOT EXISTS commande (
   `id` varchar(32) NOT NULL,
-  `dateCommande` date,
-  `nomPrenomClient` varchar(50),
-  `adresseRueClient` varchar(50),
-  `cpClient` char(5),
-  `villeClient` varchar(50),
-  `mailClient` varchar(50),
+  `idClient` int NOT NULL,
+  `dateCommande` date
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4 ;
 

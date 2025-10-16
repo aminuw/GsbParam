@@ -17,6 +17,7 @@ class Routeur{
         $this->ctrlVoirProduits=new ControleurVoirProduits();
         $this->ctrlAccueil=new ControleurAccueil();
         $this->ctrlGererPanier=new ControleurGererPanier();
+        $this->ctrlUtilisateur=new ControleurUtilisateur();
     }
     /** recupère les paramètres de l'url et active les contrôleurs nécessaires
     */
@@ -53,6 +54,14 @@ class Routeur{
                 case 'confirmerCommande' : $this->ctrlGererPanier->confirmerCommande();break;
                 case 'viderPanier' : $this->ctrlGererPanier->viderPanier();break;
                 default: {$this->ctrlGererPanier->voirPanier();break;}
+            }; break;
+             case 'utilisateur' :
+            switch ($action)
+            {
+                case null :
+                case 'inscription' : {$this->ctrlUtilisateur->inscription();break;}
+                case 'connexion' : {$this->ctrlUtilisateur->connexion();break;}
+                case 'deconnexion' : {$this->ctrlUtilisateur->deconnexion();break;}
             }; break;
         case 'administrer' :  // TODO Créer un contrôleur spécial pour l'administration du site
 		break; 

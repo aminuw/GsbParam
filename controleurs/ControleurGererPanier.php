@@ -48,6 +48,7 @@ class ControleurGererPanier{
 			{
 				$desIdProduit = $this->getLesIdProduitsDuPanier();
 				$lesProduitsDuPanier = $this->modeleFront->getLesProduitsDuTableau($desIdProduit);
+				$qteProduits = $this->getQte();
 				include("vues/v_panier.php");
 			}
 			else
@@ -56,7 +57,25 @@ class ControleurGererPanier{
 				include ("vues/v_message.php");
 			}
 		}
-
+	/**
+	 * Retourne la quantité de chaque produit dans le panier
+	 *
+	 * @return array $qte tableau associatif idProduit => quantité
+	 */
+	function getQte()
+	{
+		$qte = [];
+		if (isset($_SESSION['produits']) && count($_SESSION['produits']) > 0) {
+			foreach ($_SESSION['produits'] as $idProduit) {
+				if (!isset($qte[$idProduit])) {
+					$qte[$idProduit] = 1;
+				} else {
+					$qte[$idProduit]++;
+				}
+			}
+		}
+		return $qte;
+	}
 	/**
 	 * Vide le panier
 	 *
