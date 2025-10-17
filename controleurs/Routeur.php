@@ -1,4 +1,5 @@
 <?php
+require_once 'controleurs/ControleurUtilisateur.php';
 require_once 'controleurs/ControleurVoirProduits.php';
 require_once 'controleurs/ControleurAccueil.php';
 require_once 'controleurs/ControleurGererPanier.php';
@@ -11,6 +12,7 @@ class Routeur{
     private $ctrlVoirProduits;
     private $ctrlAccueil;
     private $ctrlGererPanier;
+    private $ctrlUtilisateur;
     
     public function __construct(){
         
@@ -50,6 +52,7 @@ class Routeur{
                 case 'ajouterAuPanier' : {$this->ctrlGererPanier->ajouterAuPanier($_REQUEST['produit']);break;}
                 case 'supprimerUnProduit' : {$this->ctrlGererPanier->supprimerUnProduit($_REQUEST['produit']);break;}
                 case 'viderPanier' : {$this->ctrlGererPanier->viderPanier();break;}
+                case 'modifierQuantite': {$this->ctrlGererPanier->modifierQuantiteProduit($_REQUEST['produit'], $_REQUEST['qte']);break;}
                 case 'passerCommande' : $this->ctrlGererPanier->passerCommande();break;
                 case 'confirmerCommande' : $this->ctrlGererPanier->confirmerCommande();break;
                 case 'viderPanier' : $this->ctrlGererPanier->viderPanier();break;
@@ -60,7 +63,9 @@ class Routeur{
             {
                 case null :
                 case 'inscription' : {$this->ctrlUtilisateur->inscription();break;}
+                case 'validerInscription': {$this->ctrlUtilisateur->validerInscription();break;}
                 case 'connexion' : {$this->ctrlUtilisateur->connexion();break;}
+                case 'validerConnexion': {$this->ctrlUtilisateur->validerConnexion();break;}
                 case 'deconnexion' : {$this->ctrlUtilisateur->deconnexion();break;}
             }; break;
         case 'administrer' :  // TODO Créer un contrôleur spécial pour l'administration du site

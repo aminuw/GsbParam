@@ -131,8 +131,62 @@ class ModeleFront extends Modele{
 		}
 	}
 	/**
-	 * Crée une commande 
+	 * Crée un client
 	 *
+	 * @param string $nom
+	 * @param string $prenom
+	 * @param string $email
+	 * @param string $mdp
+	 * @param string $adresse
+	 * @param string $ville
+	 * @param string $cp
+	 * @return PDOStatement|false
+	 */
+		public function creerClient($nom, $prenom, $email, $mdp, $adresse, $ville, $cp)
+		{
+			try {
+				$hashedMdp = password_hash($mdp, PASSWORD_DEFAULT);
+				$req = 'INSERT INTO client (nom, prenom, mail, mdp, adresse, ville, cp) VALUES (:nom, :prenom, :email, :mdp, :adresse, :ville, :cp)';
+				$tab = array(
+					'nom' => $nom,
+					'prenom' => $prenom,
+					'mail' => $email,
+					'mdp' => $hashedMdp,
+					'adresse' => $adresse,
+					'ville' => $ville,
+					'cp' => $cp
+				);
+				$res = $this->executerRequete($req, $tab);
+				return $res;
+			} catch (PDOException $e) {
+				print "Erreur !: " . $e->getMessage();
+				die();
+			}
+		}
+	
+		/**
+		 * Récupère un client par son email
+		 *
+		 * @param string $email
+		 * @return object|false
+		 */
+		public function getUnClientByEmail($email)
+		{
+			try {
+				$req = 'SELECT * FROM client WHERE email = :email';
+				$tab = array('email' => $email);
+				$res = $this->executerRequete($req, $tab);
+				$client = $res->fetch(PDO::FETCH_OBJ);
+				return $client;
+			} catch (PDOException $e) {
+				print "Erreur !: " . $e->getMessage();
+				die();
+			}
+		}
+	
+		/**
+		 * Crée une commande 
+		 *
 	 * Crée une commande à partir des arguments validés passés en paramètre, l'identifiant est
 	 * construit à partir du maximum existant ; crée les lignes de commandes dans la table contenir à partir du
 	 * tableau d'idProduit passé en paramètre
@@ -144,20 +198,21 @@ class ModeleFront extends Modele{
 	 * @param array $lesIdProduit tableau contenant les id des produits commandés
 	 
 	*/
-	public function creerCommande($nom,$rue,$cp,$ville,$mail, $lesIdProduit )
+	public function creerCommande($idClient, $lesIdProduit)
 	{
 		try 
 		{
-        // on récupère le dernier id de commande
+		// on récupère le dernier id de commande
 		$req = 'select max(id) as maxi from commande';
 		$res = $this->executerRequete($req);
 		$laLigne = $res->fetch();
-		$maxi = $laLigne['maxi'] ;// on place le dernier id de commande dans $maxi
-		$idCommande = $maxi+1; // on augmente le dernier id de commande de 1 pour avoir le nouvel idCommande
-		$date = date('Y/m/d'); // récupération de la date système
-		$req = "insert into commande values (:id,:date,:nom,:rue,:cp,:ville,:mail)";
-		$tab=array('id'=>$idCommande,'date'=>$date,'nom'=>$nom,'rue'=>$rue,'cp'=>$cp,'ville'=>$ville,'mail'=>$mail);
+		$maxi = $laLigne['maxi'] ;
+		$idCommande = $maxi+1;
+		$date = date('Y/m/d');
+		$req = "insert into commande(id, idClient, dateCommande) values (:id, :idClient, :date)";
+		$tab=array('id'=>$idCommande, 'idClient'=>$idClient, 'date'=>$date);
 		$res = $this->executerRequete($req,$tab);
+		
 		// insertion produits commandés
 		foreach($lesIdProduit as $unIdProduit)
 		{
@@ -169,12 +224,6 @@ class ModeleFront extends Modele{
 		}
 		catch (PDOException $e) 
 		{
-			//return false;
-			/*
-        $msgErreurs[]= 'Erreur !: Vérifier vos informations saisies ! Redirection vers formulaire commande ... ';
-		sleep(2);
-		echo "<script>window.location.href = 'index.php?uc=gererPanier&action=passerCommande';</script>";*/
-		//header('Location: http://localhost/gsbparam/index.php?uc=gererPanier&action=passerCommande');
 		print "Erreur !: " . $e->getMessage();
         die();
 		}

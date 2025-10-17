@@ -13,10 +13,16 @@ foreach( $lesProduitsDuPanier as $unProduit)
 	?>
 	<div id="card">
 	<div>
-	<div class="photoCard"><img src="<?= $image ?>" alt="image descriptive" /></div>
-	<div class="descrCard"><?= $description ?></div>
-	<div class="prixCard"><?= $prix."€" ?></div>
-	<div class="qteCard">Quantité : <?= $qteProduits[$id] ?></div>
+	<div class="photoCard"><img src="<?= htmlspecialchars($image) ?>" alt="image descriptive" /></div>
+	<div class="descrCard"><?= htmlspecialchars($description) ?></div>
+	<div class="prixCard"><?= htmlspecialchars($prix)."€" ?></div>
+	<div class="qteCard">
+		<form action="index.php?uc=gererPanier&action=modifierQuantite" method="post">
+			<input type="hidden" name="produit" value="<?= htmlspecialchars($id) ?>">
+			Quantité : <input type="number" name="qte" value="<?= htmlspecialchars($qteProduits[$id]) ?>" min="1" style="width: 50px;">
+			<button type="submit" class="btn btn-primary btn-sm">Mettre à jour</button>
+		</form>
+	</div>
 </div>
 	<div class="imgCard"><a href="index.php?uc=gererPanier&produit=<?= $id ?>&action=supprimerUnProduit" onclick="return confirm('Voulez-vous vraiment retirer cet article ?');">
 </div>

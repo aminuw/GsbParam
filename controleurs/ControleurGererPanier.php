@@ -64,17 +64,7 @@ class ControleurGererPanier{
 	 */
 	function getQte()
 	{
-		$qte = [];
-		if (isset($_SESSION['produits']) && count($_SESSION['produits']) > 0) {
-			foreach ($_SESSION['produits'] as $idProduit) {
-				if (!isset($qte[$idProduit])) {
-					$qte[$idProduit] = 1;
-				} else {
-					$qte[$idProduit]++;
-				}
-			}
-		}
-		return $qte;
+		return $_SESSION['produits'];
 	}
 	/**
 	 * Vide le panier
@@ -97,24 +87,20 @@ class ControleurGererPanier{
 	*/
 	function ajouterAuPanier($idProduit)
 	{
-		if(in_array($idProduit,$_SESSION['produits']))
-		{
-			$msgErreurs[]='Ce produit est déjà dans le panier.';
-			include("vues/v_erreurs.php");
-		}
-		else
-		{
-			$_SESSION['produits'][]= $idProduit; // l'indice n'est pas précisé : il sera automatiquement mis à la fin
-		}
-		$this->voirPanier();
+	    if(isset($_SESSION['produits'][$idProduit]))
+	    {
+	        $_SESSION['produits'][$idProduit]++;
+	    }
+	    else
+	    {
+	        $_SESSION['produits'][$idProduit] = 1;
+	    }
+	    $this->voirPanier();
 	}
 
 		function supprimerUnProduit($idProduit){
-			//var_dump($idProduit);
-			$key= array_search($idProduit,$_SESSION['produits']);
-			//var_dump($key);
-			if(is_int($key)){
-				unset($_SESSION['produits'][$key]);
+			if(isset($_SESSION['produits'][$idProduit])){
+				unset($_SESSION['produits'][$idProduit]);
 			}
 			else{
 				$msgErreurs[]='Ce produit ne peut pas être supprimé.';
@@ -132,7 +118,7 @@ class ControleurGererPanier{
 	*/
 	function getLesIdProduitsDuPanier()
 	{
-		return $_SESSION['produits'];
+		return array_keys($_SESSION['produits']);
 
 	}
 	/**
@@ -159,10 +145,19 @@ class ControleurGererPanier{
 	{
 		$n=$this->nbProduitsDuPanier();
 			if($n>0)
-			{   // les variables suivantes servent à l'affectation des attributs value du formulaire
-				// ici le formulaire doit être vide, quand il est erroné, le formulaire sera réaffiché pré-rempli
-				$nom ='';$rue='';$ville ='';$cp='';$mail='';
-				include ("vues/v_commande.php");
+			{   
+				if (isset($_SESSION['client'])) {
+					$client = $_SESSION['client'];
+					$nom = $client->nom . ' ' . $client->prenom;
+					$rue = $client->rue;
+					$ville = $client->ville;
+					$cp = $client->cp;
+					$mail = $client->mail;
+					include ("vues/v_commande.php");
+				} else {
+					$erreurs[] = "Vous devez être connecté pour passer une commande.";
+					include ("vues/v_connexion.php");
+				}
 			}
 			else
 			{
@@ -178,28 +173,19 @@ class ControleurGererPanier{
 	*/
 	function confirmerCommande()
 		{
-			$nom =$_REQUEST['nom'];$rue=$_REQUEST['rue'];$ville =$_REQUEST['ville'];$cp=$_REQUEST['cp'];$mail=$_REQUEST['mail'];
-			$msgErreurs = $this->getErreursSaisieCommande($nom,$rue,$ville,$cp,$mail);
-			if (count($msgErreurs)!=0)
-			{
-				include ("vues/v_erreurs.php");
-				include ("vues/v_commande.php");
-			}
-			else
-			{
+			if(isset($_SESSION['client'])){
+				$idClient = $_SESSION['client']->id;
 				$lesIdProduits = $this->getLesIdProduitsDuPanier();
-				if($this->modeleFront->creerCommande($nom,$rue,$cp,$ville,$mail, $lesIdProduits )){
+				if($this->modeleFront->creerCommande($idClient, $lesIdProduits)){
 					$message = "La commande a été enregistrée. Merci de votre visite.";
-				$this->supprimerPanier();
+					$this->supprimerPanier();
 				}else{
-					
-					$message= "La commande n'a pas été enregistrée, vérifier vos informations. Redirection automatique vers formulaire ...";
-					sleep(2);
-					echo "<script>window.location.href = 'index.php?uc=gererPanier&action=passerCommande';</script>";
-					$this->voirPanier();
+					$message= "Une erreur est survenue lors de l'enregistrement de la commande.";
 				}
-
 				include ("vues/v_message.php");
+			} else {
+				// Sécurité : si l'utilisateur n'est pas connecté, on le redirige.
+				header('Location: index.php?uc=utilisateur&action=connexion');
 			}
 		}
 	/**
@@ -210,6 +196,22 @@ class ControleurGererPanier{
 	function supprimerPanier()
 	{
 		unset($_SESSION['produits']);
+	}
+
+	function modifierQuantiteProduit($idProduit, $qte)
+	{
+	    if(isset($_SESSION['produits'][$idProduit]))
+	    {
+	        if($qte > 0)
+	        {
+	            $_SESSION['produits'][$idProduit] = $qte;
+	        }
+	        else
+	        {
+	            unset($_SESSION['produits'][$idProduit]);
+	        }
+	    }
+	    $this->voirPanier();
 	}
 	/**
 	 * teste si une chaîne a un format de code postal
