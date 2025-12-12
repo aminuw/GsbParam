@@ -1,6 +1,19 @@
-
 <div class="container">
     <h2>Inscription</h2>
+
+    <?php
+    if (isset($message)) {
+        echo '<div class="alert alert-success">' . htmlspecialchars($message) . '</div>';
+    }
+    if (isset($erreurs) && !empty($erreurs)) {
+        echo '<div class="alert alert-danger"><ul>';
+        foreach ($erreurs as $erreur) {
+            echo '<li>' . htmlspecialchars($erreur) . '</li>';
+        }
+        echo '</ul></div>';
+    }
+    ?>
+
     <p>Pour pouvoir commander, merci de vous inscrire.</p>
     <form action="index.php?uc=utilisateur&action=validerInscription" method="post">
         <fieldset>
@@ -25,8 +38,8 @@
         <fieldset>
             <legend>Votre adresse</legend>
             <div class="form-group">
-                <label for="adresse">Rue :</label>
-                <input id="adresse" type="text" name="rue" class="form-control">
+                <label for="rue">Rue :</label>
+                <input id="rue" type="text" name="rue" class="form-control">
             </div>
             <div class="form-group">
                 <label for="ville">Ville :</label>
