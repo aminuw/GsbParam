@@ -1,7 +1,7 @@
 <?php
 /** 
  * Mission : architecture MVC GsbParam
- 
+
  * @file index.php
  * @mainpage Projet GsbParam Architecture MVC en PHP Objet
  * 
@@ -14,8 +14,8 @@
  */
 session_start();
 require 'controleurs/Routeur.php';
-include("vues/v_entete.html") ;
-include("vues/v_bandeau.php") ;
-$routeur=new Routeur();
+include("vues/v_entete.html");
+include("vues/v_bandeau.php");
+$routeur = new Routeur();
 $routeur->routerRequete();
-include("vues/v_pied.html") ;
+include("vues/v_pied.html");

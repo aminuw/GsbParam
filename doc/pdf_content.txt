@@ -1,0 +1,491 @@
+=== c:\wamp64\www\e6\GsbParam\doc\Cas dutilisation - GSB Param.pdf ===
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 3 – Gestion catégorie (Ajout d’une catégorie)
+Acteur déclencheur : Administrateur
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+•1) Le système affiche le formulaire d’ajout d’une catégorie.
+•2) L’utilisateur saisit le nom de la nouvelle catégorie puis valide le formulaire.
+•3) Le système créé la nouvelle catégorie, renvoie l’utilisateur vers la page d’accueil et lui 
+informe que la création a été effectuée.
+Exceptions :
+•2.a) L’utilisateur ne saisit pas de nom mais valide le formulaire.
+◦2.a.1) Le système lui demande de saisir un nom, retour en 1.
+Contraintes :
+Question ouvertes :
+Nom cas d’utilisation : USR 3 – Gestion catégorie (Suppression d’une catégorie)
+Acteur déclencheur : Administrateur
+Pré conditions : Aucune
+Post conditions : Aucune
+•1) Le système affiche le formulaire de suppression d’une catégorie.
+•2) L’utilisateur sélectionne la ou les catégorie(s) qu’il souhaite supprimer et valide le 
+formulaire
+•3) Le système supprime la ou les catégorie(s), renvoie l’utilisateur vers la page d’accueil et 
+lui informe que la suppression a été effectuée.
+Exceptions :
+•2.a) L’utilisateur ne sélectionne pas de catégorie mais valide le formulaire.
+◦2.a.1) Le système en informe l’utilisateur, retour en 1.
+•2.b) L’utilisateur sélectionne une catégorie contenant des produits et valide le formulaire.
+◦2.b.1) Le système refuse la suppression et informe l’utilisateur que la catégorie n’est 
+pas vide, retour en 1.
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 3 – Gestion catégorie (Modification d’une catégorie)
+Acteur déclencheur : Administrateur
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+•1) Le système affiche le formulaire de sélection d’une catégorie à modifier.
+•2) L’utilisateur sélectionne la catégorie qu’il souhaite éditer puis valide le formulaire.
+•3) Le système récupère les informations sur cette catégorie, les affiche et demande à 
+choisir un nouveau nom.
+•4) L’utilisateur saisit un nouveau nom pour la catégorie puis valide.
+•5) Le système met à jour la catégorie, redirige l’utilisateur vers l’accueil et affiche un 
+message de confirmation.
+Exceptions :
+•2.a) L’utilisateur ne sélectionne pas de catégorie mais valide le formulaire
+◦2.a.1) Le système en informe l’utilisateur, retour en 1
+•4.a) L’utilisateur ne saisis pas de nouveau nom et valide le formulaire
+◦Le système en informe l’utilisateur, retour en 3
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 4 – Consulter liste des produits
+Acteur déclencheur : Aucun
+Pré conditions : Visualiser la liste des produits
+Post conditions : Aucune
+Scénario normal :
+1)Le système affiche la liste des produits et les filtres possibles pour la recherche.
+2)L’utilisateur sélectionne un ou plusieurs filtres.
+3)L’utilisateur valide les filtres en validant.
+4)La liste des produits filtrée est retournée par le système sur la même page.
+Exceptions :
+2.a) L’utilisateur sélectionne le filtre « Catégorie »
+2.a.1) L’utilisateur sélectionne la catégorie qui lui convient
+2.a.2) L’utilisateur peut à tout moment désactiver ce filtre
+2.b) L’utilisateur sélectionne le filtre « Prix »
+2.b.1) L’utilisateur renseigne un prix minimal, ou non
+2.b.2) L’utilisateur renseigne un prix maximum, ou non
+2.b.3) L’utilisateur peut à tout moment désactiver ce filtre
+2.c) L’utilisateur sélectionne le filtre « Marque »
+2.c.1) L’utilisateur sélectionne le filtre qui lui convient
+2.c.2) L’utilisateur peut à tout moment désactiver ce filtre
+3.a) L’utilisateur peut réinitialiser les filtres en appuyant sur un bouton dédié
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR7 - Gestion Stock Produit simple
+Acteur déclencheur : Administrateur
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1) L’utilisateur sélectionne l’onglet produits. Le système affiche la liste des produits avec la 
+possibilité de changer le stock de chaque produit.
+2) L’utilisateur saisit les nouveaux stocks puis valide.
+3) Le système enregistre les nouveaux stocks et en informe l’utilisateur.
+4) L’utilisateur souhaite consulter les stocks disponibles. Le système les lui affiche.
+Exceptions :
+1.a) Il n’y a aucun produit enregistré dans la base de données.
+o1.a.1) Le système en informe l’utilisateur. Retour en 1.
+2.a) L’utilisateur saisit des lettres.
+o2.a.1) Le système en informe l’utilisateur et refuse la saisie. Retour en 2.
+2.b) L’utilisateur saisit une valeur négative.
+o2.b.1) Le système en informe l’utilisateur et refuse la saisie. Retour en 2.
+4.a) L’utilisateur souhaite trier les stocks pour n’afficher que ceux avec un stock critique.
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 5 – Consulter détails d’un produit
+Acteur déclencheur : Visiteur
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1)L’utilisateur accède à la liste des produits
+2)L’utilisateur choisi un produit, et appuie sur le bouton « Infos du produit » lui 
+correspondant
+3)Un nouvel onglet s’ouvre avec toutes les informations du produit (nom, marque, 
+catégorie, description, avis, prix, stock), et un bouton « Retour »
+Exceptions :
+       3.a) Le stock du produit peut varier
+       3.a.1) Si le stock du produit est en dessous du seuil paramétré, un message indiquant le stock 
+restant apparaîtra
+       3.a.2) Si le stock du produit est à 0, le bouton de commande sera masqué
+       3.b) Il est possible de voir la note moyenne du produit
+       3.b.1) S’il existe une note moyenne, elle sera affichée à l’aide d’étoiles et du nombre d’avis 
+renseigné
+       3.b.2) S’il n’existe aucune note moyenne pour le produit, un message apparaîtra pour 
+l’indiquer
+       3.c) Un produit peut être associé à un ou plusieurs autres
+       3.c.1) Si un produit est associé à un ou plusieurs autres, la liste apparaîtra dans une section en
+bas de la page, où on pourra accéder à leur fiche produit respective
+       3.d) Le produit peut être commandé via la fiche produit si l’utilisateur est connecté
+       3.d.1) Si l’utilisateur est connecté, un bouton apparaîtra pour choisir le stock voulu (en 
+fonction des disponibilités) et un bouton pour valider
+       3.d.2) Si l’utilisateur n’est pas connecté, les boutons pour commander n’apparaîtrons pas
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 6 – Gestion des avis produit
+Acteur déclencheur : Client
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1) L’utilisateur consulte les détails d’un produit et souhaite déposer un avis.
+2) L’utilisateur attribut une note au produit et ajoute éventuellement un commentaire 
+dessus.
+3) L’utilisateur valide l’avis, le système l’enregistre et en informe l’utilisateur.
+4) L’utilisateur consulte les avis sur le produit concerné.
+Exceptions :
+2.a) L’utilisateur n’est pas authentifié.
+o2.a.1) Le système empêche l’utilisateur de saisir un avis.
+3.a) L’utilisateur n’a pas attribué de note.
+oLe système en informe l’utilisateur et refuse l’envoi du formulaire.
+3.b) L’utilisateur à déjà donné son avis sur le produit concerné
+o3.b.1) Le système en informe l’utilisateur et refuse de déposer un nouvel avis.
+4.a) Le produit n’a reçu aucun avis.
+o4.a.1) Le système en informe l’utilisateur.
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 2C – Gestion Produit associé
+Acteur déclencheur : Administrateur
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1.L’utilisateur accède à la page des associations de produit via le menu d’administrateur
+2.La liste des associations existantes apparaît sous la forme d’un tableau
+Exceptions :
+       2.a) Un bouton « Supprimer » sert à supprimer une association existante
+       2.a.1) S’il n’existe pas d’associations, un message avertira l’utilisateur
+       2.b) Un bouton « Modifier » sert à modifier une association existante
+       2.b.1) Si l’association traitée existe déjà, la modification échouera et l’utilisateur en sera 
+informé
+       2.c) Un bouton « Créer une association » sert à créer une nouvelle association entre deux     
+produits
+       2.c.1) Si l’association traitée existe déjà, l’ajout échouera et l’utilisateur en sera informé 
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 10 – Gestion des commandes
+Acteur déclencheur : Administrateur
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1.L’utilisateur accède à la page de gestion des commandes via le menu des administrateurs
+2.Un tableau affiche toutes les commandes existantes (triées par ID de commande) avec les 
+informations importantes tel que l’ID de commande, la date de commande, les 
+informations du client, la liste des articles de la commande et l’état actuel de la 
+commande
+Exceptions :
+       2.a) Il peut ne pas exister de commandes
+       2.a.1) Si c’est le cas, un message d’avertissement l’indiquera
+       2.b) Un bouton « Liste des articles » permet d’afficher les articles contenus dans une 
+commande
+       2.b.1) A l’appui, ce bouton ouvre une nouvelle fenêtre indiquant les produits présents dans la 
+commande et leurs informations essentielles (nom du produit, prix du produit à l’unité, la marque
+du produit, la catégorie du produit, la quantité commandée du produit), ainsi que le prix total de 
+la commande
+        2.c) Un bouton permet d’afficher l’état actuel de la commande et de le modifier
+        2.c.1) A l’appui sur la flèche du bouton, les autres états de commande disponibles 
+apparaissent
+        2.c.2) Il faut cliquer sur l’état désiré pour changer celui de la commande
+        2.c.3) Un message de succès apparaîtra une fois l’état de la commande changé
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 12 – Ajout/Modification produit
+Acteur déclencheur : Administrateur
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1. L’utilisateur accède à la liste des produits, et choisi un produit un produit à modifier
+2. L’utilisateur peut modifier les informations du produit via le formulaire
+3. L’utilisateur valide le formulaire
+4. Le système traite les informations et modifie le produit dans la base de données et l’utilisateur 
+retourne automatique sur la liste actualisée des produits, avec un message de succès
+Exceptions :
+1.a) L’utilisateur peut ajouter un nouveau produit
+1.a.1) L’utilisateur saisit toutes les informations nécessaires dans le formulaire
+1.a.2) L’utilisateur valide le formulaire
+1.a.3) Le système ajoute le produit dans la base de données et l’utilisateur retourne automatique 
+sur la liste actualisée des produits, avec un message de succès
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 8 - Gestion du panier - Produit simple
+Acteur déclencheur : Visiteur
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1. Le visiteur souhaite créer un compte.
+2. Le visiteur saisit les informations nécessaires et valide
+3. Le système créé le compte et informe le visiteur.
+4. L’utilisateur se connecte et ajout un produit dans le panier.
+5. L'utilisateur souhaite consulter son panier et modifier les quantités.
+6. L'utilisateur souhaite retirer un produit de son panier.
+Exceptions :
+1.a) L’utilisateur est déjà authentifié.
+2.a) Le visiteur ne saisit pas toutes les informations.
+2.b) Le visiteur valide le formulaire vide.
+2.c) Le mot de passe saisit ne correspond pas aux exigences de la CNIL
+2.c.a) Le mot de passe saisit et le mot de passe de confirmation ne correspondent pas
+2.d) L’adresse mail ne respecte pas le bon format 
+2.e) Le code postal ne respecte pas le bon format.
+3.a) L’adresse mail saisie correspond déjà à un compte existant.
+4.a) L’utilisateur n’est pas connecté.
+5.a) Le panier est vide
+5.b) La quantité sélectionnée pour un produit dépasse le stock.
+5.c) La quantité saisie est inférieur à 1
+Contraintes :
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 15 – Page d’accueil
+Acteur déclencheur : Aucun
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1. Le visiteur (connecté ou non) du site arrive sur la page d’accueil du site
+2. En bas de la page, une liste de produits mis en avant apparaît
+3. Le visiteur peut accéder à la fiche produit d’un produit mis en avant
+Exceptions :
+2.a) Si aucun produit n’est mis à l’avant actuellement, rien n’apparaîtra
+2.b) Un administrateur peut programmer un produit à être mis en avant pendant une période 
+donnée
+2.b.1) L’administrateur accède au panel de programmation des promotions produit, et accède à la
+liste des programmations existantes (ou rien si rien n’est programmé)
+2.b.2) L’administrateur peut supprimer une programmation existante
+2.b.3) L’administrateur peut créer une programmation
+2.b.3.a) L’administrateur renseigne le produit à mettre en avant, une date de début et une date 
+de fin de mise en avant
+2.b.3.b) L’administrateur valide, et le système enregistre la programmation
+2.b.7) Le système efface automatiquement chaque jour les programmations dont la date de fin 
+est dépassée par la date du jour
+Contraintes :
+2.b.4) L’administrateur ne peut pas créer une programmation inférieure à la date du jour
+2.b.5) L’administrateur ne peut pas créer une programmation avec une date de fin inférieure à la 
+date de début
+2.b.6) L’administrateur ne peut pas créer une programmation déjà existante
+Question ouvertes :
+
+Cas d’utilisation – GSB Param
+D’après Théo LECLERC GALLOIS et Thibault BEE 
+Nom cas d’utilisation : USR 14 – Espace client
+Acteur déclencheur : Aucun
+Pré conditions : Être connecté en tant que client certifié (dupont@wanadoo.fr/DupJac!)
+Post conditions : Aucune
+Scénario normal :
+1.En tant que client, je consulte les informations de mon compte
+2.Je souhaite les modifier et enregistrer les modifications
+3.Je souhaite consulter la liste de mes commandes
+4.Je souhaite consulter mes avis déposés
+Exceptions :
+1.a) Je ne suis pas connecté
+2.a) Je n’ai pas rempli tous les champs lors de la modifications (nom, prénom, adresse, code 
+postal, ville, mail)
+3.a) Je n’ai passé aucune commande
+4.a) Je n’ai déposé aucun avis
+Contraintes :
+Question ouvertes :
+Nom cas d’utilisation : USR 13 – Mentions légales
+Acteur déclencheur : Aucun
+Pré conditions : Aucune
+Post conditions : Aucune
+Scénario normal :
+1.Je veux consulter les mentions légales
+Exceptions :
+Contraintes :
+Question ouvertes :
+
+=== c:\wamp64\www\e6\GsbParam\doc\_ap Cahier des charges GSB paramedical complément TP v5.pdf ===
+GSB Paramédical
+Cahier des charges : Site Internet GSB paramédical
+Phase 1 du projet : TP GSB paramédical de Mme Jouin
+Le projet pour l’examen reprend le TP GSB paramédical de Mme Jouin et est à enrichir.
+Le contenu du TP sans un travail complémentaire ne couvre pas les compétences exigées
+à l’examen.
+Phase 2 du projet
+Commanditaire : GSB  
+Demande : Réalisation d’un site Internet pour présenter les produits de GSB paramédical
+et les vendre en ligne avec un site en ligne 
+1.Méthodologie  
+Pour réaliser ce cahier des charges, des entretiens et tests ont permis de déterminer les 
+besoins des utilisateurs potentiels et construire l’architecture du site à réaliser.  
+ 
+2.Aspects techniques 
+a)Contraintes techniques :
+Environnement
+L'application Web sera développée dans un langage de script côté serveur, éventuellement
+complétée par des API, frameworks et autres compléments.
+Les langages de programmation retenus pour ce projet sont le PHP, HTML, JavaScript. Le
+site doit être compatible avec Firefox, Chrome et Edge.
+Dans le cadre d'une portabilité vers un environnement d'application mobile, on prendra
+soin de séparer au maximum le rendu utilisateur de la logique interne de l'application.
+Le site doit être compatible avec l'ensemble des navigateurs standards : Google Chrome, 
+Android, Mozilla FireFox, Internet Explorer, Safari & Opera.
+Base de données :
+ La base de données du TP devra être modifiée pour répondre aux nouvelles exigences
+fonctionnelles. Les données sont modélisées avec un MCD conformément au besoin de la
+solution applicative.
+Les accès aux données sont contrôlés conformément aux habilitations définies par le
+cahier des charges.
+La base de données est sauvegardée selon la planification à définir et des tests de
+restauration sont à effectuer.
+La base de données est opérationnelle et stable dans l’environnement de production.
+Estelle Méret – boutique GSB bio
+
+GSB Paramédical
+Tests fonctionnels
+Les tests fonctionnels sont à décrire et à réalisés. Une documentation est fournie à cet
+effet les décrits dans le fichier joint à ce cahier des charges.
+Gestion de versions
+un outil collaboratif de gestion des itérations de développement et de versions est utilisé ;
+- une documentation des versions vient appuyer l’intégration continue ;
+Voir cours de Madame Jouin   : gestion de version Git + power point 
+https://www.youtube.com/watch?v=hPfgekYUKgk
+Architecture
+L’architecture du code produit doit respecter les conventions d’usage : développement
+basé sur une architecture MVC.
+b)Contraintes légales :
+Le site doit être conforme à la réglementation en vigueur en Europe
+RGPD
+Mentions légales
+Les images utilisées doivent être libres de droit et citées. 
+La boutique ne doit pas être activée pour la vente.
+3.Prestations attendues et méthodologie de suivi 
+Prestations attendues : 
+Les attendus de cette application sont la réalisation des pages décrites et conformes aux
+cas d’utilisation, du design des pages validées par les utilisateurs et à une documentation
+technique.
+Les livrables attendus pour l’examen comprennent :
+- Les codes sources du site
+- Une documentation technique et utilisateur
+L’application doit être fonctionnelle sur le serveur de production.
+4.Planning :  
+La date limite est fixée au 6 mai 2025.
+Le projet sera découpé en plusieurs étapes : 
+1.Analyse du cahier des charges et définition des USR dans trello (Nom de la user story,
+détail des taches à réaliser dans les checklist). Evaluation avec le planning Poker
+Estelle Méret – boutique GSB bio
+
+GSB Paramédical
+2.Développement du pilote : Développement de l'ensemble des fonctionnalités, intégration
+des maquettes, réalisation du plan de test.
+3.Industrialisation : Intégration des contenus.
+4. Mise en production sur servslam
+a)Méthodologie de suivi : 
+L'ensemble du projet sera basé sur une méthodologie agile type
+"scrum". 
+Tableau à utiliser :
+https://trello.com/b/WEmqaeDR/gsb-paramedical
+5.Principe d’une boutique en ligne  
+ 
+https://reicluos.com/prestashop-mascotte-livres-informatique/prestashop-frontoffice-et-backoffice-principe/
+Front Office : 
+- partie visible par le consommateur de la boutique. Par exemple, gérer son
+panier, passer la commande
+- partie qui permet de gérer le front (la partie visible par le consommateur).
+Back Office : partie invisible pour l’utilisateur final. Ce sont tous les processus internes de
+l’entreprise. Par exemple, gérer les stocks, gérer les ventes, gérer la logistique
+Estelle Méret – boutique GSB bio
+
+GSB Paramédical
+6.Front Office
+a)Description fonctionnelle du site : Boutique en ligne 
+Le site doit comporter une boutique en ligne. Cette boutique en ligne doit par défaut
+afficher l'ensemble des produits mis en ligne depuis le back-office, et disponibles en
+stocks, classés par ordre de prix croissant. 
+Une liste de filtres doit permettre d'affiner et de simplifier la recherche. La liste des filtres à
+proposer est la suivante : 
+Prix (type fourchette)
+Catégories 
+Marque
+Exemple d’IHM :
+Depuis la liste des produits, les utilisateurs doivent pouvoir : 
+Consulter la fiche du produit
+Estelle Méret – boutique GSB bio
+
+GSB Paramédical
+Fiches produits : Chaque fiche produit est composée des informations structurées
+suivantes : 
+Nom du produit
+Note du produit
+Photo du produit
+Description du produit
+Marque du produit
+Contenance du produit
+Nombre de produits en stock
+Un produit pourra être en rupture de stock. Dans ce cas, il ne pourra pas être commandé.
+Des produits pourront être suggérés
+Estelle Méret – boutique GSB bio
+
+GSB Paramédical
+L'utilisateur pourra depuis ces pages produits effectuer un ajout panier si le produit est
+disponible en stock.
+ 
+Espace Client : 
+Un utilisateur sera dans l'obligation de créer un compte client pour compléter un achat. Afin
+de créer un compte, l'utilisateur devra seulement fournir son adresse email et définir un
+mot de passe. La création d'un compte est indispensable afin de pouvoir finaliser une
+commande.
+Estelle Méret – boutique GSB bio
+
+GSB Paramédical
+Un utilisateur connecté pourra déposer des avis.
+Le client pourra consulter les avis déposés.
+Gestion du front
+- Gestion du catalogue de produits : Ajout et retrait des produits, 
+gestion des catégories 
+- - Mise à jour de la page d'accueil : Possibilité de mettre en avant les produits
+nouveaux
+- exemple nouveauté  produits :
+Estelle Méret – boutique GSB bio
+
+GSB Paramédical
+b)Boutique en ligne 
+Exemple de panier créé
+Les produits pourront être retirer du panier et la quantité pourra être modifiée
+7.Architecture – Back Office
+Description fonctionnelle du Back-office : Depuis le back-office, l'équipe de GSB doit
+être en mesure d'effectuer en autonomie l'ensemble des tâches quotidiennes
+nécessaires au bon fonctionnement de la boutique du site. 
+Gestion du Back-office
+- Gestion des Produits
+Ajouter un produit
+Cet onglet dans le menu administrateur permet d’ajouter un produit sur le site directement
+dans la base de données.
+Estelle Méret – boutique GSB bio
+
+GSB Paramédical
+Editer un produit
+- Suivi des commandes :
+Affichage et modification de l’état (en cours de livraison, etc.)
+Possibilité de suivre le montant total des commandes par période.
+-Gestion des stocks : Il doit être possible de le suivre depuis le Back,
+Affichage des produits dont le seuil critique est atteint (la quantité en stock est ≤ au 
+seuil critique du produit)
+Estelle Méret – boutique GSB bio 
+Seuil critique
+
