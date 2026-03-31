@@ -78,6 +78,24 @@ class ControleurVoirProduits{
             include("vues/v_ajouterCategorie.php");
         }
     }
+
+    public function ajouterProduit(){
+        $lesCategories = $this->modeleFront->getLesCategories();
+        include("vues/v_ajouterProduit.php");
+    }
+
+    public function validerAjoutProduit(){
+        $id = $_POST['id'];
+        $description = $_POST['description'];
+        $prix = $_POST['prix'];
+        $image = $_POST['image'];
+        $idCategorie = $_POST['idCategorie'];
+
+        $this->modeleFront->creerProduit($id, $description, $prix, $image, $idCategorie);
+        
+        echo "<p>Produit ajouté avec succès !</p>";
+        $this->voirTousProduits();
+    }
 }
 
 ?>

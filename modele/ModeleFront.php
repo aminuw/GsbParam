@@ -241,5 +241,18 @@ class ModeleFront extends Modele
 		}
 	}
 
+	public function creerProduit($id, $description, $prix, $image, $idCategorie)
+	{
+		$req = "INSERT INTO produit (id, description, prix, image, idCategorie) VALUES (:id, :description, :prix, :image, :idCategorie)";
+		$tab = array(
+			'id' => $id, 
+			'description' => $description, 
+			'prix' => $prix, 
+			'image' => $image, 
+			'idCategorie' => $idCategorie
+		);
+		$this->executerRequete($req, $tab);
+	}
+
 }
 ?>
