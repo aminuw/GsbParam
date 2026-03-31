@@ -254,5 +254,26 @@ class ModeleFront extends Modele
 		$this->executerRequete($req, $tab);
 	}
 
+	public function getUnProduit($id)
+	{
+		$req = "SELECT * FROM produit WHERE id=:id";
+		$tab = array('id' => $id);
+		$res = $this->executerRequete($req, $tab);
+		return $res->fetch(PDO::FETCH_OBJ);
+	}
+
+	public function modifierProduit($id, $description, $prix, $image, $idCategorie)
+	{
+		$req = "UPDATE produit SET description = :description, prix = :prix, image = :image, idCategorie = :idCategorie WHERE id = :id";
+		$tab = array(
+			'id' => $id, 
+			'description' => $description, 
+			'prix' => $prix, 
+			'image' => $image, 
+			'idCategorie' => $idCategorie
+		);
+		$this->executerRequete($req, $tab);
+	}
+
 }
 ?>

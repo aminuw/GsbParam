@@ -47,6 +47,9 @@ class Routeur{
                 case 'validerAjoutCategorie' : {$this->ctrlVoirProduits->validerAjoutCategorie();break;}
                 case 'ajouterProduit' : {$this->ctrlVoirProduits->ajouterProduit();break;}
                 case 'validerAjoutProduit' : {$this->ctrlVoirProduits->validerAjoutProduit();break;}
+                case 'listeProduitsModif' : {$this->ctrlVoirProduits->listeProduitsModif();break;}
+                case 'modifierProduit' : {$this->ctrlVoirProduits->modifierProduit();break;}
+                case 'validerModifProduit' : {$this->ctrlVoirProduits->validerModifProduit();break;}
             }; break;
         case 'gererPanier' :
             switch ($action)

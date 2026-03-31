@@ -96,6 +96,36 @@ class ControleurVoirProduits{
         echo "<p>Produit ajouté avec succès !</p>";
         $this->voirTousProduits();
     }
+
+    public function listeProduitsModif() {
+        // 1. On récupère la liste pour l'afficher
+        $lesProduits = $this->modeleFront->getTousLesProduits();
+        include("vues/v_listeProduitsModif.php");
+    }
+
+    public function modifierProduit() {
+        // 2. On affiche le formulaire avec les valeurs existantes
+        $id = $_REQUEST['id']; // vient du lien de v_listeProduitsModif
+        $leProduit = $this->modeleFront->getUnProduit($id);
+        $lesCategories = $this->modeleFront->getLesCategories();
+        include("vues/v_modifierProduit.php");
+    }
+
+    public function validerModifProduit() {
+        // 3. On enregistre en base les nouvelles données
+        $id = $_POST['id'];
+        $description = $_POST['description'];
+        $prix = $_POST['prix'];
+        $image = $_POST['image'];
+        $idCategorie = $_POST['idCategorie'];
+
+        $this->modeleFront->modifierProduit($id, $description, $prix, $image, $idCategorie);
+        
+        // On affiche le message puis on réaffiche la liste actualisée
+        echo "<p>Produit mis à jour avec succès !</p>";
+        $this->listeProduitsModif();
+    }
+
 }
 
 ?>
