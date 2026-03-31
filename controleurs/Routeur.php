@@ -43,6 +43,8 @@ class Routeur{
                 case 'voirCategories' : {$this->ctrlVoirProduits->voirCategories();break;}
                 case 'voirProduits' : {$this->ctrlVoirProduits->voirProduits($_REQUEST['categorie']);break;}
                 case 'nosProduits' : {$this->ctrlVoirProduits->voirTousProduits();break;}
+                case 'ajouterCategorie' : {$this->ctrlVoirProduits->ajouterCategorie();break;}
+                case 'validerAjoutCategorie' : {$this->ctrlVoirProduits->validerAjoutCategorie();break;}
             }; break;
         case 'gererPanier' :
             switch ($action)

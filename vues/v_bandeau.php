@@ -12,7 +12,7 @@
               <li><a  href="index.php?uc=accueil" class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Accueil</a></li>
               <li><a  href="index.php?uc=voirProduits&action=nosProduits" class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Nos produits</a></li>
               <li><a  href="index.php?uc=voirProduits&action=voirProduits&categorie=CH" class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Produits par catégorie</a></li>
-              <li><a href="index.php?uc=gererPanier&action=voirPanier" class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Ajouter une catégorie</a></li>
+              <li><a  href="index.php?uc=voirProduits&action=ajouterCategorie" class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Ajouter une catégorie</a></li>
               <li><a href="index.php?uc=gererPanier&action=voirPanier" class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Mon panier</a></li>
               
               <?php if (isset($_SESSION['client'])): ?>

@@ -218,5 +218,28 @@ class ModeleFront extends Modele
 		}
 	}
 
+	/**
+	 * Ajoute une nouvelle catégorie dans la base de données
+	 *
+	 * @param string $id L'identifiant de la catégorie (3 caractères)
+	 * @param string $libelle Le libellé de la catégorie
+	 * @return PDOStatement|false
+	 */
+	public function creerCategorie($id, $libelle)
+	{
+		try {
+			$req = 'INSERT INTO categorie (id, libelle) VALUES (:id, :libelle)';
+			$tab = array(
+				'id' => $id,
+				'libelle' => $libelle
+			);
+			$res = $this->executerRequete($req, $tab);
+			return $res;
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
 }
 ?>
