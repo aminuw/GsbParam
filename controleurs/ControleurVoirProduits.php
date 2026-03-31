@@ -121,11 +121,18 @@ class ControleurVoirProduits{
 
         $this->modeleFront->modifierProduit($id, $description, $prix, $image, $idCategorie);
         
-        // On affiche le message puis on réaffiche la liste actualisée
+
         echo "<p>Produit mis à jour avec succès !</p>";
         $this->listeProduitsModif();
     }
 
+    public function supprimerProduit() {
+        $id = $_GET['id'];
+        $this->modeleFront->supprimerProduit($id);
+
+        echo "<p>Produit supprimé avec succès !</p>";
+        $this->listeProduitsModif();
+    }
 }
 
 ?>

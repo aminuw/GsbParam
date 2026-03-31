@@ -275,5 +275,12 @@ class ModeleFront extends Modele
 		$this->executerRequete($req, $tab);
 	}
 
+	public function supprimerProduit($id)
+	{
+		$req = "DELETE FROM produit WHERE id=:id";
+		$tab = array('id' => $id);
+		$this->executerRequete($req, $tab);
+	}
+
 }
 ?>

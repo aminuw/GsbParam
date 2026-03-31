@@ -50,6 +50,7 @@ class Routeur{
                 case 'listeProduitsModif' : {$this->ctrlVoirProduits->listeProduitsModif();break;}
                 case 'modifierProduit' : {$this->ctrlVoirProduits->modifierProduit();break;}
                 case 'validerModifProduit' : {$this->ctrlVoirProduits->validerModifProduit();break;}
+                case 'supprimerProduit' : {$this->ctrlVoirProduits->supprimerProduit();break;}
             }; break;
         case 'gererPanier' :
             switch ($action)

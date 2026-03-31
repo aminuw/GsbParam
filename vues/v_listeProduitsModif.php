@@ -5,7 +5,7 @@
         <th>ID</th>
         <th>Description</th>
         <th>Prix</th>
-        <th>Action</th>
+        <th>Action :</th>
     </tr>
     <?php foreach($lesProduits as $unProduit) { ?>
         <tr>
@@ -13,8 +13,8 @@
             <td><?php echo $unProduit->description; ?></td>
             <td><?php echo $unProduit->prix; ?></td>
             <td>
-                <!-- Lien hypertexte menant au formulaire de modification, en passant l'ID du produit -->
                 <a href="index.php?uc=voirProduits&action=modifierProduit&id=<?php echo $unProduit->id; ?>">Modifier</a>
+                <a href="index.php?uc=voirProduits&action=supprimerProduit&id=<?php echo $unProduit->id; ?>"class="text-danger">Supprimer</a>
             </td>
         </tr>
     <?php } ?>
