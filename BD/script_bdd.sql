@@ -9,8 +9,7 @@
 CREATE TABLE categorie (
   idCateg CHAR(3) NOT NULL,
   libelle VARCHAR(50) NOT NULL,
-  CONSTRAINT categorie_PK PRIMARY KEY (idCateg),
-  CONSTRAINT idCateg_UNQ UNIQUE (idCateg)
+  CONSTRAINT categorie_PK PRIMARY KEY (idCateg)
 )ENGINE=InnoDB;
 
 
@@ -25,13 +24,13 @@ CREATE TABLE unite (
 
 
 -- ----------------------------
--- Table: utilisateur
+-- Table: login
 -- ----------------------------
-CREATE TABLE utilisateur (
+CREATE TABLE login (
   idLogin INT NOT NULL,
   mdp VARCHAR(150) NOT NULL,
   role SMALLINT NOT NULL,
-  CONSTRAINT utilisateur_PK PRIMARY KEY (idLogin)
+  CONSTRAINT login_PK PRIMARY KEY (idLogin)
 )ENGINE=InnoDB;
 
 
@@ -72,8 +71,6 @@ CREATE TABLE produit (
   idMarque INT NOT NULL,
   idUnite INT NOT NULL,
   CONSTRAINT produit_PK PRIMARY KEY (idproduit),
-  CONSTRAINT idproduit_UNQ UNIQUE (idproduit),
-  CONSTRAINT idCateg_UNQ UNIQUE (idCateg),
   CONSTRAINT produit_idCateg_FK FOREIGN KEY (idCateg) REFERENCES categorie (idCateg),
   CONSTRAINT produit_idMarque_FK FOREIGN KEY (idMarque) REFERENCES marque (idMarque),
   CONSTRAINT produit_idUnite_FK FOREIGN KEY (idUnite) REFERENCES unite (idUnite)
@@ -87,15 +84,12 @@ CREATE TABLE client (
   idClient INT NOT NULL,
   nom VARCHAR(100) NOT NULL,
   prenom VARCHAR(100),
-  mail VARCHAR(255) NOT NULL,
   rue VARCHAR(255),
   cp VARCHAR(10),
   ville VARCHAR(100),
   idLogin INT NOT NULL,
   CONSTRAINT client_PK PRIMARY KEY (idClient),
-  CONSTRAINT idClient_UNQ UNIQUE (idClient),
-  CONSTRAINT mail_UNQ UNIQUE (mail),
-  CONSTRAINT client_idLogin_FK FOREIGN KEY (idLogin) REFERENCES utilisateur (idLogin)
+  CONSTRAINT client_idLogin_FK FOREIGN KEY (idLogin) REFERENCES login (idLogin)
 )ENGINE=InnoDB;
 
 
@@ -110,8 +104,6 @@ CREATE TABLE avis (
   idClient INT NOT NULL,
   idproduit VARCHAR(5) NOT NULL,
   CONSTRAINT avis_PK PRIMARY KEY (idAvis),
-  CONSTRAINT idClient_UNQ UNIQUE (idClient),
-  CONSTRAINT idproduit_UNQ UNIQUE (idproduit),
   CONSTRAINT avis_idClient_FK FOREIGN KEY (idClient) REFERENCES client (idClient),
   CONSTRAINT avis_idproduit_FK FOREIGN KEY (idproduit) REFERENCES produit (idproduit)
 )ENGINE=InnoDB;
@@ -124,8 +116,6 @@ CREATE TABLE associer (
   idproduit VARCHAR(5) NOT NULL,
   idproduit_associer VARCHAR(5) NOT NULL,
   CONSTRAINT associer_PK PRIMARY KEY (idproduit, idproduit_associer),
-  CONSTRAINT idproduit_UNQ UNIQUE (idproduit),
-  CONSTRAINT idproduit_associer_UNQ UNIQUE (idproduit_associer),
   CONSTRAINT associer_idproduit_FK FOREIGN KEY (idproduit) REFERENCES produit (idproduit),
   CONSTRAINT associer_idproduit_associer_FK FOREIGN KEY (idproduit_associer) REFERENCES produit (idproduit)
 )ENGINE=InnoDB;
@@ -140,8 +130,6 @@ CREATE TABLE commande (
   idClient INT NOT NULL,
   idEtat INT NOT NULL,
   CONSTRAINT commande_PK PRIMARY KEY (idCommande),
-  CONSTRAINT idCommande_UNQ UNIQUE (idCommande),
-  CONSTRAINT idClient_UNQ UNIQUE (idClient),
   CONSTRAINT commande_idClient_FK FOREIGN KEY (idClient) REFERENCES client (idClient),
   CONSTRAINT commande_idEtat_FK FOREIGN KEY (idEtat) REFERENCES etat_commande (idEtat)
 )ENGINE=InnoDB;
@@ -155,9 +143,9 @@ CREATE TABLE contenir (
   idCommande VARCHAR(32) NOT NULL,
   qte INT NOT NULL,
   CONSTRAINT contenir_PK PRIMARY KEY (idproduit, idCommande),
-  CONSTRAINT idproduit_UNQ UNIQUE (idproduit),
-  CONSTRAINT idCommande_UNQ UNIQUE (idCommande),
   CONSTRAINT contenir_idproduit_FK FOREIGN KEY (idproduit) REFERENCES produit (idproduit),
   CONSTRAINT contenir_idCommande_FK FOREIGN KEY (idCommande) REFERENCES commande (idCommande)
 )ENGINE=InnoDB;
 
+ALTER TABLE login ADD mail VARCHAR(255) NOT NULL;
+ALTER TABLE login ADD CONSTRAINT mail_login_UNQ UNIQUE (mail);

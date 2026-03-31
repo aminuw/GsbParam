@@ -22,7 +22,7 @@ class ModeleFront extends Modele
 	public function getLesCategories()
 	{
 		try {
-			$req = 'select id, libelle from categorie';
+			$req = 'SELECT idCateg AS id, libelle FROM categorie';
 			$res = $this->executerRequete($req);
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
 			return $lesLignes;
@@ -40,7 +40,7 @@ class ModeleFront extends Modele
 	public function getLesInfosCategorie($idCategorie)
 	{
 		try {
-			$req = 'SELECT id, libelle FROM categorie WHERE id=:idCategorie';
+			$req = 'SELECT idCateg AS id, libelle FROM categorie WHERE idCateg=:idCategorie';
 			$tab = array('idCategorie' => $idCategorie);
 			$res = $this->executerRequete($req, $tab);
 			$laLigne = $res->fetch(PDO::FETCH_OBJ);
@@ -61,7 +61,7 @@ class ModeleFront extends Modele
 	public function getLesProduitsDeCategorie($idCategorie)
 	{
 		try {
-			$req = 'select id, description, prix, image, idCategorie from produit where idCategorie =:idCategorie';
+			$req = 'SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit WHERE idCateg =:idCategorie';
 			$tab = array('idCategorie' => $idCategorie);
 			$res = $this->executerRequete($req, $tab);
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
@@ -75,7 +75,7 @@ class ModeleFront extends Modele
 	public function getTousLesProduits()
 	{
 		try {
-			$req = 'select id, description, prix, image, idCategorie from produit';
+			$req = 'SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit';
 			$res = $this->executerRequete($req);
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
 			return $lesLignes;
@@ -96,14 +96,14 @@ class ModeleFront extends Modele
 			$lesProduits = array();
 			if ($desIdsProduit != null) {
 				foreach ($desIdsProduit as $unIdProduit) {
-					$req = 'select id, description, prix, image, idCategorie from produit where id = "' . $unIdProduit . '"';
+					$req = 'SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit WHERE idproduit = "' . $unIdProduit . '"';
 					$res = $this->executerRequete($req);
 					$unProduit = $res->fetch(PDO::FETCH_OBJ);
 					$lesProduits[] = $unProduit;
 				}
 			} else // on souhaite tous les produits
 			{
-				$req = 'select id, description, prix, image, idCategorie from produit;';
+				$req = 'SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit;';
 				$res = $this->executerRequete($req);
 				$lesProduits = $res->fetchAll(PDO::FETCH_OBJ);
 			}
@@ -128,20 +128,39 @@ class ModeleFront extends Modele
 	public function creerClient($nom, $prenom, $email, $mdp, $rue, $ville, $cp)
 	{
 		try {
+			$this->beginTransaction();
 			$hashedMdp = password_hash($mdp, PASSWORD_DEFAULT);
-			$req = 'INSERT INTO utilisateur (nom, prenom, mail, mdp, rue, ville, cp) VALUES (:nom, :prenom, :mail, :mdp, :rue, :ville, :cp)';
+			
+			// Generate idLogin since there is no AUTO_INCREMENT
+			$resMaxLogin = $this->executerRequete('SELECT MAX(idLogin) as maxId FROM login');
+			$rowMaxLogin = $resMaxLogin->fetch(PDO::FETCH_OBJ);
+			$idLogin = ($rowMaxLogin->maxId === null) ? 1 : $rowMaxLogin->maxId + 1;
+
+			// 1. Insert into login
+			$reqLogin = 'INSERT INTO login (idLogin, mail, mdp, role) VALUES (:idLogin, :mail, :mdp, 1)';
+			$this->executerRequete($reqLogin, array('idLogin' => $idLogin, 'mail' => $email, 'mdp' => $hashedMdp));
+			
+			// Generate idClient since there is no AUTO_INCREMENT
+			$resMaxClient = $this->executerRequete('SELECT MAX(idClient) as maxId FROM client');
+			$rowMaxClient = $resMaxClient->fetch(PDO::FETCH_OBJ);
+			$idClient = ($rowMaxClient->maxId === null) ? 1 : $rowMaxClient->maxId + 1;
+			
+			// 2. Insert into client
+			$reqClient = 'INSERT INTO client (idClient, nom, prenom, rue, ville, cp, idLogin) VALUES (:idClient, :nom, :prenom, :rue, :ville, :cp, :idLogin)';
 			$tab = array(
+				'idClient' => $idClient,
 				'nom' => $nom,
 				'prenom' => $prenom,
-				'mail' => $email,
-				'mdp' => $hashedMdp,
 				'rue' => $rue,
 				'ville' => $ville,
-				'cp' => $cp
+				'cp' => $cp,
+				'idLogin' => $idLogin
 			);
-			$res = $this->executerRequete($req, $tab);
+			$res = $this->executerRequete($reqClient, $tab);
+			$this->commit();
 			return $res;
 		} catch (PDOException $e) {
+			$this->rollBack();
 			print "Erreur !: " . $e->getMessage();
 			die();
 		}
@@ -156,7 +175,7 @@ class ModeleFront extends Modele
 	public function getUnClientByMail($mail)
 	{
 		try {
-			$req = 'SELECT * FROM utilisateur WHERE mail = :mail';
+			$req = 'SELECT l.idLogin, l.mail, l.mdp, l.role, c.idClient, c.nom, c.prenom, c.rue, c.cp, c.ville FROM login l JOIN client c ON l.idLogin = c.idLogin WHERE l.mail = :mail';
 			$tab = array('mail' => $mail);
 			$res = $this->executerRequete($req, $tab);
 			$client = $res->fetch(PDO::FETCH_OBJ);
@@ -186,7 +205,7 @@ class ModeleFront extends Modele
 		try {
 			$this->beginTransaction();
 			//recuperer la derniere id de commande
-			$reqMaxId = "SELECT MAX(id) AS maxId FROM commande";
+			$reqMaxId = "SELECT MAX(CAST(idCommande AS UNSIGNED)) AS maxId FROM commande";
 			$resMaxId = $this->executerRequete($reqMaxId);
 			$rowMaxId = $resMaxId->fetch(PDO::FETCH_OBJ);
 			$lastId = $rowMaxId->maxId;
@@ -197,13 +216,13 @@ class ModeleFront extends Modele
 				$idCommande = $lastId + 1;
 			}
 			$date = date('Y-m-d H:i:s');
-			$req = "INSERT INTO commande(id, idClient, dateCommande) VALUES (:id, :idClient, :date)";
-			$tab = array('id' => $idCommande, 'idClient' => $idClient, 'date' => $date);
+			$req = "INSERT INTO commande(idCommande, idClient, dateCommande, idEtat) VALUES (:idCommande, :idClient, :date, 1)";
+			$tab = array('idCommande' => $idCommande, 'idClient' => $idClient, 'date' => $date);
 			$this->executerRequete($req, $tab);
 
 			foreach ($lesIdProduit as $unIdProduit) {
 				$qte = $lesQuantites[$unIdProduit] ?? 1;
-				$req = "INSERT INTO contenir (idCommande, idProduit, qte) VALUES (:idCommande, :idProduit, :qte)";
+				$req = "INSERT INTO contenir (idCommande, idproduit, qte) VALUES (:idCommande, :idProduit, :qte)";
 				$tab2 = array('idCommande' => $idCommande, 'idProduit' => $unIdProduit, 'qte' => $qte);
 				$this->executerRequete($req, $tab2);
 			}
@@ -228,7 +247,7 @@ class ModeleFront extends Modele
 	public function creerCategorie($id, $libelle)
 	{
 		try {
-			$req = 'INSERT INTO categorie (id, libelle) VALUES (:id, :libelle)';
+			$req = 'INSERT INTO categorie (idCateg, libelle) VALUES (:id, :libelle)';
 			$tab = array(
 				'id' => $id,
 				'libelle' => $libelle
@@ -243,7 +262,7 @@ class ModeleFront extends Modele
 
 	public function creerProduit($id, $description, $prix, $image, $idCategorie)
 	{
-		$req = "INSERT INTO produit (id, description, prix, image, idCategorie) VALUES (:id, :description, :prix, :image, :idCategorie)";
+		$req = "INSERT INTO produit (idproduit, description, prix, image, idCateg, quantiteStock, seuil_rupture, mis_en_avant_date_debut, mis_en_avant_date_fin, idMarque, idUnite, nom) VALUES (:id, :description, :prix, :image, :idCategorie, 0, 0, CURDATE(), CURDATE(), 1, 1, 'Nouveau Produit')";
 		$tab = array(
 			'id' => $id, 
 			'description' => $description, 
@@ -256,7 +275,7 @@ class ModeleFront extends Modele
 
 	public function getUnProduit($id)
 	{
-		$req = "SELECT * FROM produit WHERE id=:id";
+		$req = "SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit WHERE idproduit=:id";
 		$tab = array('id' => $id);
 		$res = $this->executerRequete($req, $tab);
 		return $res->fetch(PDO::FETCH_OBJ);
@@ -264,7 +283,7 @@ class ModeleFront extends Modele
 
 	public function modifierProduit($id, $description, $prix, $image, $idCategorie)
 	{
-		$req = "UPDATE produit SET description = :description, prix = :prix, image = :image, idCategorie = :idCategorie WHERE id = :id";
+		$req = "UPDATE produit SET description = :description, prix = :prix, image = :image, idCateg = :idCategorie WHERE idproduit = :id";
 		$tab = array(
 			'id' => $id, 
 			'description' => $description, 
@@ -277,7 +296,7 @@ class ModeleFront extends Modele
 
 	public function supprimerProduit($id)
 	{
-		$req = "DELETE FROM produit WHERE id=:id";
+		$req = "DELETE FROM produit WHERE idproduit=:id";
 		$tab = array('id' => $id);
 		$this->executerRequete($req, $tab);
 	}
