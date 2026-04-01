@@ -301,5 +301,22 @@ class ModeleFront extends Modele
 		$this->executerRequete($req, $tab);
 	}
 
+	public function modifierCategorie($id, $libelle)
+	{
+		$req = "UPDATE categorie SET libelle = :libelle WHERE idCateg = :id";
+		$tab = array(
+			'id' => $id,
+			'libelle' => $libelle
+		);
+		$this->executerRequete($req, $tab);
+	}
+
+	public function supprimerCategorie($id)
+	{
+		$req = "DELETE FROM categorie WHERE idCateg = :id";
+		$tab = array('id' => $id);
+		$this->executerRequete($req, $tab);
+	}
+
 }
 ?>

@@ -11,48 +11,60 @@
  * @class ControleurVoirProduits
  * @brief contient les fonctions pour gérer l'affichage des produits
  */
-class ControleurVoirProduits{
+class ControleurVoirProduits
+{
     private $modeleFront;
 
     public function __construct()
     {
-        $this->modeleFront=new ModeleFront();
+        $this->modeleFront = new ModeleFront();
     }
-	/**
-	 * Affiche les produits
-	 *
-	 * si $categ contient un idCategorie affiche les produits d'une catégorie
-	 * @param $categ un identifiant de la catégorie de produits à afficher
-	*/
-    public function voirProduits($categ){
-		$lesProduits=$this->modeleFront->getLesProduitsDeCategorie($categ);
-        $laCategorie=$this->modeleFront->getLesInfosCategorie($categ);
-       // var_dump($laCategorie);
-        $lesCategories=$this->modeleFront->getLesCategories();
-        
+    /**
+     * Affiche les produits
+     *
+     * si $categ contient un idCategorie affiche les produits d'une catégorie
+     * @param $categ un identifiant de la catégorie de produits à afficher
+     */
+    public function voirProduits($categ)
+    {
+        $lesProduits = $this->modeleFront->getLesProduitsDeCategorie($categ);
+        $laCategorie = $this->modeleFront->getLesInfosCategorie($categ);
+        // var_dump($laCategorie);
+        $lesCategories = $this->modeleFront->getLesCategories();
+
         include("vues/v_choixCategorie.php");
         include("vues/v_produits.php");
     }
 
-    public function voirTousProduits(){
-        $lesProduits=$this->modeleFront->getTousLesProduits();
-        $lesCategories=$this->modeleFront->getLesCategories();
+    public function voirTousProduits()
+    {
+        $lesProduits = $this->modeleFront->getTousLesProduits();
+        $lesCategories = $this->modeleFront->getLesCategories();
         include("vues/v_produits.php");
     }
-	/**
-	 * Affiche le menu à gauche contenant les catégories
-	*/
-    public function voirCategories(){
-		$lesCategories=$this->modeleFront->getLesCategories();
+    /**
+     * Affiche le menu à gauche contenant les catégories
+     */
+    public function voirCategories()
+    {
+        $lesCategories = $this->modeleFront->getLesCategories();
         include("vues/v_choixCategorie.php");
-	}
+    }
 
-    
-    public function ajouterCategorie(){
+    public function listeCategories()
+    {
+        $lesCategories = $this->modeleFront->getLesCategories();
+        include("vues/v_listeCategorie.php");
+    }
+
+
+    public function ajouterCategorie()
+    {
         include("vues/v_ajouterCategorie.php");
     }
 
-    public function validerAjoutCategorie(){
+    public function validerAjoutCategorie()
+    {
         $id = $_POST['id'] ?? '';
         $libelle = $_POST['libelle'] ?? '';
 
@@ -79,12 +91,44 @@ class ControleurVoirProduits{
         }
     }
 
-    public function ajouterProduit(){
+    public function modifierCategorie()
+    {
+        $id = $_REQUEST['id'] ?? null;
+        if ($id) {
+            $laCategorie = $this->modeleFront->getLesInfosCategorie($id);
+            include("vues/v_modifierCategorie.php");
+        } else {
+            $this->listeCategories();
+        }
+    }
+
+    public function validerModifCategorie()
+    {
+        $id = $_POST['id'];
+        $libelle = $_POST['libelle'];
+
+        $this->modeleFront->modifierCategorie($id, $libelle);
+
+        $this->listeCategories();
+    }
+
+    public function supprimerCategorie()
+    {
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $this->modeleFront->supprimerCategorie($id);
+        }
+        $this->listeCategories();
+    }
+
+    public function ajouterProduit()
+    {
         $lesCategories = $this->modeleFront->getLesCategories();
         include("vues/v_ajouterProduit.php");
     }
 
-    public function validerAjoutProduit(){
+    public function validerAjoutProduit()
+    {
         $id = $_POST['id'];
         $description = $_POST['description'];
         $prix = $_POST['prix'];
@@ -92,18 +136,20 @@ class ControleurVoirProduits{
         $idCategorie = $_POST['idCategorie'];
 
         $this->modeleFront->creerProduit($id, $description, $prix, $image, $idCategorie);
-        
+
         echo "<p>Produit ajouté avec succès !</p>";
         $this->voirTousProduits();
     }
 
-    public function listeProduitsModif() {
+    public function listeProduitsModif()
+    {
         // 1. On récupère la liste pour l'afficher
         $lesProduits = $this->modeleFront->getTousLesProduits();
         include("vues/v_listeProduitsModif.php");
     }
 
-    public function modifierProduit() {
+    public function modifierProduit()
+    {
         // 2. On affiche le formulaire avec les valeurs existantes
         $id = $_REQUEST['id']; // vient du lien de v_listeProduitsModif
         $leProduit = $this->modeleFront->getUnProduit($id);
@@ -111,7 +157,8 @@ class ControleurVoirProduits{
         include("vues/v_modifierProduit.php");
     }
 
-    public function validerModifProduit() {
+    public function validerModifProduit()
+    {
         // 3. On enregistre en base les nouvelles données
         $id = $_POST['id'];
         $description = $_POST['description'];
@@ -120,13 +167,14 @@ class ControleurVoirProduits{
         $idCategorie = $_POST['idCategorie'];
 
         $this->modeleFront->modifierProduit($id, $description, $prix, $image, $idCategorie);
-        
+
 
         echo "<p>Produit mis à jour avec succès !</p>";
         $this->listeProduitsModif();
     }
 
-    public function supprimerProduit() {
+    public function supprimerProduit()
+    {
         $id = $_GET['id'];
         $this->modeleFront->supprimerProduit($id);
 
@@ -136,4 +184,3 @@ class ControleurVoirProduits{
 }
 
 ?>
-

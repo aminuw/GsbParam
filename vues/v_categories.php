@@ -1,24 +1,23 @@
 <h2>Catégorie | <?php echo $laCategorie->libelle ?></h1>
 
-<ul id="categories">
+	<ul id="categories">
 
-<?php
-foreach( $lesCategories as $uneCategorie) 
-{
-	$idCategorie = $uneCategorie->id;
-	$libCategorie = $uneCategorie->libelle;
-	?>
-	
-	<li>
-		<a class="text-decoration-none text-light" href="index.php?uc=voirProduits&action=voirProduits&categorie=<?= $idCategorie ?>">
-		<?= $libCategorie ?></a>
-	</li>	
-<?php
-}?>
-<?php 
+		<?php
+		foreach ($lesCategories as $uneCategorie) {
+			$idCategorie = $uneCategorie->id;
+			$libCategorie = $uneCategorie->libelle;
+			?>
 
- ?>
+			<li>
+				<a class="text-decoration-none text-light"
+					href="index.php?uc=voirProduits&action=voirProduits&categorie=<?= $idCategorie ?>">
+					<?= $libCategorie ?></a>
+			</li>
+			<?php
+		} ?>
+		<?php
+
+		?>
 
 
-</ul>
-
+	</ul>
