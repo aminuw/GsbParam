@@ -22,7 +22,7 @@ class ModeleFront extends Modele
 	public function getLesCategories()
 	{
 		try {
-			$req = 'SELECT idCateg AS id, libelle FROM categorie';
+			$req = 'select idCateg as id, libelle from categorie';
 			$res = $this->executerRequete($req);
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
 			return $lesLignes;
@@ -61,7 +61,7 @@ class ModeleFront extends Modele
 	public function getLesProduitsDeCategorie($idCategorie)
 	{
 		try {
-			$req = 'SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit WHERE idCateg =:idCategorie';
+			$req = 'SELECT idproduit AS id, nom, description, prix, image, quantiteStock, seuil_rupture, mis_en_avant_date_debut, mis_en_avant_date_fin, idCateg AS idCategorie, idMarque, idUnite FROM produit WHERE idCateg =:idCategorie';
 			$tab = array('idCategorie' => $idCategorie);
 			$res = $this->executerRequete($req, $tab);
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
@@ -75,7 +75,7 @@ class ModeleFront extends Modele
 	public function getTousLesProduits()
 	{
 		try {
-			$req = 'SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit';
+			$req = 'SELECT idproduit AS id, nom, description, prix, image, quantiteStock, seuil_rupture, mis_en_avant_date_debut, mis_en_avant_date_fin, idCateg AS idCategorie, idMarque, idUnite FROM produit';
 			$res = $this->executerRequete($req);
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
 			return $lesLignes;
@@ -96,14 +96,14 @@ class ModeleFront extends Modele
 			$lesProduits = array();
 			if ($desIdsProduit != null) {
 				foreach ($desIdsProduit as $unIdProduit) {
-					$req = 'SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit WHERE idproduit = "' . $unIdProduit . '"';
+					$req = 'SELECT idproduit AS id, nom, description, prix, image, idCateg AS idCategorie FROM produit WHERE idproduit = "' . $unIdProduit . '"';
 					$res = $this->executerRequete($req);
 					$unProduit = $res->fetch(PDO::FETCH_OBJ);
 					$lesProduits[] = $unProduit;
 				}
 			} else // on souhaite tous les produits
 			{
-				$req = 'SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit;';
+				$req = 'SELECT idproduit AS id, nom, description, prix, image, idCateg AS idCategorie FROM produit;';
 				$res = $this->executerRequete($req);
 				$lesProduits = $res->fetchAll(PDO::FETCH_OBJ);
 			}
@@ -260,36 +260,65 @@ class ModeleFront extends Modele
 		}
 	}
 
-	public function creerProduit($id, $description, $prix, $image, $idCategorie)
-	{
-		$req = "INSERT INTO produit (idproduit, description, prix, image, idCateg, quantiteStock, seuil_rupture, mis_en_avant_date_debut, mis_en_avant_date_fin, idMarque, idUnite, nom) VALUES (:id, :description, :prix, :image, :idCategorie, 0, 0, CURDATE(), CURDATE(), 1, 1, 'Nouveau Produit')";
-		$tab = array(
-			'id' => $id, 
-			'description' => $description, 
-			'prix' => $prix, 
-			'image' => $image, 
-			'idCategorie' => $idCategorie
-		);
-		$this->executerRequete($req, $tab);
-	}
-
 	public function getUnProduit($id)
 	{
-		$req = "SELECT idproduit AS id, description, prix, image, idCateg AS idCategorie FROM produit WHERE idproduit=:id";
+		$req = "SELECT idproduit AS id, nom, description, prix, image, quantiteStock, seuil_rupture, mis_en_avant_date_debut, mis_en_avant_date_fin, idCateg AS idCategorie, idMarque, idUnite FROM produit WHERE idproduit=:id";
 		$tab = array('id' => $id);
 		$res = $this->executerRequete($req, $tab);
 		return $res->fetch(PDO::FETCH_OBJ);
 	}
 
-	public function modifierProduit($id, $description, $prix, $image, $idCategorie)
+	public function getLesMarques()
 	{
-		$req = "UPDATE produit SET description = :description, prix = :prix, image = :image, idCateg = :idCategorie WHERE idproduit = :id";
+		$req = 'SELECT idMarque, libelleMarque FROM marque';
+		$res = $this->executerRequete($req);
+		return $res->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public function getLesUnites()
+	{
+		$req = 'SELECT idUnite, libelle FROM unite';
+		$res = $this->executerRequete($req);
+		return $res->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public function creerProduit($idproduit, $nom, $description, $prix, $image, $quantiteStock, $seuil_rupture, $mis_en_avant_date_debut, $mis_en_avant_date_fin, $idCateg, $idMarque, $idUnite)
+	{
+		$req = "INSERT INTO produit (idproduit, nom, description, prix, image, quantiteStock, seuil_rupture, mis_en_avant_date_debut, mis_en_avant_date_fin, idCateg, idMarque, idUnite) 
+                VALUES (:idproduit, :nom, :description, :prix, :image, :quantiteStock, :seuil_rupture, :mis_en_avant_date_debut, :mis_en_avant_date_fin, :idCateg, :idMarque, :idUnite)";
 		$tab = array(
-			'id' => $id, 
+			'idproduit' => $idproduit,
+			'nom' => $nom,
 			'description' => $description, 
 			'prix' => $prix, 
 			'image' => $image, 
-			'idCategorie' => $idCategorie
+			'quantiteStock' => $quantiteStock, 
+			'seuil_rupture' => $seuil_rupture, 
+			'mis_en_avant_date_debut' => $mis_en_avant_date_debut, 
+			'mis_en_avant_date_fin' => $mis_en_avant_date_fin, 
+			'idCateg' => $idCateg,
+			'idMarque' => $idMarque,
+			'idUnite' => $idUnite
+		);
+		$this->executerRequete($req, $tab);
+	}
+
+	public function modifierProduit($idproduit, $nom, $description, $prix, $image, $quantiteStock, $seuil_rupture, $mis_en_avant_date_debut, $mis_en_avant_date_fin, $idCateg, $idMarque, $idUnite)
+	{
+		$req = "UPDATE produit SET nom = :nom, description = :description, prix = :prix, image = :image, quantiteStock = :quantiteStock, seuil_rupture = :seuil_rupture, mis_en_avant_date_debut = :mis_en_avant_date_debut, mis_en_avant_date_fin = :mis_en_avant_date_fin, idCateg = :idCateg, idMarque = :idMarque, idUnite = :idUnite WHERE idproduit = :idproduit";
+		$tab = array(
+			'idproduit' => $idproduit,
+			'nom' => $nom,
+			'description' => $description, 
+			'prix' => $prix, 
+			'image' => $image, 
+			'quantiteStock' => $quantiteStock, 
+			'seuil_rupture' => $seuil_rupture, 
+			'mis_en_avant_date_debut' => $mis_en_avant_date_debut, 
+			'mis_en_avant_date_fin' => $mis_en_avant_date_fin, 
+			'idCateg' => $idCateg,
+			'idMarque' => $idMarque,
+			'idUnite' => $idUnite
 		);
 		$this->executerRequete($req, $tab);
 	}

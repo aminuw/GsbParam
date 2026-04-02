@@ -8,6 +8,7 @@
 foreach( $lesProduits as $unProduit) 
 { 	// récupération des informations du produit
 	$id = $unProduit->id;
+	$nom = $unProduit->nom;
 	$description = $unProduit->description;
 	$image = $unProduit->image;
 	$prix = $unProduit->prix;
@@ -16,7 +17,7 @@ foreach( $lesProduits as $unProduit)
 	<div id="card">
 			<div>
 			<div class="photoCard"><img src="<?= $image ?>" alt=image /></div>
-			<div class="descrCard"><?= $description ?></div>
+			<div class="nomCard"><strong><?= $nom ?></strong></div>
 			<div class="prixCard"><?= $prix."€" ?></div>
 			</div>
 			<div class="imgCard"><a href="index.php?uc=gererPanier&produit=<?= $id ?>&action=ajouterAuPanier"> 

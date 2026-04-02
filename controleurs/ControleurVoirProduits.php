@@ -124,6 +124,8 @@ class ControleurVoirProduits
     public function ajouterProduit()
     {
         $lesCategories = $this->modeleFront->getLesCategories();
+        $lesMarques = $this->modeleFront->getLesMarques();
+        $lesUnites = $this->modeleFront->getLesUnites();
         include("vues/v_ajouterProduit.php");
     }
 
@@ -133,12 +135,18 @@ class ControleurVoirProduits
         $description = $_POST['description'];
         $prix = $_POST['prix'];
         $image = $_POST['image'];
-        $idCategorie = $_POST['idCategorie'];
+        $quantiteStock = $_POST['quantiteStock'];
+        $seuil_rupture = $_POST['seuil_rupture'];
+        $mis_en_avant_date_debut = $_POST['mis_en_avant_date_debut'];
+        $mis_en_avant_date_fin = $_POST['mis_en_avant_date_fin'];
+        $idCateg = $_POST['idCateg'];
+        $idMarque = $_POST['idMarque'];
+        $idUnite = $_POST['idUnite'];
 
         $this->modeleFront->creerProduit($id, $description, $prix, $image, $idCategorie);
 
         echo "<p>Produit ajouté avec succès !</p>";
-        $this->voirTousProduits();
+        $this->listeProduitsModif();
     }
 
     public function listeProduitsModif()
@@ -154,17 +162,26 @@ class ControleurVoirProduits
         $id = $_REQUEST['id']; // vient du lien de v_listeProduitsModif
         $leProduit = $this->modeleFront->getUnProduit($id);
         $lesCategories = $this->modeleFront->getLesCategories();
+        $lesMarques = $this->modeleFront->getLesMarques();
+        $lesUnites = $this->modeleFront->getLesUnites();
         include("vues/v_modifierProduit.php");
     }
 
     public function validerModifProduit()
     {
         // 3. On enregistre en base les nouvelles données
-        $id = $_POST['id'];
+        $idproduit = $_POST['idproduit'];
+        $nom = $_POST['nom'];
         $description = $_POST['description'];
         $prix = $_POST['prix'];
         $image = $_POST['image'];
-        $idCategorie = $_POST['idCategorie'];
+        $quantiteStock = $_POST['quantiteStock'];
+        $seuil_rupture = $_POST['seuil_rupture'];
+        $mis_en_avant_date_debut = $_POST['mis_en_avant_date_debut'];
+        $mis_en_avant_date_fin = $_POST['mis_en_avant_date_fin'];
+        $idCateg = $_POST['idCateg'];
+        $idMarque = $_POST['idMarque'];
+        $idUnite = $_POST['idUnite'];
 
         $this->modeleFront->modifierProduit($id, $description, $prix, $image, $idCategorie);
 
