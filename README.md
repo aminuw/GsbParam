@@ -141,11 +141,6 @@ Ce socle démontre l'utilisation rigoureuse de **PDO transactionnel** (Commit/Ro
 ---
 
 ## Réalisé par
-<<<<<<< HEAD
 * **Jef Ly**
 * **Amine Agnaou**
-=======
->>>>>>> f11aa35 (readme v3)
 
-- **Jef Ly**
-- **Ambroise Boutrin**
