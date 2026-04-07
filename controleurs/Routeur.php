@@ -76,8 +76,16 @@ class Routeur{
                 case 'validerConnexion': {$this->ctrlUtilisateur->validerConnexion();break;}
                 case 'deconnexion' : {$this->ctrlUtilisateur->deconnexion();break;}
             }; break;
-        case 'administrer' :  // TODO Créer un contrôleur spécial pour l'administration du site
-		break; 
+        case 'administrer' : 
+            switch ($action) {
+        case 'listeProduitsModif':   { $this->ctrlAdministrer->listeProduitsModif(); break; }
+        case 'ajouterProduit':       { $this->ctrlAdministrer->ajouterProduit(); break; }
+        case 'validerAjoutProduit':  { $this->ctrlAdministrer->validerAjoutProduit(); break; }
+        case 'modifierProduit':      { $this->ctrlAdministrer->modifierProduit(); break; }
+        case 'validerModifProduit':  { $this->ctrlAdministrer->validerModifProduit(); break; }
+        case 'supprimerProduit':     { $this->ctrlAdministrer->supprimerProduit(); break; }
+    }
+    break; 
     }
     }
 }
