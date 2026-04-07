@@ -2,74 +2,150 @@
 
 ## Contexte général
 
-Ce projet a été réalisé en binôme dans le cadre de la dernière année de BTS SIO (Services Informatiques aux Organisations), option SLAM (Solutions Logicielles et Applications Métiers).
+Ce projet a été réalisé **en binôme** dans le cadre de notre **dernière année de BTS SIO (Services Informatiques aux Organisations), option SLAM (Solutions Logicielles et Applications Métiers)**.
 
-Le projet **GSB Paramédical** (Phase 2) est la réalisation d'un site e-commerce et d'une application d’administration complète pour le laboratoire GSB. L'objectif est de présenter et de vendre en ligne des produits paramédicaux, tout en fournissant un *Back-Office* complet à l'équipe GSB pour la gestion quotidienne (catalogue, stocks, commandes). Le projet s'appuie et prolonge les travaux initiaux de M. Jouin.
+Le projet **GSB Paramédical** est une application web PHP destinée à la vente en ligne de produits paramédicaux pour le laboratoire GSB. Elle permet aux clients de **consulter le catalogue, gérer un panier et passer des commandes**, tout en fournissant un *Back-Office* complet à l'équipe GSB pour la gestion quotidienne (catalogue, stocks, commandes).
 
-L'application respecte les contraintes légales européennes (RGPD, Mentions Légales) et suit une architecture robuste.
+L'application est hébergée localement via **WAMP** et utilise une base de données **MySQL** (`gsbparamv2`).
+
+---
 
 ## Architecture technique
 
 | Composant | Détail |
-| :--- | :--- |
+|---|---|
 | **Langage** | PHP (Orienté Objet), JavaScript, HTML5 |
-| **Architecture** | Modèle – Vue – Contrôleur (MVC) |
-| **Base de données** | MySQL (`gsbparamv2`) requêtée via PDO |
-| **CSS / UI** | Intégration front-end responsive fonctionnant sur tous navigateurs standards |
-| **Serveur & Local** | Hébergement (WAMP) / Prévision environnement production |
-| **Routage** | Contrôleur frontal `index.php` avec passage du paramètre Use Case (`uc`) |
-| **Gestion** | Itérations Agile (Scrum via Trello) et Versionning Git |
+| **Architecture** | MVC (Modèle – Vue – Contrôleur) |
+| **Base de données** | MySQL via PDO |
+| **CSS / UI** | Intégration front-end HTML/CSS |
+| **Serveur** | WAMP (localhost) |
+| **Routage** | Paramètre `uc` (use case) dans `index.php` |
 
-## Point d'entrée : `index.php`
+### Point d'entrée : `index.php`
 
-Le fichier `index.php` est le point de départ de l'application. Après l'initialisation des sessions (`session_start()`), le trafic est routé vers les contrôleurs spécifiques selon le paramètre `uc` :
+Le fichier `index.php` route les requêtes via la variable `$_REQUEST['uc']` et la classe `Routeur` :
 
-| `uc` | Contrôleur ciblé | Description (Use Case) |
-| :--- | :--- | :--- |
-| `accueil` | `ControleurAccueil.php` | Page d'accueil publique (USR 15) |
-| `voirProduits` | `ControleurVoirProduits.php` | Catalogue côté client (USR 4, 5) et gestion côté Admin (USR 3, 12, 7) |
-| `gererPanier` | `ControleurGererPanier.php` | Fonctionnalités d'achat client et prise de commande (USR 8) |
-| `utilisateur` | `ControleurUtilisateur.php` | Espace, inscription et authentification client (USR 14) |
+| `uc` | Contrôleur | Accès |
+|---|---|---|
+| `utilisateur` | `ControleurUtilisateur.php` | Public |
+| `voirProduits` | `ControleurVoirProduits.php` | Public / Administrateur |
+| `gererPanier` | `ControleurGererPanier.php` | Public / Authentifié |
+| `accueil` | `ControleurAccueil.php` | Public |
+| (défaut) | `ControleurAccueil.php` | Public |
+
+---
 
 ## Modèle Conceptuel de Données (MCD)
 
-La base de données sépare rigoureusement la logique "Boutique" et "Comptes".
+La base de données sépare rigoureusement la logique "Boutique" et "Comptes" avec ses entités principales :
 
-| Entités Clés | Rôle & Attributs principaux |
-| :--- | :--- |
-| **`produit`** | Cœur du catalogue. Gère les descriptions, prix, `quantiteStock`, `seuil_rupture`, ainsi que les dates de `mis_en_avant` pour la page d'accueil. |
-| **`categorie`** / **`marque`** / **`unite`** | Dictionnaires de typologies des produits (relations 1:N). |
-| **`client`** | Fiche nominative (Nom, prénom, adresse, CP, Ville). |
-| **`login`** | Données d'authentification (email, mot de passe hashé, rôle). Un client possède strictement 1 login. |
-| **`commande`** | En-tête de validation d'achat avec historique et affectation d'un `idEtat`. |
-| **`contenir`** | Lignes de commandes identifiant les produits et quantités associées aux commandes passées. |
+### Entités clés
 
-*(Nota : Les données non utilisées de manière répétitive sont dé-dupliquées conformément aux formes normales ; par ex. une adresse est dans `client` et non dans `commande`).*
+| Entité | Rôle | Clé primaire |
+|---|---|---|
+| **produit** | Cœur du catalogue (prix, description, seuils stock) | `idproduit` |
+| **categorie** | Classification des produits dans le catalogue | `idCateg` |
+| **client** | Fiche d'informations personnelles du client | `idClient` |
+| **login** | Identifiants de connexion (email, mot de passe) | `idLogin` |
+| **commande** | En-tête des commandes validées | `idCommande` |
+| **contenir** | Lignes de commandes (association commande/produit) | Clés primaires `idCommande` & `idProduit` |
+| **marque** / **unite** | Typologies et classifications secondaires | `idMarque` / `idUnite` |
 
-## Fonctionnalités Métier & Use Cases (USR) Implémentés
+### Relations importantes
 
-Construit sur une approche orientée utilisateur, l'outil propose deux grands espaces : le Back-Office (Administrateur) et le Front-Office (Client).
+- **client** ↔ **login** : un client est strictement lié à un compte (1:1)
+- **client** ↔ **commande** : un client peut passer plusieurs commandes (1:N)
+- **commande** ↔ **produit** : relation N:N via la table de liaison `contenir`
+- **produit** ↔ **categorie** : un produit appartient à une catégorie
+- **produit** ↔ **marque** / **unite** : un produit a une marque et une unité
 
-### 🛠 Espace Administration (Back-Office)
+---
 
-*   **Gestion du Catalogue (USR 3, USR 12)** : L'administrateur peut procéder au CRUD complet des produits et catégories. Une logique métier interdit la suppression d'une catégorie contenant encore des produits.
-*   **Suivi des Stocks (USR 7)** : Un écran dédié permet de modifier les stocks restants. Un système d'alerte identifie les produits atteignant le **seuil de rupture** (quantité en stock <= seuil critique), bloquant par la suite leur commande côté client.
-*   **Animation du Site (USR 15)** : Possibilité de programmer la mise en avant de produits sur la page d'accueil via des dates de début et de fin.
-*   **Gestion Ventes & Commandes (USR 10)** : Tableau de suivi des commandes avec changement de statut (en cours de livraison, terminée, etc.).
+## Modules fonctionnels implémentés
 
-### 🛍 Espace Client (Front-Office)
+### 1. Connexion / Authentification (`uc=utilisateur`)
+- Inscription de nouveaux clients avec enregistrement des coordonnées
+- Login via l'adresse `mail`
+- Mot de passe haché en `Bcrypt` (`password_hash`)
+- Session PHP avec stockage de l'ID client, identifiants et données de panier
 
-*   **Catalogue Dynamique (USR 4)** : Affichage exhaustif des produits. Des filtres paramétrables (Catégorie, Prix, Marque) facilitent la recherche utilisateur.
-*   **Achat en ligne (USR 5, USR 8)** : Consultation des fiches produits détaillées. Ajout dans un panier virtuel sauvegardé en session (`$_SESSION`). Le client peut en ajuster les quantités avant de confirmer. La commande nécessite la création préalable d'un compte (RGPD).
-*   **Processus d'Inscription sécurisé** : Mot de passe haché par algorithmes forts, et séparation par rôle dans la base de données.
-*   **Espace Personnel (USR 14)** : Consultation des informations du compte, historique des commandes passées.
+### 2. Gestion et Administration du catalogue (`uc=voirProduits`)
 
-## Sécurité & Intégrité des données
+C'est un module central pour les administrateurs, avec un **CRUD complet** :
 
-Les opérations de validation (ex. Création de compte Client + Login, ou enregistrement d'une Commande + Lignes de paniers) s'effectuent par le système transactionnel de PDO (`$this->beginTransaction()`, `$this->commit()`, `$this->rollBack()`). Si l'enregistrement d'une ligne de panier échoue, l'intégralité de la commande est annulée pour protéger la cohérence financière des données.
+| Action | Description | Habilitation théorique |
+|---|---|---|
+| `voirCategories` | Afficher la liste des catégories | Public |
+| `voirProduits` | Consulter les produits (avec filtres possibles) | Public |
+| `ajouterProduit` | Créer un nouveau produit | Administrateur |
+| `modifierProduit` | Modifier les informations d'un produit existant | Administrateur |
+| `supprimerProduit`| Retirer un produit du catalogue | Administrateur |
+| `ajouterCategorie`| Créer une nouvelle catégorie | Administrateur |
+
+**Fonctionnalités spécifiques :**
+- Gestion du **stock** avec système de seuil d'alerte (seuil de rupture)
+- Animation / **Mise en avant** promo avec dates de début et fin
+
+### 3. Gestion du Panier et Ventes (`uc=gererPanier`)
+- Panier virtuel sauvegardé en mémoire de session (`$_SESSION`)
+- Modification dynamique des quantités souhaitées
+- Passage de commande **transactionnel** (ACID avec PDO et `rollback`/`commit` en cas d'erreur)
+
+---
+
+## Système de droits (habilitations)
+
+*(Le système intégre une notion de base de rôle prête pour de futures évolutions, présente en BDD table `login`)*
+
+| idRole (role) | Rôle | Droits actuels / cibles |
+|---|---|---|
+| **1** | Client standard | Consulter le catalogue, remplir son panier, passer des commandes |
+| **2** | Administrateur (cible)| + Créer, modifier, supprimer des produits et catégories, gérer les états de commande |
+
+---
+
+## Fichiers du projet
+
+```
+GsbParam/
+├── index.php                      ← Point d'entrée (initialisation)
+├── config/.config.php             ← Configuration SQL (isolée)
+├── modele/
+│   ├── Modele.php                 ← Classe abstraite de connexion PDO & Transactions
+│   └── ModeleFront.php            ← Fonctions et procédures SQL pour l'application
+├── controleurs/
+│   ├── Routeur.php                ← Fichier de routage (Switch 'uc' et 'action')
+│   ├── ControleurAccueil.php      ← Logique accueil
+│   ├── ControleurVoirProduits.php ← Logique gestion du catalogue
+│   ├── ControleurGererPanier.php  ← Logique métier Ventes
+│   └── ControleurUtilisateur.php  ← Logique authentification et inscriptions
+├── vues/                          ← L'ensemble des templates d'affichage HTML/PHP
+└── BD/   
+    ├── gsbparamv2.sql             ← Script SQL complet
+    └── ANCIEN_script_GSBPARAM.sql ← Archives bases de données
+```
+
+---
+
+## Résumé
+
+Ce projet est une **application de vente en ligne (e-commerce)** pour le laboratoire GSB, construite en **PHP Orienté Objet et MVC**. Elle couvre :
+
+1. **L'authentification** et la création de compte client sécurisée.
+2. **La gestion complète d'un catalogue produit** (CRUD + filtres + notions de stocks critiques).
+3. **Le système complet de panier virtuel** et d'enregistrement en base des commandes.
+4. **L'administration** de l'accueil et de son animation dynamique (produits mis en avant).
+
+Ce socle démontre l'utilisation rigoureuse de **PDO transactionnel** (Commit/Rollback garanti), garantissant l'intégrité de la logique financière lors du passage en caisse.
+
+---
 
 ## Réalisé par
+<<<<<<< HEAD
 * **Jef Ly**
 * **Amine Agnaou**
+=======
+>>>>>>> f11aa35 (readme v3)
 
-*(Projet d'étude examiné basé sur le cas GSB Paramédical)*
+- **Jef Ly**
+- **Ambroise Boutrin**
