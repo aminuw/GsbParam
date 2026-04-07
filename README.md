@@ -70,6 +70,6 @@ Les opérations de validation (ex. Création de compte Client + Login, ou enregi
 
 ## Réalisé par
 * **Jef Ly**
-* **Ambroise Boutrin**
+* **Amine Agnaou**
 
 *(Projet d'étude examiné basé sur le cas GSB Paramédical)*
