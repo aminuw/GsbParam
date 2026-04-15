@@ -17,15 +17,15 @@
                 class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Nos produits</a></li>
             <li><a href="index.php?uc=voirProduits&action=voirProduits&categorie=CH"
                 class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Produits par catégorie</a></li>
-            <li><a href="index.php?uc=voirProduits&action=listeCategories"
+            <li><a href="index.php?uc=categories&action=listeCategories"
                 class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Lister les catégories</a></li>
-            <li><a href="index.php?uc=voirProduits&action=ajouterCategorie"
+            <li><a href="index.php?uc=categories&action=ajouterCategorie"
                 class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Ajouter une catégorie</a></li>
-            <li><a href="index.php?uc=voirProduits&action=ajouterProduit"
+            <li><a href="index.php?uc=categories&action=ajouterProduit"
                 class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Ajouter un produit</a></li>
             <li><a href="index.php?uc=voirProduits&action=listeProduitsModif"
                 class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Modifier un produit</a></li>
-            <li><a href="index.php?uc=voirProduits&action=modifierCategorie"
+            <li><a href="index.php?uc=categories&action=modifierCategorie"
                 class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Modifier une catégorie</a></li>
             <li><a href="index.php?uc=gererPanier&action=voirPanier"
                 class="nav-link rounded-pill px-3 mx-1 fw-bold link-dark">Mon panier</a></li>
