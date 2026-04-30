@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Mission GsbParam PHP Objet
  * 
@@ -164,7 +164,7 @@ class ControleurGererPanier
 	function confirmerCommande()
 	{
 		if (isset($_SESSION['client'])) {
-			$idClient = $_SESSION['client']->id;
+			$idClient = $_SESSION['client']->idClient;
 			$lesIdProduits = $this->getLesIdProduitsDuPanier();
 			$lesQuantites = $this->getQte();
 

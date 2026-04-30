@@ -22,4 +22,8 @@ class ControleurAccueil{
     public function accueil(){
         include("vues/v_accueil.html");
     }
+
+    public function mentionsLegales(){
+        include("vues/v_mentionsLegales.php");
+    }
 }

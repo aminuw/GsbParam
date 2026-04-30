@@ -5,6 +5,22 @@
             <i class="bi bi-plus-circle me-1"></i> Ajouter une catégorie
         </a>
     </div>
+
+    <?php if (isset($message)): ?>
+        <div class="alert alert-success">
+            <?php echo $message; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (isset($erreurs)): ?>
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                <?php foreach ($erreurs as $erreur): ?>
+                    <li><?php echo $erreur; ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
     <table class="table table-hover table-striped table-bordered shadow-sm">
         <thead class="table-dark text-center">
             <tr>

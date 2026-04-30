@@ -44,6 +44,9 @@ class Routeur
             case 'accueil':
                 $this->ctrlAccueil->accueil();
                 break;
+            case 'mentionsLegales':
+                $this->ctrlAccueil->mentionsLegales();
+                break;
             case 'voirProduits':
                 switch ($action) {
                     case null:

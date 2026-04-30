@@ -67,21 +67,41 @@ class ControleurCategories
 
     public function validerModifCategorie()
     {
-        $id = $_POST['id'];
-        $libelle = $_POST['libelle'];
+        $id = $_POST['id'] ?? '';
+        $libelle = $_POST['libelle'] ?? '';
 
-        $this->modeleFront->modifierCategorie($id, $libelle);
-
-        $this->listeCategories();
+        if (empty($id) || empty($libelle)) {
+            $erreurs[] = "L'identifiant et le libellé ne peuvent pas être vides.";
+            $laCategorie = (object) ['id' => $id, 'libelle' => $libelle];
+            include("vues/v_modifierCategorie.php");
+        } else {
+            if ($this->modeleFront->modifierCategorie($id, $libelle)) {
+                $message = "La catégorie a été modifiée avec succès !";
+                $lesCategories = $this->modeleFront->getLesCategories();
+                include("vues/v_listeCategorie.php");
+            } else {
+                $erreurs[] = "Une erreur est survenue lors de la modification.";
+                $laCategorie = (object) ['id' => $id, 'libelle' => $libelle];
+                include("vues/v_modifierCategorie.php");
+            }
+        }
     }
 
     public function supprimerCategorie()
     {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
-            $this->modeleFront->supprimerCategorie($id);
+            if ($this->modeleFront->checkProduitsCateg($id)) {
+                $erreurs[] = "La catégorie ne peut pas être supprimée car elle contient des produits.";
+            } else {
+                $this->modeleFront->supprimerCategorie($id);
+                $message = "La catégorie a été supprimée avec succès !";
+            }
+        } else {
+            $erreurs[] = "Aucune catégorie n'a été sélectionnée.";
         }
-        $this->listeCategories();
+        $lesCategories = $this->modeleFront->getLesCategories();
+        include("vues/v_listeCategorie.php");
     }
 
 }

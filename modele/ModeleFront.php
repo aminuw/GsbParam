@@ -130,7 +130,7 @@ class ModeleFront extends Modele
 		try {
 			$this->beginTransaction();
 			$hashedMdp = password_hash($mdp, PASSWORD_DEFAULT);
-			
+
 			// Generate idLogin since there is no AUTO_INCREMENT
 			$resMaxLogin = $this->executerRequete('SELECT MAX(idLogin) as maxId FROM login');
 			$rowMaxLogin = $resMaxLogin->fetch(PDO::FETCH_OBJ);
@@ -139,12 +139,12 @@ class ModeleFront extends Modele
 			// 1. Insert into login
 			$reqLogin = 'INSERT INTO login (idLogin, mail, mdp, role) VALUES (:idLogin, :mail, :mdp, 1)';
 			$this->executerRequete($reqLogin, array('idLogin' => $idLogin, 'mail' => $email, 'mdp' => $hashedMdp));
-			
+
 			// Generate idClient since there is no AUTO_INCREMENT
 			$resMaxClient = $this->executerRequete('SELECT MAX(idClient) as maxId FROM client');
 			$rowMaxClient = $resMaxClient->fetch(PDO::FETCH_OBJ);
 			$idClient = ($rowMaxClient->maxId === null) ? 1 : $rowMaxClient->maxId + 1;
-			
+
 			// 2. Insert into client
 			$reqClient = 'INSERT INTO client (idClient, nom, prenom, rue, ville, cp, idLogin) VALUES (:idClient, :nom, :prenom, :rue, :ville, :cp, :idLogin)';
 			$tab = array(
@@ -289,13 +289,13 @@ class ModeleFront extends Modele
 		$tab = array(
 			'idproduit' => $idproduit,
 			'nom' => $nom,
-			'description' => $description, 
-			'prix' => $prix, 
-			'image' => $image, 
-			'quantiteStock' => $quantiteStock, 
-			'seuil_rupture' => $seuil_rupture, 
-			'mis_en_avant_date_debut' => $mis_en_avant_date_debut, 
-			'mis_en_avant_date_fin' => $mis_en_avant_date_fin, 
+			'description' => $description,
+			'prix' => $prix,
+			'image' => $image,
+			'quantiteStock' => $quantiteStock,
+			'seuil_rupture' => $seuil_rupture,
+			'mis_en_avant_date_debut' => $mis_en_avant_date_debut,
+			'mis_en_avant_date_fin' => $mis_en_avant_date_fin,
 			'idCateg' => $idCateg,
 			'idMarque' => $idMarque,
 			'idUnite' => $idUnite
@@ -309,13 +309,13 @@ class ModeleFront extends Modele
 		$tab = array(
 			'idproduit' => $idproduit,
 			'nom' => $nom,
-			'description' => $description, 
-			'prix' => $prix, 
-			'image' => $image, 
-			'quantiteStock' => $quantiteStock, 
-			'seuil_rupture' => $seuil_rupture, 
-			'mis_en_avant_date_debut' => $mis_en_avant_date_debut, 
-			'mis_en_avant_date_fin' => $mis_en_avant_date_fin, 
+			'description' => $description,
+			'prix' => $prix,
+			'image' => $image,
+			'quantiteStock' => $quantiteStock,
+			'seuil_rupture' => $seuil_rupture,
+			'mis_en_avant_date_debut' => $mis_en_avant_date_debut,
+			'mis_en_avant_date_fin' => $mis_en_avant_date_fin,
 			'idCateg' => $idCateg,
 			'idMarque' => $idMarque,
 			'idUnite' => $idUnite
@@ -337,7 +337,7 @@ class ModeleFront extends Modele
 			'id' => $id,
 			'libelle' => $libelle
 		);
-		$this->executerRequete($req, $tab);
+		return $this->executerRequete($req, $tab);
 	}
 
 	public function supprimerCategorie($id)
@@ -345,6 +345,15 @@ class ModeleFront extends Modele
 		$req = "DELETE FROM categorie WHERE idCateg = :id";
 		$tab = array('id' => $id);
 		$this->executerRequete($req, $tab);
+	}
+
+	public function checkProduitsCateg($idCateg)
+	{
+		$req = "SELECT COUNT(*) AS nb FROM produit WHERE idCateg = :idCateg";
+		$tab = array('idCateg' => $idCateg);
+		$res = $this->executerRequete($req, $tab);
+		$nb = $res->fetchColumn();
+		return $nb;
 	}
 
 }

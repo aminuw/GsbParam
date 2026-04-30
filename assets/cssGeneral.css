@@ -2,7 +2,7 @@ html {
 font:normal 100%/1.2em "Baskerville";
 }
 body{
-	padding : 0% 5%;
+	background-color: #f8f9fa;
 }
 #container{
 	width:90%;
