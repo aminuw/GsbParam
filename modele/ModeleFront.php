@@ -356,5 +356,52 @@ class ModeleFront extends Modele
 		return $nb;
 	}
 
+	public function getAvisByProduit($idProduit)
+	{
+		$req = "SELECT a.note, a.commentaire, a.date_avis, c.prenom, c.nom FROM avis a JOIN client c ON a.idClient = c.idClient WHERE a.idproduit = :idProduit ORDER BY a.date_avis DESC";
+		$tab = array('idProduit' => $idProduit);
+		$res = $this->executerRequete($req, $tab);
+		return $res->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public function getNoteMoyenneProduit($idProduit)
+	{
+		$req = "SELECT AVG(note) as moyenne FROM avis WHERE idproduit = :idProduit";
+		$tab = array('idProduit' => $idProduit);
+		$res = $this->executerRequete($req, $tab);
+		$moyenne = $res->fetch(PDO::FETCH_OBJ)->moyenne;
+		return $moyenne ? round($moyenne, 1) : null;
+	}
+
+	public function ajouterAvis($note, $commentaire, $idClient, $idProduit)
+	{
+		try {
+			$this->beginTransaction();
+			
+			$resMaxAvis = $this->executerRequete('SELECT MAX(idAvis) as maxId FROM avis');
+			$rowMaxAvis = $resMaxAvis->fetch(PDO::FETCH_OBJ);
+			$idAvis = ($rowMaxAvis->maxId === null) ? 1 : $rowMaxAvis->maxId + 1;
+
+			$dateAvis = date('Y-m-d H:i:s');
+			$req = 'INSERT INTO avis (idAvis, note, commentaire, date_avis, idClient, idproduit) VALUES (:idAvis, :note, :commentaire, :date_avis, :idClient, :idproduit)';
+			$tab = array(
+				'idAvis' => $idAvis,
+				'note' => $note,
+				'commentaire' => $commentaire,
+				'date_avis' => $dateAvis,
+				'idClient' => $idClient,
+				'idproduit' => $idProduit
+			);
+			
+			$res = $this->executerRequete($req, $tab);
+			$this->commit();
+			return $res;
+		} catch (PDOException $e) {
+			$this->rollBack();
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
 }
 ?>

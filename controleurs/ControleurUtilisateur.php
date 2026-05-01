@@ -1,11 +1,12 @@
 <?php
 
-class ControleurUtilisateur{
-	private $modeleFront;
-	
-	public function __construct()
+class ControleurUtilisateur
+{
+    private $modeleFront;
+
+    public function __construct()
     {
-        $this->modeleFront=new ModeleFront();
+        $this->modeleFront = new ModeleFront();
     }
 
 
@@ -50,7 +51,7 @@ class ControleurUtilisateur{
 
             if ($client && password_verify($mdp, $client->mdp)) {
                 $_SESSION['client'] = $client;
-                header('Location: index.php');
+                echo '<script>window.location.href = "index.php?uc=accueil";</script>';
                 exit();
             } else {
                 $erreurs[] = "Email ou mot de passe incorrect.";
@@ -70,7 +71,7 @@ class ControleurUtilisateur{
     function deconnexion()
     {
         session_destroy();
-        header('Location: index.php');
+        echo '<script>window.location.href = "index.php?uc=accueil";</script>';
         exit();
     }
 }

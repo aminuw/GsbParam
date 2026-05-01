@@ -181,7 +181,8 @@ class ControleurGererPanier
 			include("vues/v_message.php");
 		} else {
 			// Sécurité : si l'utilisateur n'est pas connecté, on le redirige.
-			header('Location: index.php?uc=utilisateur&action=connexion');
+			echo '<script>window.location.href = "index.php?uc=utilisateur&action=connexion";</script>';
+			exit();
 		}
 	}
 	/**

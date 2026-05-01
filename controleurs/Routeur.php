@@ -55,6 +55,14 @@ class Routeur
                         $this->ctrlVoirProduits->voirProduits($_REQUEST['categorie']);
                         break;
                     }
+                    case 'voirAvis': {
+                        $this->ctrlVoirProduits->voirAvis($_REQUEST['produit']);
+                        break;
+                    }
+                    case 'validerAvis': {
+                        $this->ctrlVoirProduits->validerAvis();
+                        break;
+                    }
                     case 'nosProduits': {
                         $this->ctrlVoirProduits->voirTousProduits();
                         break;

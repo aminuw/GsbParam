@@ -124,6 +124,30 @@ class ControleurVoirProduits
         echo "<p>Produit supprimé avec succès !</p>";
         $this->listeProduitsModif();
     }
-}
 
+    public function voirAvis($idProduit)
+    {
+        $leProduit = $this->modeleFront->getUnProduit($idProduit);
+        $lesAvis = $this->modeleFront->getAvisByProduit($idProduit);
+        $noteMoyenne = $this->modeleFront->getNoteMoyenneProduit($idProduit);
+        include("vues/v_avis.php");
+    }
+
+    public function validerAvis()
+    {
+        $idProduit = $_POST['idProduit'];
+        $note = $_POST['note'];
+        $commentaire = $_POST['commentaire'];
+        
+        if (isset($_SESSION['client'])) {
+            $idClient = $_SESSION['client']->idClient;
+            $this->modeleFront->ajouterAvis($note, $commentaire, $idClient, $idProduit);
+            echo '<script>window.location.href = "index.php?uc=voirProduits&action=voirAvis&produit='.$idProduit.'";</script>';
+            exit();
+        } else {
+            echo '<script>window.location.href = "index.php?uc=utilisateur&action=connexion";</script>';
+            exit();
+        }
+    }
+}
 ?>

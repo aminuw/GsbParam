@@ -19,6 +19,7 @@ foreach( $lesProduits as $unProduit)
 			<div class="photoCard"><img src="<?= $image ?>" alt=image /></div>
 			<div class="nomCard"><strong><?= $nom ?></strong></div>
 			<div class="prixCard"><?= $prix."€" ?></div>
+            <div class="avisCard" style="margin-top: 5px;"><a href="index.php?uc=voirProduits&action=voirAvis&produit=<?= $id ?>" class="btn btn-sm btn-outline-info">Voir les avis</a></div>
 			</div>
 			<div class="imgCard"><a href="index.php?uc=gererPanier&produit=<?= $id ?>&action=ajouterAuPanier"> 
 			<img src="assets/images/mettrepanier.png" title="Ajouter au panier" alt="Mettre au panier"> </a></div>
