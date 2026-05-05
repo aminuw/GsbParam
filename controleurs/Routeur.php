@@ -4,6 +4,7 @@ require_once 'controleurs/ControleurVoirProduits.php';
 require_once 'controleurs/ControleurAccueil.php';
 require_once 'controleurs/ControleurGererPanier.php';
 require_once 'controleurs/ControleurCategories.php';
+require_once 'controleurs/ControleurAdmin.php';
 /**
  * @class Routeur
  * @brief gère les routes (actions à exécuter en fonction des urls)
@@ -16,6 +17,7 @@ class Routeur
     private $ctrlGererPanier;
     private $ctrlUtilisateur;
     private $ctrlCategories;
+    private $ctrlAdministrer;
 
 
     public function __construct()
@@ -26,6 +28,7 @@ class Routeur
         $this->ctrlGererPanier = new ControleurGererPanier();
         $this->ctrlUtilisateur = new ControleurUtilisateur();
         $this->ctrlCategories = new ControleurCategories();
+        $this->ctrlAdministrer = new ControleurAdministrer();
     }
     /** recupère les paramètres de l'url et active les contrôleurs nécessaires
      */
@@ -68,30 +71,7 @@ class Routeur
                         break;
                     }
 
-                    case 'ajouterProduit': {
-                        $this->ctrlVoirProduits->ajouterProduit();
-                        break;
-                    }
-                    case 'validerAjoutProduit': {
-                        $this->ctrlVoirProduits->validerAjoutProduit();
-                        break;
-                    }
-                    case 'listeProduitsModif': {
-                        $this->ctrlVoirProduits->listeProduitsModif();
-                        break;
-                    }
-                    case 'modifierProduit': {
-                        $this->ctrlVoirProduits->modifierProduit();
-                        break;
-                    }
-                    case 'validerModifProduit': {
-                        $this->ctrlVoirProduits->validerModifProduit();
-                        break;
-                    }
-                    case 'supprimerProduit': {
-                        $this->ctrlVoirProduits->supprimerProduit();
-                        break;
-                    }
+
                 }
                 ;
                 break;
@@ -163,6 +143,10 @@ class Routeur
 
 
             case 'administrer':
+                if (!isset($_SESSION['client']) || $_SESSION['client']->role != 2) {
+                    echo '<script>window.location.href = "index.php?uc=accueil";</script>';
+                    exit();
+                }
                 switch ($action) {
                     case 'listeProduitsModif': {
                         $this->ctrlAdministrer->listeProduitsModif();
@@ -191,6 +175,10 @@ class Routeur
                 }
                 break;
             case 'categories':
+                if (!isset($_SESSION['client']) || $_SESSION['client']->role != 2) {
+                    echo '<script>window.location.href = "index.php?uc=accueil";</script>';
+                    exit();
+                }
                 switch ($action) {
                     case 'listeCategories': {
                         $this->ctrlCategories->listeCategories();

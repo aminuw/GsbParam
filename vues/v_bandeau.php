@@ -29,7 +29,8 @@
             </ul>
           </li>
 
-          <!-- Section Administration (peut être masquée par la suite si non admin) -->
+          <?php if (isset($_SESSION['client']) && $_SESSION['client']->role == 2): ?>
+          <!-- Section Administration -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle px-3" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Administration
@@ -40,10 +41,11 @@
               <li><a class="dropdown-item" href="index.php?uc=categories&action=ajouterCategorie">Ajouter une catégorie</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><h6 class="dropdown-header text-primary">Gestion Produits</h6></li>
-              <li><a class="dropdown-item" href="index.php?uc=voirProduits&action=listeProduitsModif">Lister / Modifier</a></li>
-              <li><a class="dropdown-item" href="index.php?uc=categories&action=ajouterProduit">Ajouter un produit</a></li>
+              <li><a class="dropdown-item" href="index.php?uc=administrer&action=listeProduitsModif">Lister / Modifier</a></li>
+              <li><a class="dropdown-item" href="index.php?uc=administrer&action=ajouterProduit">Ajouter un produit</a></li>
             </ul>
           </li>
+          <?php endif; ?>
           
         </ul>
 

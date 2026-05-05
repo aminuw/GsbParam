@@ -4,3 +4,7 @@ mdp test45?
 
 login dupont@login.com 
 mdp azerty45
+
+ADMIN :
+login : admin@gsb.fr
+mdp : admin123

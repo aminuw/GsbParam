@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3307
--- Généré le : mer. 01 avr. 2026 à 14:45
+-- Généré le : mar. 05 mai 2026 à 08:27
 -- Version du serveur : 11.5.2-MariaDB
 -- Version de PHP : 8.3.14
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `associer` (
   `idproduit_associer` varchar(5) NOT NULL,
   PRIMARY KEY (`idproduit`,`idproduit_associer`),
   KEY `associer_idproduit_associer_FK` (`idproduit_associer`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 
 -- --------------------------------------------------------
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `avis` (
   PRIMARY KEY (`idAvis`),
   KEY `avis_idClient_FK` (`idClient`),
   KEY `avis_idproduit_FK` (`idproduit`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 
 -- --------------------------------------------------------
 
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `categorie` (
   `idCateg` char(3) NOT NULL,
   `libelle` varchar(50) NOT NULL,
   PRIMARY KEY (`idCateg`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 
 --
 -- Déchargement des données de la table `categorie`
@@ -74,7 +74,8 @@ CREATE TABLE IF NOT EXISTS `categorie` (
 INSERT INTO `categorie` (`idCateg`, `libelle`) VALUES
 ('CH', 'Cheveux'),
 ('FO', 'Forme'),
-('PS', 'Protection Solaire');
+('PS', 'Protection Solaire'),
+('tes', 'test');
 
 -- --------------------------------------------------------
 
@@ -93,7 +94,15 @@ CREATE TABLE IF NOT EXISTS `client` (
   `idLogin` int(11) NOT NULL,
   PRIMARY KEY (`idClient`),
   KEY `client_idLogin_FK` (`idLogin`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+
+--
+-- Déchargement des données de la table `client`
+--
+
+INSERT INTO `client` (`idClient`, `nom`, `prenom`, `rue`, `cp`, `ville`, `idLogin`) VALUES
+(1, 'Agnaou', 'Amine', '45 allée des botanistes', '45000', 'Orléans', 1),
+(2, 'Administrateur', 'Admin', '', '', '', 2);
 
 -- --------------------------------------------------------
 
@@ -110,7 +119,15 @@ CREATE TABLE IF NOT EXISTS `commande` (
   PRIMARY KEY (`idCommande`),
   KEY `commande_idClient_FK` (`idClient`),
   KEY `commande_idEtat_FK` (`idEtat`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+
+--
+-- Déchargement des données de la table `commande`
+--
+
+INSERT INTO `commande` (`idCommande`, `dateCommande`, `idClient`, `idEtat`) VALUES
+('1', '2026-04-30 08:48:15', 1, 1),
+('2', '2026-05-05 07:22:38', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -125,7 +142,15 @@ CREATE TABLE IF NOT EXISTS `contenir` (
   `qte` int(11) NOT NULL,
   PRIMARY KEY (`idproduit`,`idCommande`),
   KEY `contenir_idCommande_FK` (`idCommande`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+
+--
+-- Déchargement des données de la table `contenir`
+--
+
+INSERT INTO `contenir` (`idproduit`, `idCommande`, `qte`) VALUES
+('c01', '1', 1),
+('c06', '2', 1666);
 
 -- --------------------------------------------------------
 
@@ -138,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `etat_commande` (
   `idEtat` int(11) NOT NULL,
   `libelle` varchar(50) NOT NULL,
   PRIMARY KEY (`idEtat`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 
 --
 -- Déchargement des données de la table `etat_commande`
@@ -164,7 +189,15 @@ CREATE TABLE IF NOT EXISTS `login` (
   `mail` varchar(255) NOT NULL,
   PRIMARY KEY (`idLogin`),
   UNIQUE KEY `mail_login_UNQ` (`mail`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+
+--
+-- Déchargement des données de la table `login`
+--
+
+INSERT INTO `login` (`idLogin`, `mdp`, `role`, `mail`) VALUES
+(1, '$2y$10$O24KEIZGhENZMUDAVUbSGuW2rhC0jhs71MnsqDxCGYLxjamUPHBkO', 1, 'dupont@login.com'),
+(2, '$2y$10$jpJmo6VAEI28rQh/VIZWXeH8LjYB5UXULBvq75MXW9aKGkim.h68.', 2, 'admin@gsb.fr');
 
 -- --------------------------------------------------------
 
@@ -177,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `marque` (
   `idMarque` int(11) NOT NULL,
   `libelleMarque` varchar(30) NOT NULL,
   PRIMARY KEY (`idMarque`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 
 --
 -- Déchargement des données de la table `marque`
@@ -225,34 +258,34 @@ CREATE TABLE IF NOT EXISTS `produit` (
   KEY `produit_idCateg_FK` (`idCateg`),
   KEY `produit_idMarque_FK` (`idMarque`),
   KEY `produit_idUnite_FK` (`idUnite`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 
 --
 -- Déchargement des données de la table `produit`
 --
 
 INSERT INTO `produit` (`idproduit`, `nom`, `description`, `prix`, `image`, `quantiteStock`, `seuil_rupture`, `mis_en_avant_date_debut`, `mis_en_avant_date_fin`, `idCateg`, `idMarque`, `idUnite`) VALUES
-('c01', 'Laino Shampooing Douche au Thé Vert BIO', 'Shampooing douche au thé vert BIO, format 200ml.', 4.00, 'assets/images/laino-shampooing-douche-au-the-vert-bio-200ml.png', 100, 10, '2026-04-01', '2026-05-01', 'CH', 1, 3),
-('c02', 'Klorane fibres de lin baume après shampooing', 'Baume après shampooing aux fibres de lin.', 10.80, 'assets/images/klorane-fibres-de-lin-baume-apres-shampooing-150-ml.jpg', 80, 5, '2026-04-01', '2026-05-01', 'CH', 2, 3),
-('c03', 'Weleda Kids 2in1 Shower & Shampoo Orange fruitée', 'Shampooing et douche 2 en 1 pour enfants, orange fruitée.', 4.00, 'assets/images/weleda-kids-2in1-shower-shampoo-orange-fruitee-150-ml.jpg', 120, 15, '2026-04-01', '2026-05-01', 'CH', 3, 3),
-('c04', 'Weleda Kids 2in1 Shower & Shampoo vanille douce', 'Shampooing et douche 2 en 1 pour enfants, vanille douce.', 4.00, 'assets/images/weleda-kids-2in1-shower-shampoo-vanille-douce-150-ml.jpg', 110, 15, '2026-04-01', '2026-05-01', 'CH', 3, 3),
-('c05', 'Klorane Shampooing sec à l\'extrait d\'ortie', 'Shampooing sec purifiant à l\'ortie.', 6.10, 'assets/images/klorane-shampooing-sec-a-l-extrait-d-ortie-spray-150ml.png', 50, 10, '2026-04-01', '2026-05-01', 'CH', 2, 3),
-('c06', 'Phytopulp mousse volume intense', 'Mousse coiffante volume intense.', 18.00, 'assets/images/phytopulp-mousse-volume-intense-200ml.jpg', 40, 5, '2026-04-01', '2026-05-01', 'CH', 4, 3),
-('c07', 'Bio Beaute by Nuxe Shampooing nutritif', 'Shampooing nutritif BIO.', 8.00, 'assets/images/bio-beaute-by-nuxe-shampooing-nutritif-200ml.png', 60, 8, '2026-04-01', '2026-05-01', 'CH', 5, 3),
-('f01', 'Nuxe Men Contour des Yeux Multi-Fonctions', 'Contour des yeux multi-fonctions pour homme.', 12.05, 'assets/images/nuxe-men-contour-des-yeux-multi-fonctions-15ml.png', 30, 5, '2026-04-01', '2026-05-01', 'FO', 5, 1),
-('f02', 'Tisane romon nature sommirel bio sachet 20', 'Tisane Sommirel BIO pour le sommeil.', 5.50, 'assets/images/tisane-romon-nature-sommirel-bio-sachet-20.jpg', 200, 20, '2026-04-01', '2026-05-01', 'FO', 6, 4),
-('f03', 'La Roche Posay Cicaplast crème pansement', 'Crème réparatrice Cicaplast.', 11.00, 'assets/images/la-roche-posay-cicaplast-creme-pansement-40ml.jpg', 150, 15, '2026-04-01', '2026-05-01', 'FO', 7, 2),
-('f04', 'Futuro sport stabilisateur pour cheville', 'Attelle de cheville stabilisatrice.', 26.50, 'assets/images/futuro-sport-stabilisateur-pour-cheville-deluxe-attelle-cheville.png', 20, 2, '2026-04-01', '2026-05-01', 'FO', 8, 1),
-('f05', 'Microlife pèse-personne électronique weegschaal', 'Pèse-personne électronique de haute précision.', 63.00, 'assets/images/microlife-pese-personne-electronique-weegschaal-ws80.jpg', 15, 2, '2026-04-01', '2026-05-01', 'FO', 9, 1),
-('f06', 'Melapi Miel Thym Liquide 500g', 'Miel de thym liquide naturel.', 6.50, 'assets/images/melapi-miel-thym-liquide-500g.jpg', 90, 10, '2026-04-01', '2026-05-01', 'FO', 10, 1),
-('f07', 'Meli Meliflor Pollen 200g', 'Pollen de fleur naturel.', 8.60, 'assets/images/melapi-pollen-250g.jpg', 75, 5, '2026-04-01', '2026-05-01', 'FO', 11, 1),
-('p01', 'Avène solaire Spray très haute protection', 'Spray solaire SPF 50+, protection optimale.', 22.00, 'assets/images/avene-solaire-spray-tres-haute-protection-spf50200ml.png', 140, 15, '2026-04-01', '2026-05-01', 'PS', 12, 3),
-('p02', 'Mustela Solaire Lait très haute Protection', 'Lait solaire SPF 50+ pour bébés et enfants.', 17.50, 'assets/images/mustela-solaire-lait-tres-haute-protection-spf50-100ml.jpg', 100, 10, '2026-04-01', '2026-05-01', 'PS', 13, 2),
-('p03', 'Isdin Eryfotona aAK fluid', 'Fluide protecteur solaire haute technologie.', 29.00, 'assets/images/isdin-eryfotona-aak-fluid-100-50ml.jpg', 45, 5, '2026-04-01', '2026-05-01', 'PS', 14, 2),
-('p04', 'La Roche Posay Anthélios 50+ Brume Visage', 'Brume solaire visage toucher sec.', 8.75, 'assets/images/la-roche-posay-anthelios-50-brume-visage-toucher-sec-75ml.png', 85, 10, '2026-04-01', '2026-05-01', 'PS', 7, 1),
-('p05', 'Nuxe Sun Huile Lactée Capillaire Protectrice', 'Huile lactée protectrice pour les cheveux au soleil.', 15.00, 'assets/images/nuxe-sun-huile-lactee-capillaire-protectrice-100ml.png', 65, 5, '2026-04-01', '2026-05-01', 'PS', 5, 2),
-('p06', 'Uriage Bariésun stick lèvres SPF30 4g', 'Stick lèvres protecteur SPF 30.', 5.65, 'assets/images/uriage-bariesun-stick-levres-spf30-4g.jpg', 180, 20, '2026-04-01', '2026-05-01', 'PS', 15, 5),
-('p07', 'Bioderma Cicabio creme SPF50+ 30ml', 'Crème réparatrice avec protection solaire.', 13.70, 'assets/images/bioderma-cicabio-creme-spf50-30ml.png', 95, 10, '2026-04-01', '2026-05-01', 'PS', 16, 2);
+('c01', 'Laino Shampooing Douche au Thé Vert BIO', 'Shampooing douche au thé vert BIO, format 200ml.', 4.00, 'assets/images/laino-shampooing-douche-au-the-vert-bio-200ml.png', 100, 10, '2026-03-31', '2026-04-30', 'tes', 1, 3),
+('c02', 'Klorane fibres de lin baume après shampooing', 'Baume après shampooing aux fibres de lin.', 10.80, 'assets/images/klorane-fibres-de-lin-baume-apres-shampooing-150-ml.jpg', 80, 5, '2026-03-31', '2026-04-30', 'CH', 2, 3),
+('c03', 'Weleda Kids 2in1 Shower & Shampoo Orange fruitée', 'Shampooing et douche 2 en 1 pour enfants, orange fruitée.', 4.00, 'assets/images/weleda-kids-2in1-shower-shampoo-orange-fruitee-150-ml.jpg', 120, 15, '2026-03-31', '2026-04-30', 'CH', 3, 3),
+('c04', 'Weleda Kids 2in1 Shower & Shampoo vanille douce', 'Shampooing et douche 2 en 1 pour enfants, vanille douce.', 4.00, 'assets/images/weleda-kids-2in1-shower-shampoo-vanille-douce-150-ml.jpg', 110, 15, '2026-03-31', '2026-04-30', 'CH', 3, 3),
+('c05', 'Klorane Shampooing sec à l\'extrait d\'ortie', 'Shampooing sec purifiant à l\'ortie.', 6.10, 'assets/images/klorane-shampooing-sec-a-l-extrait-d-ortie-spray-150ml.png', 50, 10, '2026-03-31', '2026-04-30', 'CH', 2, 3),
+('c06', 'Phytopulp mousse volume intense', 'Mousse coiffante volume intense.', 18.00, 'assets/images/phytopulp-mousse-volume-intense-200ml.jpg', 40, 5, '2026-03-31', '2026-04-30', 'CH', 4, 3),
+('c07', 'Bio Beaute by Nuxe Shampooing nutritif', 'Shampooing nutritif BIO.', 8.00, 'assets/images/bio-beaute-by-nuxe-shampooing-nutritif-200ml.png', 60, 8, '2026-03-31', '2026-04-30', 'CH', 5, 3),
+('f01', 'Nuxe Men Contour des Yeux Multi-Fonctions', 'Contour des yeux multi-fonctions pour homme.', 12.05, 'assets/images/nuxe-men-contour-des-yeux-multi-fonctions-15ml.png', 30, 5, '2026-03-31', '2026-04-30', 'FO', 5, 1),
+('f02', 'Tisane romon nature sommirel bio sachet 20', 'Tisane Sommirel BIO pour le sommeil.', 5.50, 'assets/images/tisane-romon-nature-sommirel-bio-sachet-20.jpg', 200, 20, '2026-03-31', '2026-04-30', 'FO', 6, 4),
+('f03', 'La Roche Posay Cicaplast crème pansement', 'Crème réparatrice Cicaplast.', 11.00, 'assets/images/la-roche-posay-cicaplast-creme-pansement-40ml.jpg', 150, 15, '2026-03-31', '2026-04-30', 'FO', 7, 2),
+('f04', 'Futuro sport stabilisateur pour cheville', 'Attelle de cheville stabilisatrice.', 26.50, 'assets/images/futuro-sport-stabilisateur-pour-cheville-deluxe-attelle-cheville.png', 20, 2, '2026-03-31', '2026-04-30', 'FO', 8, 1),
+('f05', 'Microlife pèse-personne électronique weegschaal', 'Pèse-personne électronique de haute précision.', 63.00, 'assets/images/microlife-pese-personne-electronique-weegschaal-ws80.jpg', 15, 2, '2026-03-31', '2026-04-30', 'FO', 9, 1),
+('f06', 'Melapi Miel Thym Liquide 500g', 'Miel de thym liquide naturel.', 6.50, 'assets/images/melapi-miel-thym-liquide-500g.jpg', 90, 10, '2026-03-31', '2026-04-30', 'FO', 10, 1),
+('f07', 'Meli Meliflor Pollen 200g', 'Pollen de fleur naturel.', 8.60, 'assets/images/melapi-pollen-250g.jpg', 75, 5, '2026-03-31', '2026-04-30', 'FO', 11, 1),
+('p01', 'Avène solaire Spray très haute protection', 'Spray solaire SPF 50+, protection optimale.', 22.00, 'assets/images/avene-solaire-spray-tres-haute-protection-spf50200ml.png', 140, 15, '2026-03-31', '2026-04-30', 'PS', 12, 3),
+('p02', 'Mustela Solaire Lait très haute Protection', 'Lait solaire SPF 50+ pour bébés et enfants.', 17.50, 'assets/images/mustela-solaire-lait-tres-haute-protection-spf50-100ml.jpg', 100, 10, '2026-03-31', '2026-04-30', 'PS', 13, 2),
+('p03', 'Isdin Eryfotona aAK fluid', 'Fluide protecteur solaire haute technologie.', 29.00, 'assets/images/isdin-eryfotona-aak-fluid-100-50ml.jpg', 45, 5, '2026-03-31', '2026-04-30', 'PS', 14, 2),
+('p04', 'La Roche Posay Anthélios 50+ Brume Visage', 'Brume solaire visage toucher sec.', 8.75, 'assets/images/la-roche-posay-anthelios-50-brume-visage-toucher-sec-75ml.png', 85, 10, '2026-03-31', '2026-04-30', 'PS', 7, 1),
+('p05', 'Nuxe Sun Huile Lactée Capillaire Protectrice', 'Huile lactée protectrice pour les cheveux au soleil.', 15.00, 'assets/images/nuxe-sun-huile-lactee-capillaire-protectrice-100ml.png', 65, 5, '2026-03-31', '2026-04-30', 'PS', 5, 2),
+('p06', 'Uriage Bariésun stick lèvres SPF30 4g', 'Stick lèvres protecteur SPF 30.', 5.65, 'assets/images/uriage-bariesun-stick-levres-spf30-4g.jpg', 180, 20, '2026-03-31', '2026-04-30', 'PS', 15, 5),
+('p07', 'Bioderma Cicabio creme SPF50+ 30ml', 'Crème réparatrice avec protection solaire.', 13.70, 'assets/images/bioderma-cicabio-creme-spf50-30ml.png', 95, 10, '2026-03-31', '2026-04-30', 'PS', 16, 2);
 
 -- --------------------------------------------------------
 
@@ -265,7 +298,7 @@ CREATE TABLE IF NOT EXISTS `unite` (
   `idUnite` int(11) NOT NULL,
   `libelle` varchar(50) NOT NULL,
   PRIMARY KEY (`idUnite`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 
 --
 -- Déchargement des données de la table `unite`
