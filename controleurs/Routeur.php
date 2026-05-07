@@ -35,7 +35,11 @@ class Routeur
         $this->ctrlGererPanier = new ControleurGererPanier();
         $this->ctrlUtilisateur = new ControleurUtilisateur();
         $this->ctrlCategories = new ControleurCategories();
+<<<<<<< HEAD
         $this->ctrlAdministrer = new ControleurAdmin();
+=======
+        $this->ctrlAdministrer = new ControleurAdministrer();
+>>>>>>> bba1a340b87739d0de54522185685419f9193108
     }
     /** recupère les paramètres de l'url et active les contrôleurs nécessaires
      */
@@ -150,7 +154,14 @@ class Routeur
 
 
             case 'administrer':
+<<<<<<< HEAD
                 $this->requireAdmin();
+=======
+                if (!isset($_SESSION['client']) || $_SESSION['client']->role != 2) {
+                    echo '<script>window.location.href = "index.php?uc=accueil";</script>';
+                    exit();
+                }
+>>>>>>> bba1a340b87739d0de54522185685419f9193108
                 switch ($action) {
                     case 'listeProduitsModif': {
                         $this->ctrlAdministrer->listeProduitsModif();
@@ -179,7 +190,14 @@ class Routeur
                 }
                 break;
             case 'categories':
+<<<<<<< HEAD
                 $this->requireAdmin();
+=======
+                if (!isset($_SESSION['client']) || $_SESSION['client']->role != 2) {
+                    echo '<script>window.location.href = "index.php?uc=accueil";</script>';
+                    exit();
+                }
+>>>>>>> bba1a340b87739d0de54522185685419f9193108
                 switch ($action) {
                     case 'listeCategories': {
                         $this->ctrlCategories->listeCategories();

@@ -29,8 +29,13 @@
             </ul>
           </li>
 
+<<<<<<< HEAD
           <!-- Section Administration (masquée si non admin) -->
           <?php if (isset($_SESSION['client']) && $_SESSION['client']->role == 2): ?>
+=======
+          <?php if (isset($_SESSION['client']) && $_SESSION['client']->role == 2): ?>
+          <!-- Section Administration -->
+>>>>>>> bba1a340b87739d0de54522185685419f9193108
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle px-3" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Administration
