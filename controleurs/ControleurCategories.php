@@ -82,7 +82,7 @@ class ControleurCategories
             } else {
                 $erreurs[] = "Une erreur est survenue lors de la modification.";
                 $laCategorie = (object) ['id' => $id, 'libelle' => $libelle];
-                include("vues/v_modifierCategorie.php");
+                include("vues/v_modifierProduits.php");
             }
         }
     }

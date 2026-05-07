@@ -29,7 +29,8 @@
             </ul>
           </li>
 
-          <!-- Section Administration (peut être masquée par la suite si non admin) -->
+          <!-- Section Administration (masquée si non admin) -->
+          <?php if (isset($_SESSION['client']) && $_SESSION['client']->role == 2): ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle px-3" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Administration
@@ -40,10 +41,11 @@
               <li><a class="dropdown-item" href="index.php?uc=categories&action=ajouterCategorie">Ajouter une catégorie</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><h6 class="dropdown-header text-primary">Gestion Produits</h6></li>
-              <li><a class="dropdown-item" href="index.php?uc=voirProduits&action=listeProduitsModif">Lister / Modifier</a></li>
-              <li><a class="dropdown-item" href="index.php?uc=categories&action=ajouterProduit">Ajouter un produit</a></li>
+              <li><a class="dropdown-item" href="index.php?uc=administrer&action=listeProduitsModif">Lister / Modifier</a></li>
+              <li><a class="dropdown-item" href="index.php?uc=administrer&action=ajouterProduit">Ajouter un produit</a></li>
             </ul>
           </li>
+          <?php endif; ?>
           
         </ul>
 
@@ -60,14 +62,16 @@
           <?php if (isset($_SESSION['client'])): ?>
             <div class="dropdown w-100 w-lg-auto text-center">
               <button class="btn btn-primary rounded-pill px-4 fw-bold dropdown-toggle w-100" type="button" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                Bonjour, <?php echo htmlspecialchars($_SESSION['client']->prenom); ?>
+                Bonjour, <?php echo htmlspecialchars($_SESSION['client']->prenom); ?> 
+                <?php echo ($_SESSION['client']->role == 2) ? '(Admin)' : '(Client)'; ?>
               </button>
               <ul class="dropdown-menu dropdown-menu-end shadow border-0 w-100" aria-labelledby="dropdownUser">
                 <li><a class="dropdown-item" href="index.php?uc=utilisateur&action=deconnexion">Déconnexion</a></li>
               </ul>
             </div>
           <?php else: ?>
-            <div class="d-flex w-100 w-lg-auto">
+            <div class="d-flex w-100 w-lg-auto align-items-center">
+                <span class="me-3 text-muted fw-bold d-none d-lg-inline">Visiteur</span>
                 <a href="index.php?uc=utilisateur&action=connexion" class="btn btn-primary rounded-pill px-4 fw-bold me-2 w-100">Connexion</a>
                 <a href="index.php?uc=utilisateur&action=inscription" class="btn btn-light rounded-pill px-4 fw-bold border w-100">S'inscrire</a>
             </div>

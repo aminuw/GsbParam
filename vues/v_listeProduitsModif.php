@@ -32,8 +32,8 @@
             <td><?php echo $unProduit->idMarque; ?></td>
             <td><?php echo $unProduit->idUnite; ?></td>
             <td>
-                <a href="index.php?uc=voirProduits&action=modifierProduit&id=<?php echo $unProduit->id; ?>">Modifier</a><br>
-                <a href="index.php?uc=voirProduits&action=supprimerProduit&id=<?php echo $unProduit->id; ?>" class="text-danger">Supprimer</a>
+                <a href="index.php?uc=administrer&action=modifierProduit&id=<?php echo $unProduit->id; ?>">Modifier</a><br>
+                <a href="index.php?uc=administrer&action=supprimerProduit&id=<?php echo $unProduit->id; ?>" class="text-danger">Supprimer</a>
             </td>
         </tr>
     <?php } ?>

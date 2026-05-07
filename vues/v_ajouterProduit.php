@@ -1,6 +1,6 @@
 <h1>Ajouter un produit</h1>
 
-<form action="index.php?uc=voirProduits&action=validerAjoutProduit" method="POST">
+<form action="index.php?uc=administrer&action=validerAjoutProduit" method="POST">
     ID Produit (5 caractères) : <input type="text" name="idproduit"><br><br>
     Nom du produit : <input type="text" name="nom"><br><br>
     Description : <input type="text" name="description"><br><br>

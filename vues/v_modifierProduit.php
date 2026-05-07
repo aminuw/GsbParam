@@ -1,6 +1,6 @@
 <h1>Modifier le produit</h1>
 
-<form action="index.php?uc=voirProduits&action=validerModifProduit" method="POST">
+<form action="index.php?uc=administrer&action=validerModifProduit" method="POST">
     <!-- Champ caché pour garder l'identifiant pour la mise à jour -->
     <input type="hidden" name="idproduit" value="<?php echo $leProduit->id; ?>">
     
