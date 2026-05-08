@@ -1,0 +1,27 @@
+Mission USR4 - Filtrage des produits (Version finale validée)
+
+1. Objectif :
+Permettre à l'utilisateur de filtrer la liste complète des produits par catégorie, marque et prix (min/max).
+
+2. Méthode :
+- Utilisation d'un formulaire HTML standard (sans styles complexes) placé dans le menu latéral.
+- Traitement des données via POST dans le contrôleur (ControleurVoirProduits.php).
+- Requête SQL dynamique sécurisée avec PDO (requêtes préparées) pour éviter les injections SQL.
+
+3. Sécurité et Validation (BTS SIO) :
+- Utilisation systématique de bindValue ou d'un tableau de paramètres avec execute() pour protéger contre les injections SQL.
+- Validation côté serveur (Contrôleur) : Vérification des nombres négatifs. Si un prix est inférieur à 0, un message d'erreur est affiché et le filtre est annulé.
+- Nettoyage des entrées : Gestion des chaînes vides envoyées par le formulaire pour éviter les erreurs SQL.
+
+4. Expérience Utilisateur :
+- Ajout de "placeholders" (exemples) dans les champs de prix pour guider l'utilisateur (Ex: 10).
+- Gestion des résultats vides : Si aucun produit ne correspond aux filtres, un message explicatif s'affiche sur la page ("Désolé, aucun produit...").
+
+5. Logique SQL :
+SELECT ... FROM produit WHERE 1=1 
+AND idCateg = :idCateg 
+AND idMarque = :idMarque 
+AND prix >= :prixMin 
+AND prix <= :prixMax
+ORDER BY prix ASC;
+(Le WHERE 1=1 permet d'ajouter dynamiquement des "AND" sans se soucier si c'est la première condition ou non).

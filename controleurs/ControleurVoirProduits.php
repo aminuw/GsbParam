@@ -29,7 +29,6 @@ class ControleurVoirProduits
     {
         $lesProduits = $this->modeleFront->getLesProduitsDeCategorie($categ);
         $laCategorie = $this->modeleFront->getLesInfosCategorie($categ);
-        // var_dump($laCategorie);
         $lesCategories = $this->modeleFront->getLesCategories();
 
         include("vues/v_choixCategorie.php");
@@ -38,8 +37,27 @@ class ControleurVoirProduits
 
     public function voirTousProduits()
     {
-        $lesProduits = $this->modeleFront->getTousLesProduits();
+        $idCateg = $_POST['lstCategorie'] ?? null;
+        $prixMin = $_POST['txtPrixMin'] ?? null;
+        $prixMax = $_POST['txtPrixMax'] ?? null;
+        $idMarque = $_POST['lstMarque'] ?? null;
+        $erreurFiltre = null;
+
+        // On nettoie les valeurs pour éviter les erreurs avec les chaînes vides
+        if ($prixMin === "") $prixMin = null;
+        if ($prixMax === "") $prixMax = null;
+
+        // Vérification des prix négatifs
+        if (($prixMin !== null && $prixMin < 0) || ($prixMax !== null && $prixMax < 0)) {
+            $erreurFiltre = "Les prix ne peuvent pas être négatifs.";
+            $prixMin = null;
+            $prixMax = null;
+        }
+
+        $lesProduits = $this->modeleFront->getProduitsFiltres($idCateg, $prixMin, $prixMax, $idMarque);
         $lesCategories = $this->modeleFront->getLesCategories();
+        $lesMarques = $this->modeleFront->getLesMarques();
+        include("vues/v_choixCategorie.php");
         include("vues/v_produits.php");
     }
     /**

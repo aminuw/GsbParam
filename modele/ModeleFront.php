@@ -403,5 +403,38 @@ class ModeleFront extends Modele
 		}
 	}
 
+
+	public function getProduitsFiltres($idCateg = null, $prixMin = null, $prixMax = null, $idMarque = null)
+	{
+		try {
+			$req = 'SELECT idproduit AS id, nom, description, prix, image, quantiteStock, seuil_rupture, idCateg AS idCategorie, idMarque, idUnite FROM produit WHERE 1=1';
+			$tab = array();
+
+			if ($idCateg && $idCateg != 'tous') {
+				$req .= ' AND idCateg = :idCateg';
+				$tab['idCateg'] = $idCateg;
+			}
+			if ($idMarque && $idMarque != 'toutes') {
+				$req .= ' AND idMarque = :idMarque';
+				$tab['idMarque'] = $idMarque;
+			}
+			if ($prixMin) {
+				$req .= ' AND prix >= :prixMin';
+				$tab['prixMin'] = $prixMin;
+			}
+			if ($prixMax) {
+				$req .= ' AND prix <= :prixMax';
+				$tab['prixMax'] = $prixMax;
+			}
+
+			$req .= ' ORDER BY prix ASC';
+
+			$res = $this->executerRequete($req, $tab);
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
 }
 ?>
