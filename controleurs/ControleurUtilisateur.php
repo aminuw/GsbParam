@@ -74,4 +74,53 @@ class ControleurUtilisateur
         echo '<script>window.location.href = "index.php?uc=accueil";</script>';
         exit();
     }
+
+    /**
+     * Affiche l'espace client (Profil, Commandes, Avis)
+     */
+    function monCompte()
+    {
+        if (isset($_SESSION['client'])) {
+            $idClient = $_SESSION['client']->idClient;
+            $lesCommandes = $this->modeleFront->getCommandesByClient($idClient);
+            $lesAvis = $this->modeleFront->getAvisByClient($idClient);
+            include("vues/v_monCompte.php");
+        } else {
+            $this->connexion();
+        }
+    }
+
+    /**
+     * Traite la modification du profil client
+     */
+    function modifierProfil()
+    {
+        if (isset($_SESSION['client'])) {
+            $idClient = $_SESSION['client']->idClient;
+            $nom = $_POST['nom'] ?? '';
+            $prenom = $_POST['prenom'] ?? '';
+            $rue = $_POST['rue'] ?? '';
+            $cp = $_POST['cp'] ?? '';
+            $ville = $_POST['ville'] ?? '';
+
+            if (!empty($nom) && !empty($prenom)) {
+                $this->modeleFront->modifierProfil($idClient, $nom, $prenom, $rue, $cp, $ville);
+
+                // Mise à jour des données en session pour affichage immédiat
+                $_SESSION['client']->nom = $nom;
+                $_SESSION['client']->prenom = $prenom;
+                $_SESSION['client']->rue = $rue;
+                $_SESSION['client']->cp = $cp;
+                $_SESSION['client']->ville = $ville;
+
+                $message = "Votre profil a été mis à jour avec succès !";
+                include("vues/v_message.php");
+            } else {
+                $erreurs[] = "Le nom et le prénom sont obligatoires.";
+            }
+            $this->monCompte();
+        } else {
+            $this->connexion();
+        }
+    }
 }
