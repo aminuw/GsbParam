@@ -43,6 +43,9 @@
               <li><h6 class="dropdown-header text-primary">Gestion Produits</h6></li>
               <li><a class="dropdown-item" href="index.php?uc=administrer&action=listeProduitsModif">Lister / Modifier</a></li>
               <li><a class="dropdown-item" href="index.php?uc=administrer&action=ajouterProduit">Ajouter un produit</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><h6 class="dropdown-header text-primary">Ventes</h6></li>
+              <li><a class="dropdown-item" href="index.php?uc=administrer&action=gestionCommandes">Gestion des Commandes</a></li>
             </ul>
           </li>
           <?php endif; ?>
@@ -66,6 +69,8 @@
                 <?php echo ($_SESSION['client']->role == 2) ? '(Admin)' : '(Client)'; ?>
               </button>
               <ul class="dropdown-menu dropdown-menu-end shadow border-0 w-100" aria-labelledby="dropdownUser">
+                <li><a class="dropdown-item" href="index.php?uc=utilisateur&action=monCompte">Mon Espace Client</a></li>
+                <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="index.php?uc=utilisateur&action=deconnexion">Déconnexion</a></li>
               </ul>
             </div>
