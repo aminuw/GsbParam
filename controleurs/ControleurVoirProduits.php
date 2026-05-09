@@ -71,6 +71,7 @@ class ControleurVoirProduits
         $leProduit = $this->modeleFront->getUnProduit($idProduit);
         $lesAvis = $this->modeleFront->getAvisByProduit($idProduit);
         $noteMoyenne = $this->modeleFront->getNoteMoyenneProduit($idProduit);
+        $lesProduitsAssocies = $this->modeleFront->getProduitsAssocies($idProduit);
         include("vues/v_avis.php");
     }
 
