@@ -4,6 +4,15 @@
             <h1 class="h4 mb-0">Ajouter un nouveau produit au catalogue</h1>
         </div>
         <div class="card-body">
+            <?php if (isset($erreurs)): ?>
+                <div class="alert alert-danger shadow-sm">
+                    <ul class="mb-0">
+                        <?php foreach ($erreurs as $erreur): ?>
+                            <li><?= $erreur ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
             <form action="index.php?uc=administrer&action=validerAjoutProduit" method="POST">
                 
                 <div class="row g-3">

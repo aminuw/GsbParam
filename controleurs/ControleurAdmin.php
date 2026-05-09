@@ -24,11 +24,11 @@ class ControleurAdmin
 
     public function validerAjoutProduit()
     {
-        $idproduit = $_POST['idproduit'];
-        $nom = $_POST['nom'];
-        $description = $_POST['description'];
+        $idproduit = trim($_POST['idproduit']);
+        $nom = trim($_POST['nom']);
+        $description = trim($_POST['description']);
         $prix = $_POST['prix'];
-        $image = $_POST['image'];
+        $image = trim($_POST['image']);
         $quantiteStock = $_POST['quantiteStock'];
         $seuil_rupture = $_POST['seuil_rupture'];
         $mis_en_avant_date_debut = $_POST['mis_en_avant_date_debut'];
@@ -37,23 +37,48 @@ class ControleurAdmin
         $idMarque = $_POST['idMarque'];
         $idUnite = $_POST['idUnite'];
 
-        $this->modeleFront->creerProduit(
-            $idproduit,
-            $nom,
-            $description,
-            $prix,
-            $image,
-            $quantiteStock,
-            $seuil_rupture,
-            $mis_en_avant_date_debut,
-            $mis_en_avant_date_fin,
-            $idCateg,
-            $idMarque,
-            $idUnite
-        );
+        $erreurs = array();
 
-        $message = "Produit ajouté avec succès !";
-        $this->listeProduitsModif();
+        if (empty($idproduit) || empty($nom) || empty($description) || empty($prix)) {
+            $erreurs[] = "Tous les champs obligatoires doivent être remplis.";
+        }
+
+        if (strlen($idproduit) > 5) {
+            $erreurs[] = "L'ID produit ne doit pas dépasser 5 caractères.";
+        }
+
+        if (!is_numeric($prix) || $prix < 0) {
+            $erreurs[] = "Le prix doit être un nombre positif.";
+        }
+
+        if (!is_numeric($quantiteStock) || $quantiteStock < 0) {
+            $erreurs[] = "La quantité en stock ne peut pas être négative.";
+        }
+
+        if (count($erreurs) > 0) {
+            $lesCategories = $this->modeleFront->getLesCategories();
+            $lesMarques = $this->modeleFront->getLesMarques();
+            $lesUnites = $this->modeleFront->getLesUnites();
+            include("vues/v_ajouterProduit.php");
+        } else {
+            $this->modeleFront->creerProduit(
+                $idproduit,
+                $nom,
+                $description,
+                $prix,
+                $image,
+                $quantiteStock,
+                $seuil_rupture,
+                $mis_en_avant_date_debut,
+                $mis_en_avant_date_fin,
+                $idCateg,
+                $idMarque,
+                $idUnite
+            );
+            $message = "Produit ajouté avec succès !";
+            include("vues/v_message.php");
+            $this->listeProduitsModif();
+        }
     }
 
     public function modifierProduit()
@@ -69,10 +94,10 @@ class ControleurAdmin
     public function validerModifProduit()
     {
         $idproduit = $_POST['idproduit'];
-        $nom = $_POST['nom'];
-        $description = $_POST['description'];
+        $nom = trim($_POST['nom']);
+        $description = trim($_POST['description']);
         $prix = $_POST['prix'];
-        $image = $_POST['image'];
+        $image = trim($_POST['image']);
         $quantiteStock = $_POST['quantiteStock'];
         $seuil_rupture = $_POST['seuil_rupture'];
         $mis_en_avant_date_debut = $_POST['mis_en_avant_date_debut'];
@@ -81,23 +106,55 @@ class ControleurAdmin
         $idMarque = $_POST['idMarque'];
         $idUnite = $_POST['idUnite'];
 
-        $this->modeleFront->modifierProduit(
-            $idproduit,
-            $nom,
-            $description,
-            $prix,
-            $image,
-            $quantiteStock,
-            $seuil_rupture,
-            $mis_en_avant_date_debut,
-            $mis_en_avant_date_fin,
-            $idCateg,
-            $idMarque,
-            $idUnite
-        );
+        $erreurs = array();
 
-        $message = "Produit modifié avec succès !";
-        $this->listeProduitsModif();
+        if (empty($nom) || empty($description) || empty($prix)) {
+            $erreurs[] = "Le nom, la description et le prix sont obligatoires.";
+        }
+
+        if (!is_numeric($prix) || $prix < 0) {
+            $erreurs[] = "Le prix doit être un nombre positif.";
+        }
+
+        if (!is_numeric($quantiteStock) || $quantiteStock < 0) {
+            $erreurs[] = "La quantité en stock ne peut pas être négative.";
+        }
+
+        if (!is_numeric($seuil_rupture) || $seuil_rupture < 0) {
+            $erreurs[] = "Le seuil de rupture ne peut pas être négatif.";
+        }
+
+        if (!empty($mis_en_avant_date_debut) && !empty($mis_en_avant_date_fin)) {
+            if ($mis_en_avant_date_fin < $mis_en_avant_date_debut) {
+                $erreurs[] = "La date de fin de mise en avant est incohérente.";
+            }
+        }
+
+        if (count($erreurs) > 0) {
+            $leProduit = $this->modeleFront->getUnProduit($idproduit);
+            $lesCategories = $this->modeleFront->getLesCategories();
+            $lesMarques = $this->modeleFront->getLesMarques();
+            $lesUnites = $this->modeleFront->getLesUnites();
+            include("vues/v_modifierProduit.php");
+        } else {
+            $this->modeleFront->modifierProduit(
+                $idproduit,
+                $nom,
+                $description,
+                $prix,
+                $image,
+                $quantiteStock,
+                $seuil_rupture,
+                $mis_en_avant_date_debut,
+                $mis_en_avant_date_fin,
+                $idCateg,
+                $idMarque,
+                $idUnite
+            );
+            $message = "Produit modifié avec succès !";
+            include("vues/v_message.php");
+            $this->listeProduitsModif();
+        }
     }
 
     public function supprimerProduit()
