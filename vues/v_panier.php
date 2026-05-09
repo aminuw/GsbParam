@@ -34,8 +34,8 @@
                                     <td class="text-center" style="width: 150px;">
                                         <form action="index.php?uc=gererPanier&action=modifierQuantite" method="post" class="d-flex justify-content-center align-items-center">
                                             <input type="hidden" name="produit" value="<?= $id ?>">
-                                            <input type="number" name="qte" value="<?= $qteProduits[$id] ?>" min="1" class="form-control form-control-sm me-2" style="width: 60px;">
-                                            <button type="submit" class="btn btn-outline-primary btn-sm"><i class="bi bi-arrow-repeat"></i></button>
+                                            <input type="number" name="qte" value="<?= $qteProduits[$id] ?>" min="1" class="form-control form-control-sm" style="width: 60px;">
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm ms-2">OK</button>
                                         </form>
                                     </td>
                                     <td class="text-center fw-bold"><?= number_format($unProduit->prix, 2) ?> €</td>
