@@ -97,13 +97,24 @@ class ControleurUtilisateur
     {
         if (isset($_SESSION['client'])) {
             $idClient = $_SESSION['client']->idClient;
-            $nom = $_POST['nom'] ?? '';
-            $prenom = $_POST['prenom'] ?? '';
-            $rue = $_POST['rue'] ?? '';
-            $cp = $_POST['cp'] ?? '';
-            $ville = $_POST['ville'] ?? '';
+            $nom = trim($_POST['nom'] ?? '');
+            $prenom = trim($_POST['prenom'] ?? '');
+            $rue = trim($_POST['rue'] ?? '');
+            $cp = trim($_POST['cp'] ?? '');
+            $ville = trim($_POST['ville'] ?? '');
 
-            if (!empty($nom) && !empty($prenom)) {
+            $erreurs = array();
+
+            if (empty($nom) || empty($prenom)) {
+                $erreurs[] = "Le nom et le prénom sont obligatoires.";
+            }
+
+            // Validation CP (format français simplifié)
+            if (!empty($cp) && !preg_match("/^[0-9]{5}$/", $cp)) {
+                $erreurs[] = "Le code postal doit comporter 5 chiffres.";
+            }
+
+            if (count($erreurs) == 0) {
                 $this->modeleFront->modifierProfil($idClient, $nom, $prenom, $rue, $cp, $ville);
 
                 // Mise à jour des données en session pour affichage immédiat
@@ -115,9 +126,8 @@ class ControleurUtilisateur
 
                 $message = "Votre profil a été mis à jour avec succès !";
                 include("vues/v_message.php");
-            } else {
-                $erreurs[] = "Le nom et le prénom sont obligatoires.";
             }
+            
             $this->monCompte();
         } else {
             $this->connexion();

@@ -20,6 +20,15 @@
                     <div class="card shadow-sm">
                         <div class="card-header bg-primary text-white fw-bold">Modifier mes informations personnelles</div>
                         <div class="card-body">
+                            <?php if (isset($erreurs)): ?>
+                                <div class="alert alert-danger shadow-sm">
+                                    <ul class="mb-0">
+                                        <?php foreach ($erreurs as $erreur): ?>
+                                            <li><?= $erreur ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
                             <form action="index.php?uc=utilisateur&action=modifierProfil" method="POST">
                                 <div class="row g-3">
                                     <div class="col-md-6">

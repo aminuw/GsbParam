@@ -4,6 +4,15 @@
             <h1 class="h4 mb-0">Modifier le produit : <?= htmlspecialchars($leProduit->nom) ?></h1>
         </div>
         <div class="card-body">
+            <?php if (isset($erreurs)): ?>
+                <div class="alert alert-danger shadow-sm">
+                    <ul class="mb-0">
+                        <?php foreach ($erreurs as $erreur): ?>
+                            <li><?= $erreur ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
             <form action="index.php?uc=administrer&action=validerModifProduit" method="POST">
                 <input type="hidden" name="idproduit" value="<?= $leProduit->id; ?>">
                 
