@@ -1,8 +1,4 @@
 <div class="container-fluid px-0">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold"><?php echo empty($laCategorie) ? 'Nos Produits' : 'Produits : ' . htmlspecialchars($laCategorie->libelle); ?></h2>
-    </div>
-
     <?php if (count($lesProduits) == 0): ?>
         <div class="alert alert-info text-center shadow-sm py-4">
             <i class="bi bi-search fs-1 d-block mb-3"></i>
@@ -30,8 +26,8 @@
                                     <a href="index.php?uc=voirProduits&action=voirAvis&produit=<?= $id ?>" class="btn btn-outline-dark btn-sm">
                                         <i class="bi bi-info-circle me-1"></i> Détails / Avis
                                     </a>
-                                    <a href="index.php?uc=gererPanier&produit=<?= $id ?>&action=ajouterAuPanier" class="btn btn-primary btn-sm fw-bold">
-                                        <i class="bi bi-cart-plus me-1"></i> Ajouter au panier
+                                    <a href="index.php?uc=gererPanier&produit=<?= $id ?>&action=ajouterAuPanier" class="btn btn-link p-0 border-0">
+                                        <img src="assets/images/mettrepanier.png" title="Ajouter au panier" alt="Mettre au panier" style="height: 40px;">
                                     </a>
                                 </div>
                             </div>

@@ -54,7 +54,9 @@
                 <div class="d-flex justify-content-between mt-4">
                     <a href="index.php?uc=gererPanier&action=voirPanier" class="btn btn-secondary">Modifier le panier</a>
                     <form method="POST" action="index.php?uc=gererPanier&action=confirmerCommande">
-                        <button class="btn btn-success btn-lg" type="submit">Confirmer la commande</button>
+                        <button type="submit" class="btn btn-link p-0 border-0">
+                            <img src="assets/images/commander.jpg" title="Confirmer la commande" alt="Confirmer" style="width: 180px;">
+                        </button>
                     </form>
                 </div>
                 <?php
