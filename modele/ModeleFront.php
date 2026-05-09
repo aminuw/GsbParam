@@ -262,7 +262,13 @@ class ModeleFront extends Modele
 
 	public function getUnProduit($id)
 	{
-		$req = "SELECT idproduit AS id, nom, description, prix, image, quantiteStock, seuil_rupture, mis_en_avant_date_debut, mis_en_avant_date_fin, idCateg AS idCategorie, idMarque, idUnite FROM produit WHERE idproduit=:id";
+		$req = "SELECT p.idproduit AS id, p.nom, p.description, p.prix, p.image, p.quantiteStock, p.seuil_rupture, 
+                       p.mis_en_avant_date_debut, p.mis_en_avant_date_fin, p.idCateg AS idCategorie, 
+                       p.idMarque, m.libelleMarque, p.idUnite, u.libelle AS libelleUnite 
+                FROM produit p
+                INNER JOIN marque m ON p.idMarque = m.idMarque
+                INNER JOIN unite u ON p.idUnite = u.idUnite
+                WHERE p.idproduit=:id";
 		$tab = array('id' => $id);
 		$res = $this->executerRequete($req, $tab);
 		return $res->fetch(PDO::FETCH_OBJ);
@@ -431,6 +437,193 @@ class ModeleFront extends Modele
 
 			$res = $this->executerRequete($req, $tab);
 			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+	/**
+	 * Retourne les produits associés à un produit
+	 * @param string $idProduit
+	 * @return array
+	 */
+	public function getProduitsAssocies($idProduit)
+	{
+		try {
+			$req = 'SELECT p.idproduit AS id, p.nom, p.prix, p.image 
+					FROM produit p 
+					INNER JOIN associer a ON p.idproduit = a.idproduit_associer 
+					WHERE a.idproduit = :idProduit';
+			$res = $this->executerRequete($req, array('idProduit' => $idProduit));
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
+	/**
+	 * Ajoute une association entre deux produits
+	 * @param string $idProduit
+	 * @param string $idAssoc
+	 */
+	public function ajouterAssociation($idProduit, $idAssoc)
+	{
+		try {
+			$req = 'INSERT INTO associer (idproduit, idproduit_associer) VALUES (:idProduit, :idAssoc)';
+			$this->executerRequete($req, array('idProduit' => $idProduit, 'idAssoc' => $idAssoc));
+		} catch (PDOException $e) {
+			// On ignore si l'association existe déjà
+		}
+	}
+
+	/**
+	 * Supprime une association entre deux produits
+	 * @param string $idProduit
+	 * @param string $idAssoc
+	 */
+	public function supprimerAssociation($idProduit, $idAssoc)
+	{
+		try {
+			$req = 'DELETE FROM associer WHERE idproduit = :idProduit AND idproduit_associer = :idAssoc';
+			$this->executerRequete($req, array('idProduit' => $idProduit, 'idAssoc' => $idAssoc));
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+	/**
+	 * Retourne toutes les commandes triées par ID décroissant
+	 * @return array
+	 */
+	public function getToutesLesCommandes()
+	{
+		try {
+			$req = 'SELECT c.idCommande, c.dateCommande, cl.nom, cl.prenom, e.libelle AS etat, e.idEtat 
+					FROM commande c 
+					INNER JOIN client cl ON c.idClient = cl.idClient 
+					INNER JOIN etat_commande e ON c.idEtat = e.idEtat 
+					ORDER BY CAST(c.idCommande AS UNSIGNED) DESC';
+			$res = $this->executerRequete($req);
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
+	/**
+	 * Retourne les articles d'une commande avec les détails produits
+	 * @param string $idCommande
+	 * @return array
+	 */
+	public function getArticlesCommande($idCommande)
+	{
+		try {
+			$req = 'SELECT p.idproduit, p.nom, p.prix, m.libelleMarque, cat.libelle AS libelleCateg, co.qte 
+					FROM contenir co 
+					INNER JOIN produit p ON co.idproduit = p.idproduit 
+					INNER JOIN marque m ON p.idMarque = m.idMarque 
+					INNER JOIN categorie cat ON p.idCateg = cat.idCateg 
+					WHERE co.idCommande = :idCommande';
+			$res = $this->executerRequete($req, array('idCommande' => $idCommande));
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
+	/**
+	 * Retourne tous les états de commande possibles
+	 * @return array
+	 */
+	public function getTousLesEtats()
+	{
+		try {
+			$req = 'SELECT idEtat, libelle FROM etat_commande';
+			$res = $this->executerRequete($req);
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
+	/**
+	 * Modifie l'état d'une commande
+	 * @param string $idCommande
+	 * @param int $idEtat
+	 */
+	public function modifierEtatCommande($idCommande, $idEtat)
+	{
+		try {
+			$req = 'UPDATE commande SET idEtat = :idEtat WHERE idCommande = :idCommande';
+			$this->executerRequete($req, array('idCommande' => $idCommande, 'idEtat' => $idEtat));
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+	/**
+	 * Retourne les avis déposés par un client
+	 * @param int $idClient
+	 * @return array
+	 */
+	public function getAvisByClient($idClient)
+	{
+		try {
+			$req = 'SELECT a.note, a.commentaire, a.date_avis, p.nom AS nomProduit 
+					FROM avis a 
+					INNER JOIN produit p ON a.idproduit = p.idproduit 
+					WHERE a.idClient = :idClient 
+					ORDER BY a.date_avis DESC';
+			$res = $this->executerRequete($req, array('idClient' => $idClient));
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
+	/**
+	 * Retourne les commandes passées par un client
+	 * @param int $idClient
+	 * @return array
+	 */
+	public function getCommandesByClient($idClient)
+	{
+		try {
+			$req = 'SELECT c.idCommande, c.dateCommande, e.libelle AS etat 
+					FROM commande c 
+					INNER JOIN etat_commande e ON c.idEtat = e.idEtat 
+					WHERE c.idClient = :idClient 
+					ORDER BY c.dateCommande DESC';
+			$res = $this->executerRequete($req, array('idClient' => $idClient));
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
+	/**
+	 * Modifie le profil d'un client
+	 */
+	public function modifierProfil($idClient, $nom, $prenom, $rue, $cp, $ville)
+	{
+		try {
+			$req = 'UPDATE client SET nom = :nom, prenom = :prenom, rue = :rue, cp = :cp, ville = :ville 
+					WHERE idClient = :idClient';
+			$tab = array(
+				'idClient' => $idClient,
+				'nom' => $nom,
+				'prenom' => $prenom,
+				'rue' => $rue,
+				'cp' => $cp,
+				'ville' => $ville
+			);
+			$this->executerRequete($req, $tab);
 		} catch (PDOException $e) {
 			print "Erreur !: " . $e->getMessage();
 			die();

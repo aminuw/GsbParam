@@ -144,6 +144,14 @@ class Routeur
                         $this->ctrlUtilisateur->deconnexion();
                         break;
                     }
+                    case 'monCompte': {
+                        $this->ctrlUtilisateur->monCompte();
+                        break;
+                    }
+                    case 'modifierProfil': {
+                        $this->ctrlUtilisateur->modifierProfil();
+                        break;
+                    }
                 }
                 ;
                 break;
@@ -174,6 +182,26 @@ class Routeur
                     }
                     case 'supprimerProduit': {
                         $this->ctrlAdministrer->supprimerProduit();
+                        break;
+                    }
+                    case 'gererAssociations': {
+                        $this->ctrlAdministrer->gererAssociations();
+                        break;
+                    }
+                    case 'validerAssociations': {
+                        $this->ctrlAdministrer->validerAssociations();
+                        break;
+                    }
+                    case 'gestionCommandes': {
+                        $this->ctrlAdministrer->gestionCommandes();
+                        break;
+                    }
+                    case 'voirArticles': {
+                        $this->ctrlAdministrer->voirArticles();
+                        break;
+                    }
+                    case 'modifierEtat': {
+                        $this->ctrlAdministrer->modifierEtat();
                         break;
                     }
                 }
