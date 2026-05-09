@@ -1,0 +1,26 @@
+Mission USR12 - Modification d'un produit
+
+1. Objectif :
+Permettre à l'administrateur de mettre à jour toutes les informations d'un produit existant via un formulaire sécurisé.
+
+2. Logique SQL (UPDATE) :
+UPDATE produit 
+SET nom = :nom, description = :description, prix = :prix, image = :image, 
+    quantiteStock = :qte, seuil_rupture = :seuil, 
+    mis_en_avant_date_debut = :debut, mis_en_avant_date_fin = :fin, 
+    idCateg = :idCateg, idMarque = :idMarque, idUnite = :idUnite 
+WHERE idproduit = :id;
+
+3. Points clés du formulaire :
+- Utilisation d'un champ masqué (hidden) pour l'identifiant du produit afin d'assurer que l'UPDATE cible le bon enregistrement.
+- Listes déroulantes dynamiques pour les clés étrangères (Marque, Catégorie, Unité) avec l'attribut 'selected' positionné sur la valeur actuelle en base.
+- Utilisation des types HTML5 (type="date", type="number") pour faciliter la saisie et la validation primaire.
+
+4. Sécurité (BTS SIO) :
+- Vérification que l'utilisateur est bien Administrateur avant d'accéder au contrôleur.
+- Utilisation de requêtes préparées (PDO) pour protéger contre les injections SQL lors de la mise à jour.
+
+5. Démarche :
+- Récupération des données actuelles du produit par son ID.
+- Affichage du formulaire pré-rempli.
+- Traitement de la validation (POST) et mise à jour en base de données.

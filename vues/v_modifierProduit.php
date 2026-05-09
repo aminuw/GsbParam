@@ -1,46 +1,90 @@
-<h1>Modifier le produit</h1>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h1 class="h4 mb-0">Modifier le produit : <?= htmlspecialchars($leProduit->nom) ?></h1>
+        </div>
+        <div class="card-body">
+            <form action="index.php?uc=administrer&action=validerModifProduit" method="POST">
+                <input type="hidden" name="idproduit" value="<?= $leProduit->id; ?>">
+                
+                <div class="row g-3">
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">ID Produit</label>
+                        <input type="text" class="form-control bg-light" value="<?= $leProduit->id; ?>" disabled>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label fw-bold">Nom du produit</label>
+                        <input type="text" name="nom" class="form-control" value="<?= htmlspecialchars($leProduit->nom); ?>" required>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label fw-bold">Image (lien ou chemin)</label>
+                        <input type="text" name="image" class="form-control" value="<?= htmlspecialchars($leProduit->image); ?>" required>
+                    </div>
 
-<form action="index.php?uc=administrer&action=validerModifProduit" method="POST">
-    <!-- Champ caché pour garder l'identifiant pour la mise à jour -->
-    <input type="hidden" name="idproduit" value="<?php echo $leProduit->id; ?>">
-    
-    ID Produit : <?php echo $leProduit->id; ?> <br><br>
-    
-    Nom du produit : <input type="text" name="nom" value="<?php echo $leProduit->nom; ?>"><br><br>
-    Description : <input type="text" name="description" value="<?php echo $leProduit->description; ?>"><br><br>
-    Prix : <input type="text" name="prix" value="<?php echo $leProduit->prix; ?>"><br><br>
-    Image (lien) : <input type="text" name="image" value="<?php echo $leProduit->image; ?>"><br><br>
-    Quantité en Stock : <input type="number" name="quantiteStock" value="<?php echo $leProduit->quantiteStock; ?>"><br><br>
-    Seuil de rupture : <input type="number" name="seuil_rupture" value="<?php echo $leProduit->seuil_rupture; ?>"><br><br>
-    Date de mise en avant (début) : <input type="date" name="mis_en_avant_date_debut" value="<?php echo $leProduit->mis_en_avant_date_debut; ?>"><br><br>
-    Date de mise en avant (fin) : <input type="date" name="mis_en_avant_date_fin" value="<?php echo $leProduit->mis_en_avant_date_fin; ?>"><br><br>
-    
-    Catégorie : 
-    <select name="idCateg">
-        <?php foreach($lesCategories as $uneCategorie) { ?>
-            <option value="<?php echo $uneCategorie->id; ?>" <?php if($uneCategorie->id == $leProduit->idCategorie) echo 'selected'; ?>>
-                <?php echo $uneCategorie->libelle; ?>
-            </option>
-        <?php } ?>
-    </select><br><br>
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Description</label>
+                        <textarea name="description" class="form-control" rows="3" required><?= htmlspecialchars($leProduit->description); ?></textarea>
+                    </div>
 
-    Marque : 
-    <select name="idMarque">
-        <?php foreach($lesMarques as $uneMarque) { ?>
-            <option value="<?php echo $uneMarque->idMarque; ?>" <?php if($uneMarque->idMarque == $leProduit->idMarque) echo 'selected'; ?>>
-                <?php echo $uneMarque->libelleMarque; ?>
-            </option>
-        <?php } ?>
-    </select><br><br>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Prix (€)</label>
+                        <input type="number" step="0.01" name="prix" class="form-control" value="<?= $leProduit->prix; ?>" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Quantité en Stock</label>
+                        <input type="number" name="quantiteStock" class="form-control" value="<?= $leProduit->quantiteStock; ?>" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Seuil de rupture</label>
+                        <input type="number" name="seuil_rupture" class="form-control" value="<?= $leProduit->seuil_rupture; ?>" required>
+                    </div>
 
-    Unité : 
-    <select name="idUnite">
-        <?php foreach($lesUnites as $uneUnite) { ?>
-            <option value="<?php echo $uneUnite->idUnite; ?>" <?php if($uneUnite->idUnite == $leProduit->idUnite) echo 'selected'; ?>>
-                <?php echo $uneUnite->libelle; ?>
-            </option>
-        <?php } ?>
-    </select><br><br>
-    
-    <input type="submit" value="Mettre à jour le produit (V2)">
-</form>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Date de début mise en avant</label>
+                        <input type="date" name="mis_en_avant_date_debut" class="form-control" value="<?= $leProduit->mis_en_avant_date_debut; ?>">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Date de fin mise en avant</label>
+                        <input type="date" name="mis_en_avant_date_fin" class="form-control" value="<?= $leProduit->mis_en_avant_date_fin; ?>">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Catégorie</label>
+                        <select name="idCateg" class="form-select">
+                            <?php foreach($lesCategories as $uneCategorie) { ?>
+                                <option value="<?= $uneCategorie->id; ?>" <?= ($uneCategorie->id == $leProduit->idCategorie) ? 'selected' : ''; ?>>
+                                    <?= htmlspecialchars($uneCategorie->libelle); ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Marque</label>
+                        <select name="idMarque" class="form-select">
+                            <?php foreach($lesMarques as $uneMarque) { ?>
+                                <option value="<?= $uneMarque->idMarque; ?>" <?= ($uneMarque->idMarque == $leProduit->idMarque) ? 'selected' : ''; ?>>
+                                    <?= htmlspecialchars($uneMarque->libelleMarque); ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Unité de mesure</label>
+                        <select name="idUnite" class="form-select">
+                            <?php foreach($lesUnites as $uneUnite) { ?>
+                                <option value="<?= $uneUnite->idUnite; ?>" <?= ($uneUnite->idUnite == $leProduit->idUnite) ? 'selected' : ''; ?>>
+                                    <?= htmlspecialchars($uneUnite->libelle); ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <a href="index.php?uc=administrer&action=listeProduitsModif" class="btn btn-secondary">Annuler</a>
+                    <button type="submit" class="btn btn-success px-5 fw-bold">Enregistrer les modifications</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
