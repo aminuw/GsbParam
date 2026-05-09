@@ -25,12 +25,12 @@
             <h5 class="card-title mb-0 fs-6 fw-bold text-uppercase">Filtrer les produits</h5>
         </div>
         <div class="card-body">
-            <form action="index.php?uc=voirProduits&action=voirTousProduits" method="POST">
+            <form action="index.php?uc=voirProduits&action=nosProduits" method="POST">
                 
                 <div class="mb-3">
                     <label class="form-label fw-bold small">Catégorie</label>
                     <select name="lstCategorie" class="form-select form-select-sm">
-                        <option value="tous">Toutes les catégories</option>
+                        <option value="tous" <?= (!isset($idCateg) || $idCateg == 'tous') ? 'selected' : '' ?>>Toutes les catégories</option>
                         <?php foreach($lesCategories as $uneCategorie): ?>
                             <option value="<?= $uneCategorie->id ?>" <?= (isset($idCateg) && $idCateg == $uneCategorie->id) ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($uneCategorie->libelle) ?>
@@ -42,7 +42,7 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold small">Marque</label>
                     <select name="lstMarque" class="form-select form-select-sm">
-                        <option value="toutes">Toutes les marques</option>
+                        <option value="toutes" <?= (!isset($idMarque) || $idMarque == 'toutes') ? 'selected' : '' ?>>Toutes les marques</option>
                         <?php foreach($lesMarques as $uneMarque): ?>
                             <option value="<?= $uneMarque->idMarque ?>" <?= (isset($idMarque) && $idMarque == $uneMarque->idMarque) ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($uneMarque->libelleMarque) ?>

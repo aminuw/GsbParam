@@ -424,11 +424,11 @@ class ModeleFront extends Modele
 				$req .= ' AND idMarque = :idMarque';
 				$tab['idMarque'] = $idMarque;
 			}
-			if ($prixMin) {
+			if ($prixMin !== null) {
 				$req .= ' AND prix >= :prixMin';
 				$tab['prixMin'] = $prixMin;
 			}
-			if ($prixMax) {
+			if ($prixMax !== null) {
 				$req .= ' AND prix <= :prixMax';
 				$tab['prixMax'] = $prixMax;
 			}
