@@ -188,8 +188,24 @@ class Routeur
                         $this->ctrlAdministrer->gererAssociations();
                         break;
                     }
-                    case 'validerAssociations': {
-                        $this->ctrlAdministrer->validerAssociations();
+                    case 'ajouterAssociation': {
+                        $this->ctrlAdministrer->ajouterAssociation();
+                        break;
+                    }
+                    case 'validerAjoutAssociation': {
+                        $this->ctrlAdministrer->validerAjoutAssociation();
+                        break;
+                    }
+                    case 'supprimerAssociation': {
+                        $this->ctrlAdministrer->supprimerAssociation();
+                        break;
+                    }
+                    case 'modifierAssociation': {
+                        $this->ctrlAdministrer->modifierAssociation();
+                        break;
+                    }
+                    case 'validerModifAssociation': {
+                        $this->ctrlAdministrer->validerModifAssociation();
                         break;
                     }
                     case 'gestionCommandes': {

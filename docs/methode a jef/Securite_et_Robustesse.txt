@@ -1,7 +1,3 @@
-========================================================================
-STRATÉGIE DE SÉCURITÉ ET ROBUSTESSE (Validation des données)
-========================================================================
-
 CONTEXTE :
 Après l'implémentation des fonctionnalités (USR), une phase de "blindage"
 a été réalisée pour garantir que l'application ne plante pas face à des

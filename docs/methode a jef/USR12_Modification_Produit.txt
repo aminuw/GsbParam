@@ -16,7 +16,7 @@ WHERE idproduit = :id;
 - Listes déroulantes dynamiques pour les clés étrangères (Marque, Catégorie, Unité) avec l'attribut 'selected' positionné sur la valeur actuelle en base.
 - Utilisation des types HTML5 (type="date", type="number") pour faciliter la saisie et la validation primaire.
 
-4. Sécurité (BTS SIO) :
+4. Sécurité :
 - Vérification que l'utilisateur est bien Administrateur avant d'accéder au contrôleur.
 - Utilisation de requêtes préparées (PDO) pour protéger contre les injections SQL lors de la mise à jour.
 

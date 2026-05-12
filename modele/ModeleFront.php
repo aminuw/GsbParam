@@ -442,6 +442,21 @@ class ModeleFront extends Modele
 			die();
 		}
 	}
+	public function getToutesLesAssociations()
+	{
+		try {
+			$req = 'SELECT a.idproduit, a.idproduit_associer, p1.nom AS nom1, p2.nom AS nom2 
+					FROM associer a 
+					INNER JOIN produit p1 ON a.idproduit = p1.idproduit
+					INNER JOIN produit p2 ON a.idproduit_associer = p2.idproduit';
+			$res = $this->executerRequete($req);
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			print "Erreur !: " . $e->getMessage();
+			die();
+		}
+	}
+
 	/**
 	 * Retourne les produits associés à un produit
 	 * @param string $idProduit

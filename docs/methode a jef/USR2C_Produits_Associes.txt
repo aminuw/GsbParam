@@ -19,12 +19,13 @@ Les deux colonnes forment une clé primaire composée pour éviter les doublons.
   INNER JOIN associer a ON p.idproduit = a.idproduit_associer 
   WHERE a.idproduit = :idP;
 
-4. Sécurité (BTS SIO) :
+4. Sécurité :
 - Vérification que le produit associé n'est pas le produit lui-même (id != idAssoc).
 - Utilisation de requêtes préparées (PDO) pour toutes les actions.
 - Accès restreint à l'interface de gestion (Admin uniquement).
 
 5. Démarche :
-- Création des méthodes dans le Modèle.
-- Ajout d'une interface dans le Back-Office pour cocher/décocher les associations.
-- Modification de la vue "Détail Produit" pour afficher les suggestions.
+- Ajout de la méthode `getToutesLesAssociations()` dans le Modèle pour récupérer l'ensemble des paires de produits associés.
+- Création d'une page globale (tableau) dans le Back-Office listant toutes les associations existantes.
+- Intégration des actions CRUD spécifiques avec leurs propres vues : Ajouter (deux listes déroulantes), Modifier et Supprimer une association de produits.
+- Ajout d'un lien d'accès direct "Produits Associés" dans le menu d'administration.

@@ -167,52 +167,75 @@ class ControleurAdmin
     }
 
     /**
-     * Affiche l'interface de gestion des produits associés
+     * Affiche l'interface de gestion des produits associés globale
      */
     public function gererAssociations()
     {
-        $id = $_REQUEST['id'] ?? null;
-        if ($id) {
-            $leProduit = $this->modeleFront->getUnProduit($id);
-            $tousLesProduits = $this->modeleFront->getTousLesProduits();
-            $lesProduitsAssocies = $this->modeleFront->getProduitsAssocies($id);
+        $lesAssociations = $this->modeleFront->getToutesLesAssociations();
+        include("vues/v_gererAssociations.php");
+    }
 
-            // Liste simple des IDs pour faciliter le cochage des cases
-            $idsAssocies = array();
-            foreach ($lesProduitsAssocies as $unP) {
-                $idsAssocies[] = $unP->id;
-            }
+    public function ajouterAssociation()
+    {
+        $lesProduits = $this->modeleFront->getTousLesProduits();
+        include("vues/v_ajouterAssociation.php");
+    }
 
-            include("vues/v_gererAssociations.php");
+    public function validerAjoutAssociation()
+    {
+        $idProduit1 = $_POST['idProduit1'];
+        $idProduit2 = $_POST['idProduit2'];
+
+        if ($idProduit1 == $idProduit2) {
+            $message = "Erreur : Un produit ne peut pas être associé à lui-même.";
+            include("vues/v_message.php");
+            $this->ajouterAssociation();
         } else {
-            $this->listeProduitsModif();
+            $this->modeleFront->ajouterAssociation($idProduit1, $idProduit2);
+            $message = "L'association a été créée avec succès !";
+            include("vues/v_message.php");
+            $this->gererAssociations();
         }
     }
 
-    /**
-     * Enregistre les modifications d'associations
-     */
-    public function validerAssociations()
+    public function supprimerAssociation()
     {
-        $id = $_POST['idproduit'];
-        $nouveauxAssocies = $_POST['associes'] ?? array();
-
-        // On commence par supprimer toutes les associations actuelles de ce produit
-        $anciens = $this->modeleFront->getProduitsAssocies($id);
-        foreach ($anciens as $unA) {
-            $this->modeleFront->supprimerAssociation($id, $unA->id);
-        }
-
-        // On ajoute les nouvelles associations cochées
-        foreach ($nouveauxAssocies as $idAssoc) {
-            if ($id != $idAssoc) { // Sécurité : pas d'auto-association
-                $this->modeleFront->ajouterAssociation($id, $idAssoc);
-            }
-        }
-
-        $message = "Les produits associés ont été mis à jour avec succès !";
+        $id1 = $_GET['id1'];
+        $id2 = $_GET['id2'];
+        $this->modeleFront->supprimerAssociation($id1, $id2);
+        
+        $message = "Association supprimée avec succès !";
         include("vues/v_message.php");
-        $this->listeProduitsModif();
+        $this->gererAssociations();
+    }
+
+    public function modifierAssociation()
+    {
+        $id1 = $_GET['id1'];
+        $id2 = $_GET['id2'];
+        
+        $lesProduits = $this->modeleFront->getTousLesProduits();
+        include("vues/v_modifierAssociation.php");
+    }
+
+    public function validerModifAssociation()
+    {
+        $ancienId1 = $_POST['ancienId1'];
+        $ancienId2 = $_POST['ancienId2'];
+        $idProduit1 = $_POST['idProduit1'];
+        $idProduit2 = $_POST['idProduit2'];
+
+        if ($idProduit1 == $idProduit2) {
+            $message = "Erreur : Un produit ne peut pas être associé à lui-même.";
+            include("vues/v_message.php");
+            $this->gererAssociations();
+        } else {
+            $this->modeleFront->supprimerAssociation($ancienId1, $ancienId2);
+            $this->modeleFront->ajouterAssociation($idProduit1, $idProduit2);
+            $message = "L'association a été modifiée avec succès !";
+            include("vues/v_message.php");
+            $this->gererAssociations();
+        }
     }
 
     /**

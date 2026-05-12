@@ -23,7 +23,7 @@ Fournir au client un tableau de bord personnel pour gérer son profil, suivre se
 - Affichage de l'historique des commandes sous forme de tableau.
 - Liste des avis déposés avec le nom du produit concerné.
 
-4. Sécurité (BTS SIO) :
+4. Sécurité :
 - Vérification systématique de la connexion (uc=utilisateur&action=monCompte redirige vers connexion si non connecté).
 - Utilisation des sessions pour garantir que le client n'accède qu'à ses propres données.
 

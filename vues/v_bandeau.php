@@ -43,6 +43,7 @@
               <li><h6 class="dropdown-header text-primary">Gestion Produits</h6></li>
               <li><a class="dropdown-item" href="index.php?uc=administrer&action=listeProduitsModif">Lister / Modifier</a></li>
               <li><a class="dropdown-item" href="index.php?uc=administrer&action=ajouterProduit">Ajouter un produit</a></li>
+              <li><a class="dropdown-item" href="index.php?uc=administrer&action=gererAssociations">Produits Associés</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><h6 class="dropdown-header text-primary">Ventes</h6></li>
               <li><a class="dropdown-item" href="index.php?uc=administrer&action=gestionCommandes">Gestion des Commandes</a></li>
