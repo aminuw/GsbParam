@@ -13,14 +13,23 @@ WHERE idproduit = :id;
 
 3. Points clés du formulaire :
 - Utilisation d'un champ masqué (hidden) pour l'identifiant du produit afin d'assurer que l'UPDATE cible le bon enregistrement.
+- L'ID produit est affiché mais désactivé (attribut disabled) pour éviter toute modification.
 - Listes déroulantes dynamiques pour les clés étrangères (Marque, Catégorie, Unité) avec l'attribut 'selected' positionné sur la valeur actuelle en base.
-- Utilisation des types HTML5 (type="date", type="number") pour faciliter la saisie et la validation primaire.
+- Utilisation des types HTML5 (type="date", type="number" avec step="0.01") pour faciliter la saisie et la validation primaire.
 
-4. Sécurité :
-- Vérification que l'utilisateur est bien Administrateur avant d'accéder au contrôleur.
-- Utilisation de requêtes préparées (PDO) pour protéger contre les injections SQL lors de la mise à jour.
+4. Validation côté serveur (Contrôleur) :
+- Vérification des champs obligatoires (nom, description, prix).
+- Contrôle du prix positif (is_numeric et >= 0).
+- Contrôle du stock positif et du seuil de rupture positif.
+- Vérification de la cohérence des dates de mise en avant (date fin >= date début).
+- En cas d'erreur, le formulaire est ré-affiché avec les messages d'erreur et les données du produit.
 
-5. Démarche :
-- Récupération des données actuelles du produit par son ID.
-- Affichage du formulaire pré-rempli.
-- Traitement de la validation (POST) et mise à jour en base de données.
+5. Sécurité et Robustesse :
+- Vérification que l'utilisateur est bien Administrateur avant d'accéder au contrôleur (requireAdmin dans le Routeur).
+- Utilisation de requêtes préparées (PDO) pour protéger contre les injections SQL.
+- Gestion des erreurs via try/catch : si la modification échoue en base (ex: erreur SQL), un message d'erreur explicite s'affiche au lieu d'un crash.
+
+6. Fichiers concernés :
+- Contrôleur : controleurs/ControleurAdmin.php (modifierProduit, validerModifProduit)
+- Modèle : modele/ModeleFront.php (getUnProduit, modifierProduit)
+- Vue : vues/v_modifierProduit.php (formulaire pré-rempli avec gestion des erreurs)

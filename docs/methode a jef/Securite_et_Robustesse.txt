@@ -1,36 +1,71 @@
-CONTEXTE :
-Après l'implémentation des fonctionnalités (USR), une phase de "blindage"
-a été réalisée pour garantir que l'application ne plante pas face à des
-saisies erronées ou malveillantes.
+SÉCURITÉ ET ROBUSTESSE - Phase de blindage (Version finale)
 
+CONTEXTE :
+Après l'implémentation des fonctionnalités (USR 2A, 2C, 4, 5, 10, 12, 14), une phase 
+de "blindage" a été réalisée pour garantir que l'application ne plante jamais face à des
+saisies erronées, des doublons ou des contraintes d'intégrité.
+
+========================================================================
 DÉMARCHE TECHNIQUE :
 
-1. VALIDATION CÔTÉ SERVEUR (Contrôleurs) :
+1. SUPPRESSION DES die() DANS LE MODÈLE :
+   - Tous les blocs catch du Modèle (ModeleFront.php) utilisaient die() ce qui 
+     arrêtait brutalement l'application avec une page d'erreur orange.
+   - Remplacement par throw $e pour propager l'exception vers le contrôleur,
+     qui peut alors afficher un message d'erreur lisible à l'utilisateur.
+
+2. PROTECTION DE CHAQUE APPEL AU MODÈLE (Contrôleurs) :
+   Chaque action qui écrit en base de données est désormais entourée d'un 
+   bloc try/catch dans le contrôleur correspondant :
+   - ControleurAdmin : creerProduit, modifierProduit, supprimerProduit,
+     ajouterAssociation, modifierAssociation, supprimerAssociation, modifierEtat
+   - ControleurUtilisateur : creerClient (inscription), modifierProfil
+   - ControleurVoirProduits : ajouterAvis
+   - ControleurGererPanier : creerCommande (géré via retour success/message)
+
+3. GESTION DES CONTRAINTES D'INTÉGRITÉ (Code SQL 23000) :
+   Le code d'erreur PDO '23000' correspond à une violation de contrainte :
+   - Doublon de clé primaire (ex: ID produit déjà utilisé)
+   - Violation de clé étrangère (ex: supprimer un produit lié à une commande)
+   - Doublon d'email (ex: inscription avec un email existant)
+   Chaque cas est traité avec un message d'erreur explicite et compréhensible.
+
+4. VALIDATION CÔTÉ SERVEUR (Contrôleurs) :
    - Utilisation de trim() pour nettoyer les entrées (espaces inutiles).
    - Vérification des champs obligatoires via empty().
    - Contrôle du typage numérique via is_numeric().
    - Interdiction des valeurs incohérentes (prix négatif, stock négatif).
-   - Validation des formats via Expressions Régulières (ex: Code Postal à 5 chiffres).
+   - Validation des formats via filter_var (email) et Expressions Régulières (CP à 5 chiffres).
 
-2. SÉCURITÉ DES DONNÉES (Modèle) :
+5. SÉCURITÉ DES DONNÉES (Modèle) :
    - Protection totale contre les INJECTIONS SQL grâce à l'utilisation
      systématique des REQUÊTES PRÉPARÉES PDO avec paramètres nommés.
-   - Aucune variable utilisateur n'est concaténée directement dans le SQL.
+   - Correction d'une faille : la méthode getLesProduitsDuTableau() utilisait
+     la concaténation de chaîne au lieu d'une requête préparée. Corrigé.
 
-3. PROTECTION CONTRE LES FAILLES XSS (Vues) :
+6. PROTECTION CONTRE LES FAILLES XSS (Vues) :
    - Utilisation systématique de htmlspecialchars() lors de l'affichage
      des données provenant de la base ou des formulaires.
-   - Cela neutralise l'exécution de scripts JavaScript malveillants.
 
-4. GESTION DES ERREURS (UX) :
-   - Mise en place d'un système de retour d'erreurs visuel (alert-danger Bootstrap).
-   - Les erreurs sont listées précisément pour guider l'utilisateur.
-   - En cas d'erreur, les données saisies sont conservées pour éviter de tout retaper.
+7. GESTION DES ERREURS VISUELLES (UX) :
+   - Système de messages colorés via v_message.php :
+     * $messageType = "success" → bandeau vert
+     * $messageType = "error" → bandeau rouge
+   - Les erreurs de formulaire sont listées dans des alertes Bootstrap (alert-danger).
 
+8. CORRECTIONS DE BUGS :
+   - ControleurCategories.php : le fichier v_modifierProduits.php n'existait pas,
+     remplacé par v_modifierCategorie.php.
+   - Routeur.php : suppression du case 'viderPanier' dupliqué.
+   - Suppression de target="_blank" non souhaités dans v_produits.php et v_listeCommandes.php.
+
+========================================================================
 FICHIERS CLÉS :
-- controleurs/ControleurAdmin.php (Logique de validation)
-- controleurs/ControleurUtilisateur.php (Validation profil)
-- vues/v_ajouterProduit.php (Affichage des erreurs)
-- vues/v_modifierProduit.php (Affichage des erreurs)
-- vues/v_monCompte.php (Affichage des erreurs)
+- modele/ModeleFront.php (throw $e au lieu de die())
+- controleurs/ControleurAdmin.php (try/catch sur toutes les actions)
+- controleurs/ControleurUtilisateur.php (try/catch inscription + profil)
+- controleurs/ControleurVoirProduits.php (try/catch ajout avis)
+- controleurs/ControleurCategories.php (correction du nom de vue)
+- controleurs/Routeur.php (suppression du doublon viderPanier)
+- vues/v_message.php (affichage conditionnel succès/erreur)
 ========================================================================

@@ -1,0 +1,38 @@
+Mission USR2A - Gestion du Catalogue Produits
+
+1. Objectif :
+Permettre à l'administrateur de gérer le catalogue complet des produits (Ajout, Modification, Suppression) avec un système d'alertes de stock.
+
+2. Logique SQL :
+- Ajout d'un produit :
+  INSERT INTO produit (idproduit, nom, description, prix, image, quantiteStock, seuil_rupture, 
+  mis_en_avant_date_debut, mis_en_avant_date_fin, idCateg, idMarque, idUnite) 
+  VALUES (:idproduit, :nom, :description, :prix, :image, :quantiteStock, :seuil_rupture, 
+  :debut, :fin, :idCateg, :idMarque, :idUnite);
+
+- Suppression d'un produit :
+  DELETE FROM produit WHERE idproduit = :id;
+
+3. Fonctionnalités implémentées :
+- Liste complète des produits avec image, nom, prix, stock et actions (Modifier, Associer, Supprimer).
+- Système d'alerte visuelle pour le stock : pastille verte si stock normal, pastille rouge "Alerte" si stock <= seuil de rupture.
+- Formulaire d'ajout avec tous les champs nécessaires et listes déroulantes pour les clés étrangères.
+- Bouton "+ Nouveau Produit" dans l'en-tête de la page.
+- Confirmation JavaScript avant suppression ("Voulez-vous vraiment supprimer ce produit ?").
+
+4. Validation côté serveur :
+- Vérification des champs obligatoires (ID, nom, description, prix).
+- L'ID produit ne doit pas dépasser 5 caractères.
+- Le prix doit être un nombre positif.
+- La quantité en stock ne peut pas être négative.
+
+5. Sécurité et Robustesse :
+- Accès réservé aux administrateurs (requireAdmin dans le Routeur).
+- Requêtes préparées PDO pour toutes les opérations.
+- Gestion des doublons via try/catch : si l'ID produit existe déjà, message "L'identifiant produit est déjà utilisé" au lieu d'un crash.
+- Protection de la suppression via try/catch : si le produit est lié à des commandes (table contenir) ou à des associations (table associer), message "Impossible de supprimer ce produit car il est lié à des commandes ou des associations existantes" au lieu d'un crash.
+
+6. Fichiers concernés :
+- Contrôleur : controleurs/ControleurAdmin.php (listeProduitsModif, ajouterProduit, validerAjoutProduit, supprimerProduit)
+- Modèle : modele/ModeleFront.php (getTousLesProduits, creerProduit, supprimerProduit)
+- Vues : vues/v_listeProduitsModif.php, vues/v_ajouterProduit.php

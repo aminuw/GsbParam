@@ -83,7 +83,11 @@ class ControleurVoirProduits
 
         if (isset($_SESSION['client'])) {
             $idClient = $_SESSION['client']->idClient;
-            $this->modeleFront->ajouterAvis($note, $commentaire, $idClient, $idProduit);
+            try {
+                $this->modeleFront->ajouterAvis($note, $commentaire, $idClient, $idProduit);
+            } catch (PDOException $e) {
+                // On ignore l'erreur et on redirige quand même
+            }
             echo '<script>window.location.href = "index.php?uc=voirProduits&action=voirAvis&produit=' . $idProduit . '";</script>';
             exit();
         } else {

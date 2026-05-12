@@ -112,9 +112,6 @@ class Routeur
                     case 'confirmerCommande':
                         $this->ctrlGererPanier->confirmerCommande();
                         break;
-                    case 'viderPanier':
-                        $this->ctrlGererPanier->viderPanier();
-                        break;
                     default: {
                         $this->ctrlGererPanier->voirPanier();
                         break;

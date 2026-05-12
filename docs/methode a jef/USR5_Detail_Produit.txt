@@ -5,28 +5,39 @@ Afficher une fiche détaillée pour chaque produit comprenant toutes les informa
 
 2. Structure de la requête SQL (Jointures) :
 Pour obtenir les libellés au lieu des identifiants (idMarque, idUnite), nous devons lier les tables :
-SELECT p.*, m.libelleMarque, u.libelleUnite
+SELECT p.*, m.libelleMarque, u.libelle AS libelleUnite
 FROM produit p
 INNER JOIN marque m ON p.idMarque = m.idMarque
 INNER JOIN unite u ON p.idUnite = u.idUnite
 WHERE p.idproduit = :id;
 
-3. Informations à afficher :
-- Nom et Photo
-- Note moyenne (calculée à partir de la table avis)
-- Description complète
+3. Informations affichées sur la fiche :
+- Nom et Photo du produit
 - Marque (ex: 'Laino', 'Weleda')
-- Contenance (ex: '200 ml')
-- Stock disponible (quantiteStock)
-- Produits associés (table associer)
+- Contenance (ex: 'Unité', '200 ml')
+- Description complète
+- Prix (badge vert)
+- Note moyenne (calculée via AVG(note) sur la table avis)
+- Disponibilité avec 3 états visuels :
+  * "En stock (X disponibles)" en vert
+  * "Attention, stock faible ! (X restants)" en orange si quantité <= seuil_rupture
+  * "Rupture de stock" en rouge si quantité == 0
+- Produits associés ("Vous aimerez aussi...") via la table associer
+- Liste complète des avis clients avec note, commentaire et date
 
 4. Sécurité (BTS SIO) :
-- Utilisation de htmlspecialchars() pour l'affichage des données.
+- Utilisation de htmlspecialchars() pour l'affichage de toutes les données.
 - Requête préparée pour récupérer le produit par son ID.
+- Le bouton "Ajouter au panier" est masqué si le produit est en rupture de stock.
+- Le formulaire de commande et d'avis n'est accessible qu'aux utilisateurs connectés.
+- La quantité maximale du formulaire est limitée au stock disponible (attribut max).
+- Gestion des erreurs via try/catch sur l'ajout d'avis pour éviter les crashs.
 
-5. Démarche (Mise à jour stricte selon l'USR 5) :
-- Mise à jour de la méthode getUnProduit() dans le Modèle pour inclure les jointures.
-- Amélioration de la vue v_avis.php en "Fiche Produit" avec formulaire d'ajout au panier incluant le choix de la quantité et bloqué au stock maximum.
-- Restriction de l'affichage du bouton de commande aux utilisateurs connectés uniquement.
-- Ajout d'une alerte dynamique "Stock faible" si la quantité est inférieure ou égale au seuil de rupture.
-- Ajout de target="_blank" sur les liens depuis le catalogue.
+5. Navigation :
+- Le lien "Détails / Avis" depuis le catalogue s'ouvre dans la même page (pas de target="_blank").
+- Un bouton "Retour aux produits" permet de revenir au catalogue.
+
+6. Fichiers concernés :
+- Contrôleur : controleurs/ControleurVoirProduits.php (méthodes voirAvis, validerAvis)
+- Modèle : modele/ModeleFront.php (getUnProduit, getAvisByProduit, getNoteMoyenneProduit, getProduitsAssocies, ajouterAvis)
+- Vue : vues/v_avis.php (fiche produit complète)

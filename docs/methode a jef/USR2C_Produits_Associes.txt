@@ -1,7 +1,7 @@
 Mission USR2C - Gestion des Produits Associés
 
 1. Objectif :
-Permettre au responsable commercial de lier des produits entre eux (ex: un shampooing avec son après-shampooing) et afficher ces suggestions aux clients sur la fiche produit.
+Permettre au responsable commercial de lier des produits entre eux (ex: un shampooing avec son après-shampooing) et afficher ces suggestions aux clients sur la fiche produit ("Vous aimerez aussi...").
 
 2. Structure de la base de données :
 Table `associer` :
@@ -19,13 +19,15 @@ Les deux colonnes forment une clé primaire composée pour éviter les doublons.
   INNER JOIN associer a ON p.idproduit = a.idproduit_associer 
   WHERE a.idproduit = :idP;
 
-4. Sécurité :
-- Vérification que le produit associé n'est pas le produit lui-même (id != idAssoc).
+4. Sécurité et Robustesse :
+- Vérification que le produit associé n'est pas le produit lui-même (id != idAssoc) : message "Un produit ne peut pas être associé à lui-même".
+- Gestion des doublons via try/catch : si l'association existe déjà, un message d'erreur explicite s'affiche ("Cette association existe déjà") au lieu d'un crash.
+- Protection lors de la modification : le système tente d'abord de créer la nouvelle association. Si elle existe déjà, il s'arrête et conserve l'ancienne. Sinon, il supprime l'ancienne après succès de la nouvelle. Cela garantit l'intégrité des données.
+- Protection lors de la suppression via try/catch pour éviter tout crash.
 - Utilisation de requêtes préparées (PDO) pour toutes les actions.
-- Accès restreint à l'interface de gestion (Admin uniquement).
+- Accès restreint à l'interface de gestion (Admin uniquement, vérifié par requireAdmin dans le Routeur).
 
-5. Démarche :
-- Ajout de la méthode `getToutesLesAssociations()` dans le Modèle pour récupérer l'ensemble des paires de produits associés.
-- Création d'une page globale (tableau) dans le Back-Office listant toutes les associations existantes.
-- Intégration des actions CRUD spécifiques avec leurs propres vues : Ajouter (deux listes déroulantes), Modifier et Supprimer une association de produits.
-- Ajout d'un lien d'accès direct "Produits Associés" dans le menu d'administration.
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurAdmin.php (gererAssociations, ajouterAssociation, validerAjoutAssociation, modifierAssociation, validerModifAssociation, supprimerAssociation)
+- Modèle : modele/ModeleFront.php (getToutesLesAssociations, getProduitsAssocies, ajouterAssociation, supprimerAssociation)
+- Vues : vues/v_gererAssociations.php, vues/v_ajouterAssociation.php, vues/v_modifierAssociation.php

@@ -27,8 +27,7 @@ class ModeleFront extends Modele
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
 			return $lesLignes;
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 	/**
@@ -46,8 +45,7 @@ class ModeleFront extends Modele
 			$laLigne = $res->fetch(PDO::FETCH_OBJ);
 			return $laLigne;
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 	/**
@@ -67,8 +65,7 @@ class ModeleFront extends Modele
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
 			return $lesLignes;
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -80,8 +77,7 @@ class ModeleFront extends Modele
 			$lesLignes = $res->fetchAll(PDO::FETCH_OBJ);
 			return $lesLignes;
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 	/**
@@ -96,8 +92,8 @@ class ModeleFront extends Modele
 			$lesProduits = array();
 			if ($desIdsProduit != null) {
 				foreach ($desIdsProduit as $unIdProduit) {
-					$req = 'SELECT idproduit AS id, nom, description, prix, image, idCateg AS idCategorie FROM produit WHERE idproduit = "' . $unIdProduit . '"';
-					$res = $this->executerRequete($req);
+					$req = 'SELECT idproduit AS id, nom, description, prix, image, idCateg AS idCategorie FROM produit WHERE idproduit = :idProduit';
+					$res = $this->executerRequete($req, array('idProduit' => $unIdProduit));
 					$unProduit = $res->fetch(PDO::FETCH_OBJ);
 					$lesProduits[] = $unProduit;
 				}
@@ -109,8 +105,7 @@ class ModeleFront extends Modele
 			}
 			return $lesProduits;
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 	/**
@@ -161,8 +156,7 @@ class ModeleFront extends Modele
 			return $res;
 		} catch (PDOException $e) {
 			$this->rollBack();
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -181,8 +175,7 @@ class ModeleFront extends Modele
 			$client = $res->fetch(PDO::FETCH_OBJ);
 			return $client;
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -255,8 +248,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req, $tab);
 			return $res;
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -404,8 +396,7 @@ class ModeleFront extends Modele
 			return $res;
 		} catch (PDOException $e) {
 			$this->rollBack();
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -438,8 +429,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req, $tab);
 			return $res->fetchAll(PDO::FETCH_OBJ);
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 	public function getToutesLesAssociations()
@@ -452,8 +442,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req);
 			return $res->fetchAll(PDO::FETCH_OBJ);
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -472,8 +461,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req, array('idProduit' => $idProduit));
 			return $res->fetchAll(PDO::FETCH_OBJ);
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -484,12 +472,8 @@ class ModeleFront extends Modele
 	 */
 	public function ajouterAssociation($idProduit, $idAssoc)
 	{
-		try {
-			$req = 'INSERT INTO associer (idproduit, idproduit_associer) VALUES (:idProduit, :idAssoc)';
-			$this->executerRequete($req, array('idProduit' => $idProduit, 'idAssoc' => $idAssoc));
-		} catch (PDOException $e) {
-			// On ignore si l'association existe déjà
-		}
+		$req = 'INSERT INTO associer (idproduit, idproduit_associer) VALUES (:idProduit, :idAssoc)';
+		$this->executerRequete($req, array('idProduit' => $idProduit, 'idAssoc' => $idAssoc));
 	}
 
 	/**
@@ -503,8 +487,7 @@ class ModeleFront extends Modele
 			$req = 'DELETE FROM associer WHERE idproduit = :idProduit AND idproduit_associer = :idAssoc';
 			$this->executerRequete($req, array('idProduit' => $idProduit, 'idAssoc' => $idAssoc));
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 	/**
@@ -522,8 +505,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req);
 			return $res->fetchAll(PDO::FETCH_OBJ);
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -544,8 +526,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req, array('idCommande' => $idCommande));
 			return $res->fetchAll(PDO::FETCH_OBJ);
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -560,8 +541,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req);
 			return $res->fetchAll(PDO::FETCH_OBJ);
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -576,8 +556,7 @@ class ModeleFront extends Modele
 			$req = 'UPDATE commande SET idEtat = :idEtat WHERE idCommande = :idCommande';
 			$this->executerRequete($req, array('idCommande' => $idCommande, 'idEtat' => $idEtat));
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 	/**
@@ -596,8 +575,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req, array('idClient' => $idClient));
 			return $res->fetchAll(PDO::FETCH_OBJ);
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -617,8 +595,7 @@ class ModeleFront extends Modele
 			$res = $this->executerRequete($req, array('idClient' => $idClient));
 			return $res->fetchAll(PDO::FETCH_OBJ);
 		} catch (PDOException $e) {
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 
@@ -649,8 +626,7 @@ class ModeleFront extends Modele
 			$this->commit();
 		} catch (PDOException $e) {
 			$this->rollBack();
-			print "Erreur !: " . $e->getMessage();
-			die();
+			throw $e;
 		}
 	}
 }

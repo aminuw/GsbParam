@@ -61,23 +61,35 @@ class ControleurAdmin
             $lesUnites = $this->modeleFront->getLesUnites();
             include("vues/v_ajouterProduit.php");
         } else {
-            $this->modeleFront->creerProduit(
-                $idproduit,
-                $nom,
-                $description,
-                $prix,
-                $image,
-                $quantiteStock,
-                $seuil_rupture,
-                $mis_en_avant_date_debut,
-                $mis_en_avant_date_fin,
-                $idCateg,
-                $idMarque,
-                $idUnite
-            );
-            $message = "Produit ajouté avec succès !";
-            include("vues/v_message.php");
-            $this->listeProduitsModif();
+            try {
+                $this->modeleFront->creerProduit(
+                    $idproduit,
+                    $nom,
+                    $description,
+                    $prix,
+                    $image,
+                    $quantiteStock,
+                    $seuil_rupture,
+                    $mis_en_avant_date_debut,
+                    $mis_en_avant_date_fin,
+                    $idCateg,
+                    $idMarque,
+                    $idUnite
+                );
+                $message = "Produit ajouté avec succès !";
+                include("vues/v_message.php");
+                $this->listeProduitsModif();
+            } catch (PDOException $e) {
+                if ($e->getCode() == '23000') {
+                    $erreurs[] = "Erreur : L'identifiant produit '$idproduit' est déjà utilisé.";
+                } else {
+                    $erreurs[] = "Erreur lors de l'ajout : " . $e->getMessage();
+                }
+                $lesCategories = $this->modeleFront->getLesCategories();
+                $lesMarques = $this->modeleFront->getLesMarques();
+                $lesUnites = $this->modeleFront->getLesUnites();
+                include("vues/v_ajouterProduit.php");
+            }
         }
     }
 
@@ -137,32 +149,51 @@ class ControleurAdmin
             $lesUnites = $this->modeleFront->getLesUnites();
             include("vues/v_modifierProduit.php");
         } else {
-            $this->modeleFront->modifierProduit(
-                $idproduit,
-                $nom,
-                $description,
-                $prix,
-                $image,
-                $quantiteStock,
-                $seuil_rupture,
-                $mis_en_avant_date_debut,
-                $mis_en_avant_date_fin,
-                $idCateg,
-                $idMarque,
-                $idUnite
-            );
-            $message = "Produit modifié avec succès !";
-            include("vues/v_message.php");
-            $this->listeProduitsModif();
+            try {
+                $this->modeleFront->modifierProduit(
+                    $idproduit,
+                    $nom,
+                    $description,
+                    $prix,
+                    $image,
+                    $quantiteStock,
+                    $seuil_rupture,
+                    $mis_en_avant_date_debut,
+                    $mis_en_avant_date_fin,
+                    $idCateg,
+                    $idMarque,
+                    $idUnite
+                );
+                $message = "Produit modifié avec succès !";
+                $messageType = "success";
+                include("vues/v_message.php");
+                $this->listeProduitsModif();
+            } catch (PDOException $e) {
+                $message = "Erreur lors de la modification du produit : " . $e->getMessage();
+                $messageType = "error";
+                include("vues/v_message.php");
+                $this->listeProduitsModif();
+            }
         }
     }
 
     public function supprimerProduit()
     {
         $id = $_GET['id'];
-        $this->modeleFront->supprimerProduit($id);
+        try {
+            $this->modeleFront->supprimerProduit($id);
+            $message = "Produit supprimé avec succès !";
+        } catch (PDOException $e) {
+            // Code 23000 = Violation de contrainte d'intégrité (clé étrangère)
+            if ($e->getCode() == '23000') {
+                $message = "Erreur : Impossible de supprimer ce produit car il est lié à des commandes ou des associations existantes.";
+            } else {
+                $message = "Erreur lors de la suppression : " . $e->getMessage();
+            }
+            $messageType = "error";
+        }
 
-        $message = "Produit supprimé avec succès !";
+        include("vues/v_message.php");
         $this->listeProduitsModif();
     }
 
@@ -191,10 +222,22 @@ class ControleurAdmin
             include("vues/v_message.php");
             $this->ajouterAssociation();
         } else {
-            $this->modeleFront->ajouterAssociation($idProduit1, $idProduit2);
-            $message = "L'association a été créée avec succès !";
-            include("vues/v_message.php");
-            $this->gererAssociations();
+            try {
+                $this->modeleFront->ajouterAssociation($idProduit1, $idProduit2);
+                $message = "L'association a été créée avec succès !";
+                $messageType = "success";
+                include("vues/v_message.php");
+                $this->gererAssociations();
+            } catch (PDOException $e) {
+                if ($e->getCode() == '23000') {
+                    $message = "Erreur : Cette association existe déjà.";
+                } else {
+                    $message = "Erreur lors de l'association : " . $e->getMessage();
+                }
+                $messageType = "error";
+                include("vues/v_message.php");
+                $this->ajouterAssociation();
+            }
         }
     }
 
@@ -202,9 +245,14 @@ class ControleurAdmin
     {
         $id1 = $_GET['id1'];
         $id2 = $_GET['id2'];
-        $this->modeleFront->supprimerAssociation($id1, $id2);
-        
-        $message = "Association supprimée avec succès !";
+        try {
+            $this->modeleFront->supprimerAssociation($id1, $id2);
+            $message = "Association supprimée avec succès !";
+            $messageType = "success";
+        } catch (PDOException $e) {
+            $message = "Erreur lors de la suppression de l'association : " . $e->getMessage();
+            $messageType = "error";
+        }
         include("vues/v_message.php");
         $this->gererAssociations();
     }
@@ -227,14 +275,32 @@ class ControleurAdmin
 
         if ($idProduit1 == $idProduit2) {
             $message = "Erreur : Un produit ne peut pas être associé à lui-même.";
+            $messageType = "error";
             include("vues/v_message.php");
             $this->gererAssociations();
         } else {
-            $this->modeleFront->supprimerAssociation($ancienId1, $ancienId2);
-            $this->modeleFront->ajouterAssociation($idProduit1, $idProduit2);
-            $message = "L'association a été modifiée avec succès !";
-            include("vues/v_message.php");
-            $this->gererAssociations();
+            try {
+                // On tente d'ajouter la nouvelle association d'abord
+                // Si elle existe déjà, ça va lever une exception 23000
+                if ($ancienId1 != $idProduit1 || $ancienId2 != $idProduit2) {
+                    $this->modeleFront->ajouterAssociation($idProduit1, $idProduit2);
+                    // Si l'ajout a réussi, on supprime l'ancienne
+                    $this->modeleFront->supprimerAssociation($ancienId1, $ancienId2);
+                }
+                $message = "L'association a été modifiée avec succès !";
+                $messageType = "success";
+                include("vues/v_message.php");
+                $this->gererAssociations();
+            } catch (PDOException $e) {
+                if ($e->getCode() == '23000') {
+                    $message = "Erreur : La nouvelle association choisie existe déjà.";
+                } else {
+                    $message = "Erreur lors de la modification : " . $e->getMessage();
+                }
+                $messageType = "error";
+                include("vues/v_message.php");
+                $this->gererAssociations();
+            }
         }
     }
 
@@ -272,9 +338,14 @@ class ControleurAdmin
         $idCommande = $_POST['idCommande'];
         $idEtat = $_POST['idEtat'];
         
-        $this->modeleFront->modifierEtatCommande($idCommande, $idEtat);
-        
-        $message = "État de la commande n°$idCommande mis à jour !";
+        try {
+            $this->modeleFront->modifierEtatCommande($idCommande, $idEtat);
+            $message = "État de la commande n°$idCommande mis à jour !";
+            $messageType = "success";
+        } catch (PDOException $e) {
+            $message = "Erreur lors de la mise à jour de l'état : " . $e->getMessage();
+            $messageType = "error";
+        }
         include("vues/v_message.php");
         $this->gestionCommandes();
     }

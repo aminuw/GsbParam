@@ -8,30 +8,31 @@ Offrir à l'administrateur une interface complète pour suivre les ventes, consu
   SELECT c.idCommande, c.dateCommande, cl.nom, cl.prenom, e.libelle AS etat, e.idEtat
   FROM commande c
   INNER JOIN client cl ON c.idClient = cl.idClient
-  INNER JOIN etat e ON c.idEtat = e.idEtat
+  INNER JOIN etat_commande e ON c.idEtat = e.idEtat
   ORDER BY CAST(c.idCommande AS UNSIGNED) DESC;
 
 - Pour le détail d'une commande (Articles) :
-  SELECT p.nom, p.prix, p.idMarque, m.libelleMarque, cat.libelle AS libelleCateg, co.qte
+  SELECT p.nom, p.prix, m.libelleMarque, cat.libelle AS libelleCateg, co.qte
   FROM contenir co
   INNER JOIN produit p ON co.idproduit = p.idproduit
   INNER JOIN marque m ON p.idMarque = m.idMarque
   INNER JOIN categorie cat ON p.idCateg = cat.idCateg
   WHERE co.idCommande = :idCommande;
 
-3. Fonctionnalités à implémenter :
-- Affichage d'un tableau récapitulatif.
-- Calcul dynamique du montant total de la commande (Prix * Quantité).
-- Formulaire de mise à jour de l'état (idEtat).
+3. Fonctionnalités implémentées :
+- Affichage d'un tableau récapitulatif de toutes les commandes (ID, Date, Client, État actuel).
+- Calcul dynamique du montant total de la commande (Prix * Quantité) dans la vue détaillée.
+- Formulaire de mise à jour de l'état via une liste déroulante avec le bouton "Valider". L'état actuel est pré-sélectionné grâce à l'attribut 'selected'.
+- Bouton "Liste des articles" pour consulter le détail de chaque commande (s'ouvre dans la même page).
 - Message d'alerte si aucune commande n'est présente.
 
-4. Sécurité (BTS SIO) :
-- Accès strictement réservé au rôle Administrateur (vérifié dans le routeur).
-- Requêtes préparées pour la mise à jour de l'état.
-- Respect de l'intégrité référentielle (on ne supprime pas une commande liée à des articles).
+4. Sécurité et Robustesse (BTS SIO) :
+- Accès strictement réservé au rôle Administrateur (vérifié par requireAdmin() dans le Routeur).
+- Requêtes préparées pour toutes les opérations SQL.
+- Gestion des erreurs via try/catch lors de la mise à jour de l'état d'une commande, avec affichage d'un message d'erreur explicite au lieu d'un crash.
+- Respect de l'intégrité référentielle (on ne peut pas supprimer un produit lié à une commande).
 
-5. Démarche (Mise à jour stricte selon l'USR 10) :
-- Création des méthodes dans le Modèle.
-- Ajout de l'action 'gestionCommandes' dans ControleurAdmin.
-- Création des vues v_listeCommandes.php et v_detailCommande.php.
-- Ajout de target="_blank" sur le bouton de détails pour garantir l'ouverture dans un nouvel onglet.
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurAdmin.php (gestionCommandes, voirArticles, modifierEtat)
+- Modèle : modele/ModeleFront.php (getToutesLesCommandes, getArticlesCommande, getTousLesEtats, modifierEtatCommande)
+- Vues : vues/v_listeCommandes.php, vues/v_detailCommande.php

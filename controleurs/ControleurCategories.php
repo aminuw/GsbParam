@@ -40,13 +40,17 @@ class ControleurCategories
         }
 
         if (count($erreurs) == 0) {
-            $resultat = $this->modeleFront->creerCategorie($id, $libelle);
-            if ($resultat) {
+            try {
+                $resultat = $this->modeleFront->creerCategorie($id, $libelle);
                 $message = "La catégorie a été ajoutée avec succès !";
                 $lesCategories = $this->modeleFront->getLesCategories();
                 include("vues/v_listeCategorie.php");
-            } else {
-                $erreurs[] = "Une erreur est survenue lors de l'ajout. L'identifiant est peut-être déjà utilisé.";
+            } catch (PDOException $e) {
+                if ($e->getCode() == '23000') {
+                    $erreurs[] = "Erreur : L'identifiant '$id' est déjà utilisé.";
+                } else {
+                    $erreurs[] = "Erreur lors de l'ajout : " . $e->getMessage();
+                }
                 include("vues/v_ajouterCategorie.php");
             }
         } else {
@@ -75,14 +79,15 @@ class ControleurCategories
             $laCategorie = (object) ['id' => $id, 'libelle' => $libelle];
             include("vues/v_modifierCategorie.php");
         } else {
-            if ($this->modeleFront->modifierCategorie($id, $libelle)) {
+            try {
+                $this->modeleFront->modifierCategorie($id, $libelle);
                 $message = "La catégorie a été modifiée avec succès !";
                 $lesCategories = $this->modeleFront->getLesCategories();
                 include("vues/v_listeCategorie.php");
-            } else {
-                $erreurs[] = "Une erreur est survenue lors de la modification.";
+            } catch (PDOException $e) {
+                $erreurs[] = "Erreur lors de la modification : " . $e->getMessage();
                 $laCategorie = (object) ['id' => $id, 'libelle' => $libelle];
-                include("vues/v_modifierProduits.php");
+                include("vues/v_modifierCategorie.php");
             }
         }
     }
@@ -94,8 +99,12 @@ class ControleurCategories
             if ($this->modeleFront->checkProduitsCateg($id)) {
                 $erreurs[] = "La catégorie ne peut pas être supprimée car elle contient des produits.";
             } else {
-                $this->modeleFront->supprimerCategorie($id);
-                $message = "La catégorie a été supprimée avec succès !";
+                try {
+                    $this->modeleFront->supprimerCategorie($id);
+                    $message = "La catégorie a été supprimée avec succès !";
+                } catch (PDOException $e) {
+                    $erreurs[] = "Erreur lors de la suppression : " . $e->getMessage();
+                }
             }
         } else {
             $erreurs[] = "Aucune catégorie n'a été sélectionnée.";

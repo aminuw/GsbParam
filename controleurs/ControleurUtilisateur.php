@@ -26,13 +26,16 @@ class ControleurUtilisateur
         $cp = $_POST['cp'] ?? '';
 
         if (!empty($nom) && !empty($prenom) && !empty($mail) && !empty($mdp)) {
-            $result = $this->modeleFront->creerClient($nom, $prenom, $mail, $mdp, $rue, $ville, $cp);
-
-            if ($result) {
+            try {
+                $result = $this->modeleFront->creerClient($nom, $prenom, $mail, $mdp, $rue, $ville, $cp);
                 $message = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
                 include("vues/v_connexion.php");
-            } else {
-                $erreurs[] = "Une erreur est survenue lors de l'inscription. L'adresse email est peut-être déjà utilisée.";
+            } catch (PDOException $e) {
+                if ($e->getCode() == '23000') {
+                    $erreurs[] = "Erreur : Cette adresse email est déjà liée à un compte.";
+                } else {
+                    $erreurs[] = "Erreur lors de l'inscription : " . $e->getMessage();
+                }
                 include("vues/v_inscription.php");
             }
         } else {
@@ -121,18 +124,26 @@ class ControleurUtilisateur
 
             if (count($erreurs) == 0) {
                 $idLogin = $_SESSION['client']->idLogin;
-                $this->modeleFront->modifierProfil($idClient, $idLogin, $nom, $prenom, $rue, $cp, $ville, $mail);
+                try {
+                    $this->modeleFront->modifierProfil($idClient, $idLogin, $nom, $prenom, $rue, $cp, $ville, $mail);
 
-                // Mise à jour des données en session pour affichage immédiat
-                $_SESSION['client']->nom = $nom;
-                $_SESSION['client']->prenom = $prenom;
-                $_SESSION['client']->mail = $mail;
-                $_SESSION['client']->rue = $rue;
-                $_SESSION['client']->cp = $cp;
-                $_SESSION['client']->ville = $ville;
+                    // Mise à jour des données en session pour affichage immédiat
+                    $_SESSION['client']->nom = $nom;
+                    $_SESSION['client']->prenom = $prenom;
+                    $_SESSION['client']->mail = $mail;
+                    $_SESSION['client']->rue = $rue;
+                    $_SESSION['client']->cp = $cp;
+                    $_SESSION['client']->ville = $ville;
 
-                $message = "Votre profil a été mis à jour avec succès !";
-                include("vues/v_message.php");
+                    $message = "Votre profil a été mis à jour avec succès !";
+                    include("vues/v_message.php");
+                } catch (PDOException $e) {
+                    if ($e->getCode() == '23000') {
+                        $erreurs[] = "Erreur : Cette adresse email est déjà utilisée par un autre compte.";
+                    } else {
+                        $erreurs[] = "Erreur lors de la mise à jour du profil : " . $e->getMessage();
+                    }
+                }
             }
             
             $this->monCompte();

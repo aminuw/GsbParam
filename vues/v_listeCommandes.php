@@ -41,7 +41,7 @@
                                 </form>
                             </td>
                             <td>
-                                <a href="index.php?uc=administrer&action=voirArticles&id=<?= $uneC->idCommande ?>" target="_blank" class="btn btn-sm btn-primary">
+                                <a href="index.php?uc=administrer&action=voirArticles&id=<?= $uneC->idCommande ?>" class="btn btn-sm btn-primary">
                                     Liste des articles
                                 </a>
                             </td>
