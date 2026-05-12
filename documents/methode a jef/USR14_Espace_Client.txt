@@ -1,0 +1,33 @@
+Mission USR14 - Espace Client (Finalisation du projet)
+
+1. Objectif :
+Fournir au client un tableau de bord personnel pour gérer son profil, suivre ses commandes et consulter son activité (avis).
+
+2. Logique SQL (Filtrage par client) :
+- Pour l'historique des commandes :
+  SELECT c.idCommande, c.dateCommande, e.libelle AS etat 
+  FROM commande c 
+  INNER JOIN etat_commande e ON c.idEtat = e.idEtat 
+  WHERE c.idClient = :idClient 
+  ORDER BY c.dateCommande DESC;
+
+- Pour les avis personnels :
+  SELECT a.note, a.commentaire, a.date_avis, p.nom AS nomProduit 
+  FROM avis a 
+  INNER JOIN produit p ON a.idproduit = p.idproduit 
+  WHERE a.idClient = :idClient 
+  ORDER BY a.date_avis DESC;
+
+3. Fonctionnalités :
+- Formulaire de modification du profil avec validation des champs.
+- Affichage de l'historique des commandes sous forme de tableau.
+- Liste des avis déposés avec le nom du produit concerné.
+
+4. Sécurité (BTS SIO) :
+- Vérification systématique de la connexion (uc=utilisateur&action=monCompte redirige vers connexion si non connecté).
+- Utilisation des sessions pour garantir que le client n'accède qu'à ses propres données.
+
+5. Démarche :
+- Ajout des méthodes de lecture (avis et commandes par client) dans le Modèle.
+- Création de l'action 'monCompte' dans le ControleurUtilisateur.
+- Création des vues v_monCompte.php, v_mesCommandes.php et v_mesAvis.php.

@@ -1,0 +1,40 @@
+========================================================================
+STRATÉGIE DE SÉCURITÉ ET ROBUSTESSE (Validation des données)
+========================================================================
+
+CONTEXTE :
+Après l'implémentation des fonctionnalités (USR), une phase de "blindage"
+a été réalisée pour garantir que l'application ne plante pas face à des
+saisies erronées ou malveillantes.
+
+DÉMARCHE TECHNIQUE :
+
+1. VALIDATION CÔTÉ SERVEUR (Contrôleurs) :
+   - Utilisation de trim() pour nettoyer les entrées (espaces inutiles).
+   - Vérification des champs obligatoires via empty().
+   - Contrôle du typage numérique via is_numeric().
+   - Interdiction des valeurs incohérentes (prix négatif, stock négatif).
+   - Validation des formats via Expressions Régulières (ex: Code Postal à 5 chiffres).
+
+2. SÉCURITÉ DES DONNÉES (Modèle) :
+   - Protection totale contre les INJECTIONS SQL grâce à l'utilisation
+     systématique des REQUÊTES PRÉPARÉES PDO avec paramètres nommés.
+   - Aucune variable utilisateur n'est concaténée directement dans le SQL.
+
+3. PROTECTION CONTRE LES FAILLES XSS (Vues) :
+   - Utilisation systématique de htmlspecialchars() lors de l'affichage
+     des données provenant de la base ou des formulaires.
+   - Cela neutralise l'exécution de scripts JavaScript malveillants.
+
+4. GESTION DES ERREURS (UX) :
+   - Mise en place d'un système de retour d'erreurs visuel (alert-danger Bootstrap).
+   - Les erreurs sont listées précisément pour guider l'utilisateur.
+   - En cas d'erreur, les données saisies sont conservées pour éviter de tout retaper.
+
+FICHIERS CLÉS :
+- controleurs/ControleurAdmin.php (Logique de validation)
+- controleurs/ControleurUtilisateur.php (Validation profil)
+- vues/v_ajouterProduit.php (Affichage des erreurs)
+- vues/v_modifierProduit.php (Affichage des erreurs)
+- vues/v_monCompte.php (Affichage des erreurs)
+========================================================================
