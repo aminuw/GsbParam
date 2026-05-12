@@ -40,6 +40,10 @@
                                         <input type="text" name="prenom" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->prenom) ?>" required>
                                     </div>
                                     <div class="col-12">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" name="mail" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->mail) ?>" required>
+                                    </div>
+                                    <div class="col-12">
                                         <label class="form-label">Adresse (Rue)</label>
                                         <input type="text" name="rue" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->rue) ?>">
                                     </div>

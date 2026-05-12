@@ -625,12 +625,14 @@ class ModeleFront extends Modele
 	/**
 	 * Modifie le profil d'un client
 	 */
-	public function modifierProfil($idClient, $nom, $prenom, $rue, $cp, $ville)
+	public function modifierProfil($idClient, $idLogin, $nom, $prenom, $rue, $cp, $ville, $mail)
 	{
 		try {
-			$req = 'UPDATE client SET nom = :nom, prenom = :prenom, rue = :rue, cp = :cp, ville = :ville 
+			$this->beginTransaction();
+
+			$req1 = 'UPDATE client SET nom = :nom, prenom = :prenom, rue = :rue, cp = :cp, ville = :ville 
 					WHERE idClient = :idClient';
-			$tab = array(
+			$tab1 = array(
 				'idClient' => $idClient,
 				'nom' => $nom,
 				'prenom' => $prenom,
@@ -638,8 +640,15 @@ class ModeleFront extends Modele
 				'cp' => $cp,
 				'ville' => $ville
 			);
-			$this->executerRequete($req, $tab);
+			$this->executerRequete($req1, $tab1);
+
+			$req2 = 'UPDATE login SET mail = :mail WHERE idLogin = :idLogin';
+			$tab2 = array('idLogin' => $idLogin, 'mail' => $mail);
+			$this->executerRequete($req2, $tab2);
+			
+			$this->commit();
 		} catch (PDOException $e) {
+			$this->rollBack();
 			print "Erreur !: " . $e->getMessage();
 			die();
 		}

@@ -27,7 +27,8 @@ Fournir au client un tableau de bord personnel pour gérer son profil, suivre se
 - Vérification systématique de la connexion (uc=utilisateur&action=monCompte redirige vers connexion si non connecté).
 - Utilisation des sessions pour garantir que le client n'accède qu'à ses propres données.
 
-5. Démarche :
+5. Démarche (Mise à jour stricte selon l'USR 14) :
 - Ajout des méthodes de lecture (avis et commandes par client) dans le Modèle.
-- Création de l'action 'monCompte' dans le ControleurUtilisateur.
-- Création des vues v_monCompte.php, v_mesCommandes.php et v_mesAvis.php.
+- Mise à jour de modifierProfil() dans le Modèle pour prendre en compte l'email (update synchronisé des tables client et login).
+- Création de l'action 'monCompte' dans le ControleurUtilisateur, avec ajout de la validation de l'email.
+- Création/fusion des vues dans v_monCompte.php avec le champ email rendu modifiable.

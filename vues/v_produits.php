@@ -23,7 +23,7 @@
                             <h5 class="card-title h6 fw-bold mb-3"><?= htmlspecialchars($nom) ?></h5>
                             <div class="mt-auto">
                                 <div class="d-grid gap-2">
-                                    <a href="index.php?uc=voirProduits&action=voirAvis&produit=<?= $id ?>" class="btn btn-outline-dark btn-sm">
+                                    <a href="index.php?uc=voirProduits&action=voirAvis&produit=<?= $id ?>" target="_blank" class="btn btn-outline-dark btn-sm">
                                         <i class="bi bi-info-circle me-1"></i> Détails / Avis
                                     </a>
                                     <a href="index.php?uc=gererPanier&produit=<?= $id ?>&action=ajouterAuPanier" class="btn btn-link p-0 border-0">

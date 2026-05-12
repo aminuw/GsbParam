@@ -20,17 +20,30 @@
             </p>
             <p>
                 <strong>Disponibilité :</strong> 
-                <?php if ($leProduit->quantiteStock > 0): ?>
-                    <span class="text-success fw-bold">En stock (<?= $leProduit->quantiteStock ?> disponibles)</span>
-                <?php else: ?>
+                <?php if ($leProduit->quantiteStock == 0): ?>
                     <span class="text-danger fw-bold">Rupture de stock</span>
+                <?php elseif ($leProduit->quantiteStock <= $leProduit->seuil_rupture): ?>
+                    <span class="text-warning fw-bold text-dark">Attention, stock faible ! (<?= $leProduit->quantiteStock ?> restants)</span>
+                <?php else: ?>
+                    <span class="text-success fw-bold">En stock (<?= $leProduit->quantiteStock ?> disponibles)</span>
                 <?php endif; ?>
             </p>
             
             <div class="mt-3">
-                <a href="index.php?uc=gererPanier&produit=<?= $leProduit->id ?>&action=ajouterAuPanier" class="btn btn-primary">
-                    <img src="assets/images/mettrepanier.png" alt="" style="height: 20px;"> Ajouter au panier
-                </a>
+                <?php if (isset($_SESSION['client'])): ?>
+                    <?php if ($leProduit->quantiteStock > 0): ?>
+                        <form action="index.php?uc=gererPanier&action=ajouterAuPanier" method="POST" class="d-flex align-items-center">
+                            <input type="hidden" name="produit" value="<?= htmlspecialchars($leProduit->id) ?>">
+                            <label for="qte" class="me-2 fw-bold">Quantité :</label>
+                            <input type="number" name="qte" id="qte" value="1" min="1" max="<?= $leProduit->quantiteStock ?>" class="form-control form-control-sm me-3" style="width: 80px;">
+                            <button type="submit" class="btn btn-primary shadow-sm">
+                                <img src="assets/images/mettrepanier.png" alt="" style="height: 20px;" class="me-1"> Valider la commande
+                            </button>
+                        </form>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <p class="text-muted fst-italic mt-2 mb-0">Connectez-vous pour pouvoir commander ce produit.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>

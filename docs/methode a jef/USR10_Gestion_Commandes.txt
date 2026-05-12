@@ -30,7 +30,8 @@ Offrir à l'administrateur une interface complète pour suivre les ventes, consu
 - Requêtes préparées pour la mise à jour de l'état.
 - Respect de l'intégrité référentielle (on ne supprime pas une commande liée à des articles).
 
-5. Démarche :
+5. Démarche (Mise à jour stricte selon l'USR 10) :
 - Création des méthodes dans le Modèle.
 - Ajout de l'action 'gestionCommandes' dans ControleurAdmin.
 - Création des vues v_listeCommandes.php et v_detailCommande.php.
+- Ajout de target="_blank" sur le bouton de détails pour garantir l'ouverture dans un nouvel onglet.

@@ -90,7 +90,8 @@ class Routeur
                         break;
                     }
                     case 'ajouterAuPanier': {
-                        $this->ctrlGererPanier->ajouterAuPanier($_REQUEST['produit']);
+                        $qte = $_REQUEST['qte'] ?? 1;
+                        $this->ctrlGererPanier->ajouterAuPanier($_REQUEST['produit'], $qte);
                         break;
                     }
                     case 'supprimerUnProduit': {

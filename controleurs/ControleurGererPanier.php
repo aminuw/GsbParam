@@ -82,12 +82,12 @@ class ControleurGererPanier
 
 	* @param Produit $idProduit Le produit à ajouter au panier 
 	*/
-	function ajouterAuPanier($idProduit)
+	function ajouterAuPanier($idProduit, $qte = 1)
 	{
 		if (isset($_SESSION['produits'][$idProduit])) {
-			$_SESSION['produits'][$idProduit]++;
+			$_SESSION['produits'][$idProduit] += $qte;
 		} else {
-			$_SESSION['produits'][$idProduit] = 1;
+			$_SESSION['produits'][$idProduit] = $qte;
 		}
 		$this->voirPanier();
 	}

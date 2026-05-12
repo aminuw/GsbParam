@@ -99,14 +99,19 @@ class ControleurUtilisateur
             $idClient = $_SESSION['client']->idClient;
             $nom = trim($_POST['nom'] ?? '');
             $prenom = trim($_POST['prenom'] ?? '');
+            $mail = trim($_POST['mail'] ?? '');
             $rue = trim($_POST['rue'] ?? '');
             $cp = trim($_POST['cp'] ?? '');
             $ville = trim($_POST['ville'] ?? '');
 
             $erreurs = array();
 
-            if (empty($nom) || empty($prenom)) {
-                $erreurs[] = "Le nom et le prénom sont obligatoires.";
+            if (empty($nom) || empty($prenom) || empty($mail)) {
+                $erreurs[] = "Le nom, le prénom et l'email sont obligatoires.";
+            }
+
+            if (!empty($mail) && !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+                $erreurs[] = "L'adresse email n'est pas valide.";
             }
 
             // Validation CP (format français simplifié)
@@ -115,11 +120,13 @@ class ControleurUtilisateur
             }
 
             if (count($erreurs) == 0) {
-                $this->modeleFront->modifierProfil($idClient, $nom, $prenom, $rue, $cp, $ville);
+                $idLogin = $_SESSION['client']->idLogin;
+                $this->modeleFront->modifierProfil($idClient, $idLogin, $nom, $prenom, $rue, $cp, $ville, $mail);
 
                 // Mise à jour des données en session pour affichage immédiat
                 $_SESSION['client']->nom = $nom;
                 $_SESSION['client']->prenom = $prenom;
+                $_SESSION['client']->mail = $mail;
                 $_SESSION['client']->rue = $rue;
                 $_SESSION['client']->cp = $cp;
                 $_SESSION['client']->ville = $ville;
