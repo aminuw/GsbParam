@@ -24,15 +24,28 @@ Fournir au client un tableau de bord personnel pour gérer son profil, suivre se
   (Les deux requêtes sont exécutées dans une transaction avec beginTransaction/commit/rollBack)
 
 3. Fonctionnalités :
-- Onglet "Mon Profil" : Formulaire de modification avec validation des champs (nom, prénom, email obligatoires, code postal à 5 chiffres, format email vérifié via filter_var).
-- Onglet "Mes Commandes" : Affichage de l'historique sous forme de tableau (n° commande, date, état).
-- Onglet "Mes Avis déposés" : Liste des commentaires passés avec le nom du produit et la note.
+- Onglet "Mon Profil" : Formulaire de modification avec validation de TOUS les champs obligatoires (nom, prénom, adresse/rue, code postal, ville, email), code postal à 5 chiffres, format email vérifié via filter_var.
+- Onglet "Mes Commandes" : Affichage de l'historique sous forme de tableau (n° commande, date, état). Message "Vous n'avez pas encore passé de commande." si aucune commande.
+- Onglet "Mes Avis déposés" : Liste des commentaires passés avec le nom du produit et la note. Message "Vous n'avez pas encore déposé d'avis." si aucun avis.
 
-4. Sécurité :
+3.bis Conformité au cas d'utilisation officiel (USR 14) :
+- Scénario 1 (consulter le compte) : OK via onglet "Mon Profil".
+- Scénario 2 (modifier et enregistrer) : OK via formulaire + méthode modifierProfil.
+- Scénario 3 (consulter les commandes) : OK via onglet "Mes Commandes".
+- Scénario 4 (consulter les avis déposés) : OK via onglet "Mes Avis déposés".
+- Exception 1.a (non connecté) : redirection automatique vers la page de connexion.
+- Exception 2.a (champs non remplis : nom, prénom, adresse, code postal, ville, mail) : message d'erreur "Tous les champs sont obligatoires (nom, prénom, adresse, code postal, ville, mail)." + attribut HTML5 required sur tous les inputs.
+- Exception 3.a (aucune commande) : message dédié affiché.
+- Exception 4.a (aucun avis) : message dédié affiché.
+
+4. Sécurité et Robustesse :
 - Vérification systématique de la connexion (redirige vers la page de connexion si non connecté).
 - Utilisation des sessions pour garantir que le client n'accède qu'à ses propres données.
+- Validation serveur : trim() sur toutes les entrées, empty() sur les 6 champs obligatoires, filter_var pour l'email, preg_match pour le code postal (5 chiffres).
+- Validation client : attribut HTML5 "required" sur tous les inputs du formulaire (nom, prénom, mail, rue, cp, ville).
 - Gestion des erreurs via try/catch : si le client modifie son email pour un email déjà utilisé, un message d'erreur explicite s'affiche ("Cette adresse email est déjà utilisée par un autre compte.") au lieu d'un crash.
 - Mise à jour immédiate de la session après modification du profil pour un affichage cohérent.
+- Protection XSS via htmlspecialchars() sur tous les affichages.
 
 5. Fichiers concernés :
 - Contrôleur : controleurs/ControleurUtilisateur.php (méthodes monCompte, modifierProfil)

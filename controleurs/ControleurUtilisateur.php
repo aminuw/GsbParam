@@ -109,8 +109,8 @@ class ControleurUtilisateur
 
             $erreurs = array();
 
-            if (empty($nom) || empty($prenom) || empty($mail)) {
-                $erreurs[] = "Le nom, le prénom et l'email sont obligatoires.";
+            if (empty($nom) || empty($prenom) || empty($mail) || empty($rue) || empty($cp) || empty($ville)) {
+                $erreurs[] = "Tous les champs sont obligatoires (nom, prénom, adresse, code postal, ville, mail).";
             }
 
             if (!empty($mail) && !filter_var($mail, FILTER_VALIDATE_EMAIL)) {

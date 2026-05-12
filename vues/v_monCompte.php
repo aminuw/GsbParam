@@ -45,15 +45,15 @@
                                     </div>
                                     <div class="col-12">
                                         <label class="form-label">Adresse (Rue)</label>
-                                        <input type="text" name="rue" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->rue) ?>">
+                                        <input type="text" name="rue" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->rue) ?>" required>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Code Postal</label>
-                                        <input type="text" name="cp" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->cp) ?>">
+                                        <input type="text" name="cp" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->cp) ?>" required>
                                     </div>
                                     <div class="col-md-8">
                                         <label class="form-label">Ville</label>
-                                        <input type="text" name="ville" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->ville) ?>">
+                                        <input type="text" name="ville" class="form-control" value="<?= htmlspecialchars($_SESSION['client']->ville) ?>" required>
                                     </div>
                                     <div class="col-12 mt-4">
                                         <button type="submit" class="btn btn-primary px-4">Enregistrer les modifications</button>
