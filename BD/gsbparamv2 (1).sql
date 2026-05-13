@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3307
--- Généré le : mar. 12 mai 2026 à 13:54
--- Version du serveur : 11.4.9-MariaDB
--- Version de PHP : 8.3.28
+-- Généré le : mer. 13 mai 2026 à 13:45
+-- Version du serveur : 11.5.2-MariaDB
+-- Version de PHP : 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `gsbparam`
+-- Base de données : `gsbparamv2`
 --
 
 -- --------------------------------------------------------
@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `avis` (
   `idClient` int(11) NOT NULL,
   `idproduit` varchar(5) NOT NULL,
   PRIMARY KEY (`idAvis`),
+  UNIQUE KEY `avis_unique_client_produit` (`idClient`,`idproduit`),
   KEY `avis_idClient_FK` (`idClient`),
   KEY `avis_idproduit_FK` (`idproduit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -67,7 +68,8 @@ CREATE TABLE IF NOT EXISTS `avis` (
 --
 
 INSERT INTO `avis` (`idAvis`, `note`, `commentaire`, `date_avis`, `idClient`, `idproduit`) VALUES
-(1, 5, 'Ce produit marche très bien, je recommande ! ', '2026-05-09 06:53:36', 2, 'c01');
+(3, 4, 'Finalement, il est juste bien. (test auto 2)', '2026-05-13 11:24:21', 2, 'c01'),
+(4, 5, 'Excellent produit, je recommande !', '2026-05-13 11:34:36', 5, 'c01');
 
 -- --------------------------------------------------------
 
@@ -117,7 +119,10 @@ CREATE TABLE IF NOT EXISTS `client` (
 INSERT INTO `client` (`idClient`, `nom`, `prenom`, `rue`, `cp`, `ville`, `idLogin`) VALUES
 (1, 'Testeur', 'Un', 'Rue du Test', '75000', 'TestVille', 1),
 (2, 'Dupont', 'Jean', 'Rue Dupont', '75001', 'Paris', 2),
-(3, 'Admin', 'Gsb', 'Avenue GSB', '69000', 'Lyon', 3);
+(3, 'Admin', 'Gsb', 'Avenue GSB', '69000', 'Lyon', 3),
+(4, 'Agent', 'Test', 'Rue du Test', '75000', 'TestVille', 4),
+(5, 'Agent', 'Test', 'Rue du Test', '75000', 'TestVille', 5),
+(6, 'Tester', 'User', '123 Test St', '12345', 'TestCity', 6);
 
 -- --------------------------------------------------------
 
@@ -211,7 +216,10 @@ CREATE TABLE IF NOT EXISTS `login` (
 INSERT INTO `login` (`idLogin`, `mdp`, `role`, `mail`) VALUES
 (1, '$2y$10$LoYLQHOzxMSWOIH8O2TrU.lCKovGLp/HH4RW4IubyHb5BYLWPsfRS', 1, 'test1@mail.com'),
 (2, '$2y$10$sc/o4KaBEvyWIkO.oD6ct.GMG5631RRMfZoaUEMi2JVunbnXMA29e', 1, 'dupont@login.com'),
-(3, '$2y$10$kAbgmTB6d9lm3KA3FsxrS.njS8MFjB4mAK4jVjjHHagbAy0rHdg1y', 2, 'admin@gsb.fr');
+(3, '$2y$10$mTP8Fg.Hy3Iisl/NO/BJMevCc6dqD29GYGis/piNDjAMk67dEyDzO', 2, 'admin@gsb.fr'),
+(4, '$2y$10$wiZdFd/TVGsSF5ZM1qbtMO/5a878s7LxvjdBnkPu98f306WCfWNaG', 1, 'biolucagent@test.com'),
+(5, '$2y$10$oiQD8vr.f0vZYNOr1ZeLduakwPeU5tWpXAPf5IcYo/7XEl01bOuwu', 1, 'agent@test.com'),
+(6, '$2y$10$CDRYDAi/VqxgyTGkB5Oe5.tAFIVIvtlW/nZShGvcicrcnR6yadeIq', 1, 'tester@mail.com');
 
 -- --------------------------------------------------------
 
@@ -263,8 +271,8 @@ CREATE TABLE IF NOT EXISTS `produit` (
   `image` char(100) DEFAULT NULL,
   `quantiteStock` int(11) NOT NULL,
   `seuil_rupture` int(11) NOT NULL,
-  `mis_en_avant_date_debut` date NULL DEFAULT NULL,
-  `mis_en_avant_date_fin` date NULL DEFAULT NULL,
+  `mis_en_avant_date_debut` date DEFAULT NULL,
+  `mis_en_avant_date_fin` date DEFAULT NULL,
   `idCateg` char(3) NOT NULL,
   `idMarque` int(11) NOT NULL,
   `idUnite` int(11) NOT NULL,
@@ -279,10 +287,10 @@ CREATE TABLE IF NOT EXISTS `produit` (
 --
 
 INSERT INTO `produit` (`idproduit`, `nom`, `description`, `prix`, `image`, `quantiteStock`, `seuil_rupture`, `mis_en_avant_date_debut`, `mis_en_avant_date_fin`, `idCateg`, `idMarque`, `idUnite`) VALUES
-('c01', 'Laino Shampooing Douche au Thé Vert BIO', 'Shampooing douche au thé vert BIO, format 200ml.', 4.00, 'assets/images/laino-shampooing-douche-au-the-vert-bio-200ml.png', 100, 10, NULL, NULL, 'CH', 1, 3),
-('c02', 'Klorane fibres de lin baume après shampooing', 'Baume après shampooing aux fibres de lin.', 10.80, 'assets/images/klorane-fibres-de-lin-baume-apres-shampooing-150-ml.jpg', 80, 5, NULL, NULL, 'CH', 2, 3),
+('c01', 'Laino Shampooing Douche au Thé Vert BIO', 'Shampooing douche au thé vert BIO, format 200ml.', 4.00, 'assets/images/laino-shampooing-douche-au-the-vert-bio-200ml.png', 18, 20, '2026-05-13', '2026-06-30', 'CH', 1, 3),
+('c02', 'Klorane fibres de lin baume après shampooing', 'Baume après shampooing aux fibres de lin.', 10.80, 'assets/images/klorane-fibres-de-lin-baume-apres-shampooing-150-ml.jpg', 11, 5, NULL, NULL, 'CH', 2, 3),
 ('c03', 'Weleda Kids 2in1 Shower & Shampoo Orange fruitée', 'Shampooing et douche 2 en 1 pour enfants, orange fruitée.', 4.00, 'assets/images/weleda-kids-2in1-shower-shampoo-orange-fruitee-150-ml.jpg', 120, 15, NULL, NULL, 'CH', 3, 3),
-('c04', 'Weleda Kids 2in1 Shower & Shampoo vanille douce', 'Shampooing et douche 2 en 1 pour enfants, vanille douce.', 4.00, 'assets/images/weleda-kids-2in1-shower-shampoo-vanille-douce-150-ml.jpg', 110, 15, NULL, NULL, 'CH', 3, 3),
+('c04', 'Weleda Kids 2in1 Shower & Shampoo vanille douce', 'Shampooing et douche 2 en 1 pour enfants, vanille douce.', 4.00, 'assets/images/weleda-kids-2in1-shower-shampoo-vanille-douce-150-ml.jpg', 10, 2, NULL, NULL, 'CH', 3, 3),
 ('c05', 'Klorane Shampooing sec à l\'extrait d\'ortie', 'Shampooing sec purifiant à l\'ortie.', 6.10, 'assets/images/klorane-shampooing-sec-a-l-extrait-d-ortie-spray-150ml.png', 50, 10, NULL, NULL, 'CH', 2, 3),
 ('c06', 'Phytopulp mousse volume intense', 'Mousse coiffante volume intense.', 18.00, 'assets/images/phytopulp-mousse-volume-intense-200ml.jpg', 40, 5, NULL, NULL, 'CH', 4, 3),
 ('c07', 'Bio Beaute by Nuxe Shampooing nutritif', 'Shampooing nutritif BIO.', 8.00, 'assets/images/bio-beaute-by-nuxe-shampooing-nutritif-200ml.png', 60, 8, NULL, NULL, 'CH', 5, 3),
@@ -341,8 +349,7 @@ ALTER TABLE `associer`
 --
 ALTER TABLE `avis`
   ADD CONSTRAINT `avis_idClient_FK` FOREIGN KEY (`idClient`) REFERENCES `client` (`idClient`),
-  ADD CONSTRAINT `avis_idproduit_FK` FOREIGN KEY (`idproduit`) REFERENCES `produit` (`idproduit`),
-  ADD CONSTRAINT `avis_unique_client_produit` UNIQUE (`idClient`, `idproduit`);
+  ADD CONSTRAINT `avis_idproduit_FK` FOREIGN KEY (`idproduit`) REFERENCES `produit` (`idproduit`);
 
 --
 -- Contraintes pour la table `client`
