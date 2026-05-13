@@ -32,7 +32,12 @@
             </div>
             <div class="form-group">
                 <label for="mdp">Mot de passe :</label>
-                <input id="mdp" type="password" name="mdp" class="form-control" required>
+                <input id="mdp" type="password" name="mdp" class="form-control" required
+                       pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}"
+                       title="8 caractères minimum, une majuscule, un chiffre, un caractère spécial">
+                <small class="form-text text-muted">
+                    Exigences CNIL : au moins <strong>8 caractères</strong>, une <strong>majuscule</strong>, un <strong>chiffre</strong> et un <strong>caractère spécial</strong> (!@#$%…).
+                </small>
             </div>
         </fieldset>
         <fieldset>

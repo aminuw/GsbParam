@@ -25,9 +25,32 @@ class ControleurUtilisateur
         $ville = $_POST['ville'] ?? '';
         $cp = $_POST['cp'] ?? '';
 
-        if (!empty($nom) && !empty($prenom) && !empty($mail) && !empty($mdp)) {
+        // Validation CNIL : 8 car. min, 1 majuscule, 1 chiffre, 1 caractère spécial
+        $erreurs = [];
+        if (empty($nom) || empty($prenom) || empty($mail) || empty($mdp)) {
+            $erreurs[] = "Tous les champs obligatoires (nom, prénom, email, mot de passe) doivent être remplis.";
+        }
+        if (!empty($mail) && !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+            $erreurs[] = "L'adresse email n'est pas valide.";
+        }
+        if (!empty($mdp)) {
+            if (strlen($mdp) < 8) {
+                $erreurs[] = "Le mot de passe doit contenir au moins 8 caractères.";
+            }
+            if (!preg_match('/[A-Z]/', $mdp)) {
+                $erreurs[] = "Le mot de passe doit contenir au moins une lettre majuscule.";
+            }
+            if (!preg_match('/[0-9]/', $mdp)) {
+                $erreurs[] = "Le mot de passe doit contenir au moins un chiffre.";
+            }
+            if (!preg_match('/[^a-zA-Z0-9]/', $mdp)) {
+                $erreurs[] = "Le mot de passe doit contenir au moins un caractère spécial (!@#$%…).";
+            }
+        }
+
+        if (empty($erreurs)) {
             try {
-                $result = $this->modeleFront->creerClient($nom, $prenom, $mail, $mdp, $rue, $ville, $cp);
+                $this->modeleFront->creerClient($nom, $prenom, $mail, $mdp, $rue, $ville, $cp);
                 $message = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
                 include("vues/v_connexion.php");
             } catch (PDOException $e) {
@@ -39,7 +62,6 @@ class ControleurUtilisateur
                 include("vues/v_inscription.php");
             }
         } else {
-            $erreurs[] = "Tous les champs obligatoires doivent être remplis.";
             include("vues/v_inscription.php");
         }
     }
