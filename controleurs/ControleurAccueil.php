@@ -10,17 +10,21 @@ require_once 'Modele/ModeleFront.php';
  * @brief contient la fonction qui gère l'accueil
  */
 class ControleurAccueil{
-    private $produit;
+    private $modeleFront;
 
     public function __construct()
     {
-        $this->produit=new ModeleFront();
+        $this->modeleFront = new ModeleFront();
     }
     /**
-	 * affiche la page d'accueil
+	 * affiche la page d'accueil avec les produits mis en avant
 	*/
     public function accueil(){
-        include("vues/v_accueil.html");
+        // Nettoyage automatique des programmations expirées (exigence 2.b.7)
+        $this->modeleFront->supprimerProgrammationsExpirees();
+        // Récupération des produits actuellement mis en avant
+        $lesProduitsEnAvant = $this->modeleFront->getProduitsEnAvant();
+        include("vues/v_accueil.php");
     }
 
     public function mentionsLegales(){

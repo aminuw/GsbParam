@@ -1,6 +1,22 @@
 <div id="produit_avis" class="container mt-4">
     <h2>Fiche produit : <?= htmlspecialchars($leProduit->nom) ?></h2>
     
+    <?php if (isset($_SESSION['message_succes'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['message_succes']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['message_succes']); ?>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['message_erreur'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['message_erreur']) ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['message_erreur']); ?>
+    <?php endif; ?>
+
     <div class="info-produit row mb-4">
         <div class="col-md-4">
             <img src="<?= htmlspecialchars($leProduit->image) ?>" alt="image produit" class="img-fluid rounded shadow-sm border">
@@ -73,24 +89,30 @@
             <div class="card">
                 <div class="card-body">
                     <?php if (isset($_SESSION['client'])): ?>
-                        <form method="POST" action="index.php?uc=voirProduits&action=validerAvis">
-                            <input type="hidden" name="idProduit" value="<?= htmlspecialchars($leProduit->id) ?>">
-                            <div class="mb-3">
-                                <label for="note" class="form-label">Note (/5) :</label>
-                                <select name="note" id="note" class="form-select" required>
-                                    <option value="5">5 - Excellent</option>
-                                    <option value="4">4 - Très bien</option>
-                                    <option value="3">3 - Moyen</option>
-                                    <option value="2">2 - Décevant</option>
-                                    <option value="1">1 - Mauvais</option>
-                                </select>
+                        <?php if ($aDejaDonneAvis): ?>
+                            <div class="alert alert-info mb-0">
+                                <em>Vous avez déjà donné votre avis sur ce produit. Merci pour votre contribution !</em>
                             </div>
-                            <div class="mb-3">
-                                <label for="commentaire" class="form-label">Votre avis :</label>
-                                <textarea name="commentaire" id="commentaire" class="form-control" rows="4" required placeholder="Partagez votre expérience avec ce produit..."></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Envoyer mon avis</button>
-                        </form>
+                        <?php else: ?>
+                            <form method="POST" action="index.php?uc=voirProduits&action=validerAvis">
+                                <input type="hidden" name="idProduit" value="<?= htmlspecialchars($leProduit->id) ?>">
+                                <div class="mb-3">
+                                    <label for="note" class="form-label">Note (/5) :</label>
+                                    <select name="note" id="note" class="form-select" required>
+                                        <option value="5">5 - Excellent</option>
+                                        <option value="4">4 - Très bien</option>
+                                        <option value="3">3 - Moyen</option>
+                                        <option value="2">2 - Décevant</option>
+                                        <option value="1">1 - Mauvais</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="commentaire" class="form-label">Votre avis :</label>
+                                    <textarea name="commentaire" id="commentaire" class="form-control" rows="4" required placeholder="Partagez votre expérience avec ce produit..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Envoyer mon avis</button>
+                            </form>
+                        <?php endif; ?>
                     <?php else: ?>
                         <div class="alert alert-warning mb-0">
                             <em>Vous devez être <a href="index.php?uc=utilisateur&action=connexion" class="alert-link">connecté(e)</a> pour laisser un avis.</em>

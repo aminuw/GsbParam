@@ -1,121 +1,194 @@
+/* =============================================================
+   GsbParam - CSS Global v4
+   CSS original conservé + améliorations ciblées
+   Framework: Bootstrap 5.3.3
+   ============================================================= */
+
+/* ── Base (original) ────────────────────────────────────── */
 html {
-font:normal 100%/1.2em "Baskerville";
+    font: normal 100%/1.2em "Baskerville";
 }
-body{
-	background-color: #f8f9fa;
+body {
+    background-color: #f8f9fa;
 }
-#container{
-	width:90%;
-	margin:auto;
-}
-#accueil{
-	display:flex;
-	justify-content:space-around;
-	padding-top:5%;
-}
-#textAccueil{
-	font-family: 'Libre Baskerville', serif;
-	width:60%;
-	margin: 10px 0;
-	color: #999999 ;
-	text-align: justify;
-}
-#textAccueil h1{
-	color:#6699FF;
-}
-#textAccueil p{
-	line-height: 1.5em;
-}
-header{
-	margin-bottom: 10px;
-}
-#categories{
-float:left;
+#container {
+    width: 90%;
+    margin: auto;
 }
 
-#produits{
-padding:0 150px;
-display:flex;
-flex-flow: row wrap;
+/* ── Accueil (original) ─────────────────────────────────── */
+#accueil {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 3%;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+#textAccueil {
+    font-family: 'Libre Baskerville', serif;
+    width: 55%;
+    min-width: 280px;
+    margin: 10px 0;
+    color: #555;
+    text-align: justify;
+}
+#textAccueil h1 {
+    color: #6699FF;
+}
+#textAccueil p {
+    line-height: 1.5em;
+}
+header {
+    margin-bottom: 10px;
+}
+
+/* ── Produits (original) ────────────────────────────────── */
+#categories { float: left; }
+#produits {
+    padding: 0 150px;
+    display: flex;
+    flex-flow: row wrap;
 }
 #categories li {
-	list-style-type: none;
-	list-style-image:none;
-	margin-right: 1px ;
-    border:1px solid white;
-    width:100px;
-    text-align:center;
-	background: #8b8beb;
-	font-weight: bold; 
+    list-style-type: none;
+    list-style-image: none;
+    margin-right: 1px;
+    border: 1px solid white;
+    width: 100px;
+    text-align: center;
+    background: #8b8beb;
+    font-weight: bold;
 }
 #produits a {
-	list-style-type: none;
-	list-style-image:none;
-	display:inline; 
-    width:175px;
-    text-align:center;
-    height:205px;
-    font: 1em "Trebuchet MS",Arial,sans-serif ;
+    list-style-type: none;
+    display: inline;
+    width: 175px;
+    text-align: center;
+    height: 205px;
+    font: 1em "Trebuchet MS", Arial, sans-serif;
 }
-#card{
-    width:180px;
-    height : 250px;
-    padding:10px;
-    margin : 10px;
-    background-color : var(--fondC);
+#card {
+    width: 180px;
+    height: 250px;
+    padding: 10px;
+    margin: 10px;
+    background-color: var(--fondC, #fff);
     box-shadow: 1px 1px 4px #bbb;
-    text-align:center;
-	display : flex;
-	flex-direction: column;
-	justify-content:space-between;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
-.descrCard{
-    top:0px;
-	font: .8em "Trebuchet MS",Arial,sans-serif ;
+.descrCard { font: .8em "Trebuchet MS", Arial, sans-serif; }
+.prixCard  { font: .8em "Trebuchet MS", Arial, sans-serif; }
+.imgCard   { margin-top: 10px; max-width: 200px; max-height: 140px; }
+div.photoCard > img { max-width: 200px; max-height: 140px; }
+
+/* ── Formulaires (original) ─────────────────────────────── */
+.contenuCentre {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
 }
-.prixCard{
-    font: .8em "Trebuchet MS",Arial,sans-serif ;    
+.contenuCentre a { margin: 0 5px; }
+#formC { width: 60%; }
+.btnCentre { display: flex; justify-content: center; }
+#message, #erreurs { margin: 2px; }
+#panier { font-size: large; margin: 2px; }
+button { margin: 3px 0; }
+#creationCommande { margin-top: 25px; }
+#erreurs { margin-right: 20px; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   AMÉLIORATIONS CIBLÉES (sans casser l'original)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Section "À la une" (USR15) ─────────────────────────── */
+.section-alaune {
+    background: linear-gradient(135deg, #f0f4ff 0%, #eef9f0 100%);
+    border-top: 3px solid #6699FF;
+    padding: 2rem 0 2.5rem;
+    margin-top: 1.5rem;
 }
-.imgCard{
-    margin-top: 10px;
-	max-width : 200px;
-    max-height: 140px;
+.section-alaune .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.badge-alaune {
+    background: #6699FF;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.35em 0.9em;
+    border-radius: 50px;
+}
+.section-alaune h2 {
+    font-family: 'Libre Baskerville', serif;
+    color: #333;
+    margin: 0;
 }
 
-div.photoCard>img{
-    max-width : 200px;
-    max-height: 140px;
-    
+/* Cartes produits mis en avant */
+.card-produit {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: #fff;
 }
-.contenuCentre{
-	display:flex;
-	justify-content: center;
-	padding-top:20px;	
+.card-produit:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(102, 153, 255, 0.18);
+    border-color: #6699FF;
 }
-.contenuCentre a{
- margin :0px 5px;
+.card-produit .img-wrapper {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafafa;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
 }
-#formC{
-	width:60%;
+.card-produit img { max-height: 140px; max-width: 100%; object-fit: contain; }
+.card-produit .prix { font-size: 1.1rem; font-weight: 700; color: #6699FF; }
+.card-produit .card-body { padding: 0.9rem; }
+.card-produit .card-title { font-size: 0.88rem; line-height: 1.4; color: #333; }
+
+/* ── Back-office : pages admin ────────────────────────────── */
+.admin-header {
+    background: linear-gradient(90deg, #1e293b 0%, #334155 100%);
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+    padding: 0.9rem 1.2rem;
 }
-.btnCentre{
-	display:flex;
-	justify-content: center;
+.admin-card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.08);
 }
-#message, #erreurs{
-	margin : 2px;
+
+/* Tables admin */
+.table thead th {
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #6b7280;
+    font-weight: 600;
+    border-bottom: 2px solid #e5e7eb;
 }
-#panier{
-	font-size: large;
-	margin : 2px;
-}
-button{
-	margin: 3px 0px;
-}
-#creationCommande
-{
-margin-top:25px;
-}
-#erreurs{
-	margin-right: 20px;
+.badge-active  { background: #16a34a; color: #fff; }
+.badge-future  { background: #0284c7; color: #fff; }
+.badge-expired { background: #9ca3af; color: #fff; }
+
+/* ── Boutons ─────────────────────────────────────────────── */
+.btn-voir {
+    font-size: 0.82rem;
+    padding: 0.3em 1em;
+    border-radius: 50px;
 }

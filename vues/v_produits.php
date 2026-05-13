@@ -1,7 +1,6 @@
 <div class="container-fluid px-0">
     <?php if (count($lesProduits) == 0): ?>
         <div class="alert alert-info text-center shadow-sm py-4">
-            <i class="bi bi-search fs-1 d-block mb-3"></i>
             <h5 class="mb-0">Désolé, aucun produit ne correspond à votre recherche.</h5>
             <p class="text-muted mt-2">Essayez de modifier vos filtres ou de réinitialiser la recherche.</p>
         </div>
@@ -24,10 +23,10 @@
                             <div class="mt-auto">
                                 <div class="d-grid gap-2">
                                     <a href="index.php?uc=voirProduits&action=voirAvis&produit=<?= $id ?>" class="btn btn-outline-dark btn-sm">
-                                        <i class="bi bi-info-circle me-1"></i> Détails / Avis
+                                        Détails / Avis
                                     </a>
-                                    <a href="index.php?uc=gererPanier&produit=<?= $id ?>&action=ajouterAuPanier" class="btn btn-link p-0 border-0">
-                                        <img src="assets/images/mettrepanier.png" title="Ajouter au panier" alt="Mettre au panier" style="height: 40px;">
+                                    <a href="index.php?uc=gererPanier&produit=<?= $id ?>&action=ajouterAuPanier" class="btn btn-primary btn-sm fw-bold">
+                                        + Ajouter au panier
                                     </a>
                                 </div>
                             </div>

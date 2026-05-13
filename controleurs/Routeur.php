@@ -218,6 +218,22 @@ class Routeur
                         $this->ctrlAdministrer->modifierEtat();
                         break;
                     }
+                    case 'gererPromotions': {
+                        $this->ctrlAdministrer->gererPromotions();
+                        break;
+                    }
+                    case 'ajouterPromotion': {
+                        $this->ctrlAdministrer->ajouterPromotion();
+                        break;
+                    }
+                    case 'validerAjoutPromotion': {
+                        $this->ctrlAdministrer->validerAjoutPromotion();
+                        break;
+                    }
+                    case 'supprimerPromotion': {
+                        $this->ctrlAdministrer->supprimerPromotion();
+                        break;
+                    }
                 }
                 break;
             case 'categories':

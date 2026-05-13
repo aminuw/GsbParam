@@ -47,6 +47,9 @@
               <li><hr class="dropdown-divider"></li>
               <li><h6 class="dropdown-header text-primary">Ventes</h6></li>
               <li><a class="dropdown-item" href="index.php?uc=administrer&action=gestionCommandes">Gestion des Commandes</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><h6 class="dropdown-header text-primary">Mise en Avant</h6></li>
+              <li><a class="dropdown-item" href="index.php?uc=administrer&action=gererPromotions">⭐ Programmation Accueil</a></li>
             </ul>
           </li>
           <?php endif; ?>

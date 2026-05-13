@@ -2,7 +2,14 @@
     <div class="card shadow-sm">
         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
             <h1 class="h4 mb-0">Gestion du Catalogue Produits</h1>
-            <a href="index.php?uc=administrer&action=ajouterProduit" class="btn btn-success btn-sm fw-bold">+ Nouveau Produit</a>
+            <div>
+                <?php if (isset($filtreCritique) && $filtreCritique): ?>
+                    <a href="index.php?uc=administrer&action=listeProduitsModif" class="btn btn-outline-light btn-sm me-2">Voir tous les produits</a>
+                <?php else: ?>
+                    <a href="index.php?uc=administrer&action=listeProduitsModif&filtre=critique" class="btn btn-warning btn-sm fw-bold text-dark me-2">Stocks Critiques</a>
+                <?php endif; ?>
+                <a href="index.php?uc=administrer&action=ajouterProduit" class="btn btn-success btn-sm fw-bold">+ Nouveau Produit</a>
+            </div>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">

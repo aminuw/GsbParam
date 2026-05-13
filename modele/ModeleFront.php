@@ -371,9 +371,22 @@ class ModeleFront extends Modele
 		return $moyenne ? round($moyenne, 1) : null;
 	}
 
+	public function aDejaDonneAvis($idClient, $idProduit)
+	{
+		$req = "SELECT COUNT(*) AS nb FROM avis WHERE idClient = :idClient AND idproduit = :idProduit";
+		$tab = array('idClient' => $idClient, 'idProduit' => $idProduit);
+		$res = $this->executerRequete($req, $tab);
+		$nb = $res->fetchColumn();
+		return $nb > 0;
+	}
+
 	public function ajouterAvis($note, $commentaire, $idClient, $idProduit)
 	{
 		try {
+			if ($this->aDejaDonneAvis($idClient, $idProduit)) {
+				throw new Exception("Vous avez déjà donné votre avis sur ce produit.");
+			}
+
 			$this->beginTransaction();
 			
 			$resMaxAvis = $this->executerRequete('SELECT MAX(idAvis) as maxId FROM avis');
@@ -626,6 +639,103 @@ class ModeleFront extends Modele
 			$this->commit();
 		} catch (PDOException $e) {
 			$this->rollBack();
+			throw $e;
+		}
+	}
+
+	/**
+	 * Retourne les produits dont le stock est inférieur ou égal au seuil de rupture
+	 * @return array
+	 */
+	public function getProduitsStockCritique()
+	{
+		try {
+			$req = 'SELECT idproduit AS id, nom, description, prix, image, quantiteStock, seuil_rupture, mis_en_avant_date_debut, mis_en_avant_date_fin, idCateg AS idCategorie, idMarque, idUnite 
+					FROM produit 
+					WHERE quantiteStock <= seuil_rupture 
+					ORDER BY quantiteStock ASC';
+			$res = $this->executerRequete($req);
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			throw $e;
+		}
+	}
+
+	/**
+	 * Retourne les produits actuellement mis en avant (date du jour comprise dans la période)
+	 */
+	public function getProduitsEnAvant()
+	{
+		try {
+			$req = 'SELECT idproduit AS id, nom, prix, image, mis_en_avant_date_debut, mis_en_avant_date_fin
+					FROM produit
+					WHERE mis_en_avant_date_debut IS NOT NULL
+					  AND mis_en_avant_date_fin IS NOT NULL
+					  AND CURDATE() BETWEEN mis_en_avant_date_debut AND mis_en_avant_date_fin';
+			$res = $this->executerRequete($req);
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			throw $e;
+		}
+	}
+
+	/**
+	 * Supprime (réinitialise à NULL) les programmations dont la date de fin est dépassée
+	 */
+	public function supprimerProgrammationsExpirees()
+	{
+		try {
+			$req = 'UPDATE produit SET mis_en_avant_date_debut = NULL, mis_en_avant_date_fin = NULL
+					WHERE mis_en_avant_date_fin IS NOT NULL AND mis_en_avant_date_fin < CURDATE()';
+			$this->executerRequete($req);
+		} catch (PDOException $e) {
+			throw $e;
+		}
+	}
+
+	/**
+	 * Retourne la liste de tous les produits ayant une programmation de mise en avant (actuelle ou future)
+	 */
+	public function getLesProgrammations()
+	{
+		try {
+			$req = 'SELECT idproduit AS id, nom, image, mis_en_avant_date_debut, mis_en_avant_date_fin
+					FROM produit
+					WHERE mis_en_avant_date_debut IS NOT NULL
+					ORDER BY mis_en_avant_date_debut ASC';
+			$res = $this->executerRequete($req);
+			return $res->fetchAll(PDO::FETCH_OBJ);
+		} catch (PDOException $e) {
+			throw $e;
+		}
+	}
+
+	/**
+	 * Crée ou met à jour la programmation de mise en avant pour un produit
+	 */
+	public function creerPromotion($idProduit, $dateDebut, $dateFin)
+	{
+		try {
+			$req = 'UPDATE produit SET mis_en_avant_date_debut = :dateDebut, mis_en_avant_date_fin = :dateFin
+					WHERE idproduit = :id';
+			$tab = array('id' => $idProduit, 'dateDebut' => $dateDebut, 'dateFin' => $dateFin);
+			$this->executerRequete($req, $tab);
+		} catch (PDOException $e) {
+			throw $e;
+		}
+	}
+
+	/**
+	 * Supprime la programmation de mise en avant d'un produit (remet les dates à NULL)
+	 */
+	public function supprimerPromotion($idProduit)
+	{
+		try {
+			$req = 'UPDATE produit SET mis_en_avant_date_debut = NULL, mis_en_avant_date_fin = NULL
+					WHERE idproduit = :id';
+			$tab = array('id' => $idProduit);
+			$this->executerRequete($req, $tab);
+		} catch (PDOException $e) {
 			throw $e;
 		}
 	}

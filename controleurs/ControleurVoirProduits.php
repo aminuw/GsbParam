@@ -72,6 +72,10 @@ class ControleurVoirProduits
         $lesAvis = $this->modeleFront->getAvisByProduit($idProduit);
         $noteMoyenne = $this->modeleFront->getNoteMoyenneProduit($idProduit);
         $lesProduitsAssocies = $this->modeleFront->getProduitsAssocies($idProduit);
+        $aDejaDonneAvis = false;
+        if (isset($_SESSION['client'])) {
+            $aDejaDonneAvis = $this->modeleFront->aDejaDonneAvis($_SESSION['client']->idClient, $idProduit);
+        }
         include("vues/v_avis.php");
     }
 
@@ -85,8 +89,9 @@ class ControleurVoirProduits
             $idClient = $_SESSION['client']->idClient;
             try {
                 $this->modeleFront->ajouterAvis($note, $commentaire, $idClient, $idProduit);
-            } catch (PDOException $e) {
-                // On ignore l'erreur et on redirige quand même
+                $_SESSION['message_succes'] = "Votre avis a été ajouté avec succès.";
+            } catch (Exception $e) {
+                $_SESSION['message_erreur'] = $e->getMessage();
             }
             echo '<script>window.location.href = "index.php?uc=voirProduits&action=voirAvis&produit=' . $idProduit . '";</script>';
             exit();

@@ -84,10 +84,15 @@ class ControleurGererPanier
 	*/
 	function ajouterAuPanier($idProduit, $qte = 1)
 	{
-		if (isset($_SESSION['produits'][$idProduit])) {
-			$_SESSION['produits'][$idProduit] += $qte;
+		$leProduit = $this->modeleFront->getUnProduit($idProduit);
+		$qteActuelle = isset($_SESSION['produits'][$idProduit]) ? $_SESSION['produits'][$idProduit] : 0;
+		$qteDemandee = $qteActuelle + $qte;
+
+		if ($leProduit && $qteDemandee > $leProduit->quantiteStock) {
+			$msgErreurs[] = "Impossible d'ajouter au panier : Stock insuffisant pour le produit " . htmlspecialchars($leProduit->nom) . ". Seulement " . $leProduit->quantiteStock . " disponibles.";
+			include("vues/v_erreurs.php");
 		} else {
-			$_SESSION['produits'][$idProduit] = $qte;
+			$_SESSION['produits'][$idProduit] = $qteDemandee;
 		}
 		$this->voirPanier();
 	}
@@ -199,7 +204,13 @@ class ControleurGererPanier
 	{
 		if (isset($_SESSION['produits'][$idProduit])) {
 			if ($qte > 0) {
-				$_SESSION['produits'][$idProduit] = $qte;
+				$leProduit = $this->modeleFront->getUnProduit($idProduit);
+				if ($leProduit && $qte > $leProduit->quantiteStock) {
+					$msgErreurs[] = "Stock insuffisant pour " . htmlspecialchars($leProduit->nom) . ". Quantité max : " . $leProduit->quantiteStock;
+					include("vues/v_erreurs.php");
+				} else {
+					$_SESSION['produits'][$idProduit] = $qte;
+				}
 			} else {
 				unset($_SESSION['produits'][$idProduit]);
 			}

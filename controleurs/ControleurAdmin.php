@@ -10,7 +10,13 @@ class ControleurAdmin
 
     public function listeProduitsModif()
     {
-        $lesProduits = $this->modeleFront->getTousLesProduits();
+        if (isset($_GET['filtre']) && $_GET['filtre'] == 'critique') {
+            $lesProduits = $this->modeleFront->getProduitsStockCritique();
+            $filtreCritique = true;
+        } else {
+            $lesProduits = $this->modeleFront->getTousLesProduits();
+            $filtreCritique = false;
+        }
         include("vues/v_listeProduitsModif.php");
     }
 
@@ -348,6 +354,90 @@ class ControleurAdmin
         }
         include("vues/v_message.php");
         $this->gestionCommandes();
+    }
+
+    /**
+     * Affiche la liste des programmations de mises en avant
+     */
+    public function gererPromotions()
+    {
+        $lesProgrammations = $this->modeleFront->getLesProgrammations();
+        include("vues/v_gererPromotions.php");
+    }
+
+    /**
+     * Affiche le formulaire d'ajout d'une programmation
+     */
+    public function ajouterPromotion()
+    {
+        $lesProduits = $this->modeleFront->getTousLesProduits();
+        $erreurs = array();
+        include("vues/v_ajouterPromotion.php");
+    }
+
+    /**
+     * Valide et enregistre une nouvelle programmation de mise en avant
+     */
+    public function validerAjoutPromotion()
+    {
+        $idProduit  = $_POST['idProduit'];
+        $dateDebut  = $_POST['dateDebut'];
+        $dateFin    = $_POST['dateFin'];
+        $today      = date('Y-m-d');
+        $erreurs    = array();
+
+        // Contrainte 2.b.4 : date début >= aujourd'hui
+        if ($dateDebut < $today) {
+            $erreurs[] = "La date de début ne peut pas être inférieure à la date du jour.";
+        }
+        // Contrainte 2.b.5 : date fin > date début
+        if ($dateFin <= $dateDebut) {
+            $erreurs[] = "La date de fin doit être postérieure à la date de début.";
+        }
+        // Contrainte 2.b.6 : pas de doublon (le produit a déjà une programmation)
+        $produitData = $this->modeleFront->getUnProduit($idProduit);
+        if ($produitData && $produitData->mis_en_avant_date_debut !== null) {
+            $erreurs[] = "Ce produit possède déjà une programmation. Supprimez-la avant d'en créer une nouvelle.";
+        }
+
+        if (!empty($erreurs)) {
+            $lesProduits = $this->modeleFront->getTousLesProduits();
+            include("vues/v_ajouterPromotion.php");
+            return;
+        }
+
+        try {
+            $this->modeleFront->creerPromotion($idProduit, $dateDebut, $dateFin);
+            $message = "La programmation a été enregistrée avec succès !";
+            $messageType = "success";
+        } catch (PDOException $e) {
+            $message = "Erreur lors de l'enregistrement : " . $e->getMessage();
+            $messageType = "error";
+        }
+
+        $lesProgrammations = $this->modeleFront->getLesProgrammations();
+        include("vues/v_message.php");
+        include("vues/v_gererPromotions.php");
+    }
+
+    /**
+     * Supprime la programmation de mise en avant d'un produit
+     */
+    public function supprimerPromotion()
+    {
+        $idProduit = $_GET['id'];
+        try {
+            $this->modeleFront->supprimerPromotion($idProduit);
+            $message = "Programmation supprimée avec succès.";
+            $messageType = "success";
+        } catch (PDOException $e) {
+            $message = "Erreur lors de la suppression : " . $e->getMessage();
+            $messageType = "error";
+        }
+
+        $lesProgrammations = $this->modeleFront->getLesProgrammations();
+        include("vues/v_message.php");
+        include("vues/v_gererPromotions.php");
     }
 }
 ?>
