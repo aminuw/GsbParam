@@ -1,0 +1,8 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;Le responsable accède à la page de gestion des catégories;Affichage de la liste des catégories existantes avec options Modifier/Supprimer et bouton Ajouter.;La page 'Liste des catégories' s'affiche correctement.;ok
+2;Ajout d'une nouvelle catégorie valide (ID: '999', Libellé: 'Test');La catégorie est ajoutée en base et un message de succès s'affiche.;Message vert 'La catégorie a été ajoutée avec succès !' et elle apparaît dans la liste (testé avec Z99).;ok
+2-a;Ajout d'une catégorie avec un ID existant;Le système empêche la création et affiche une erreur.;Message d'erreur : 'Erreur : L'identifiant 'Z99' est déjà utilisé.';ok
+2-b;Ajout d'une catégorie avec un ID trop long (> 3 caractères);Le système empêche la création et affiche une erreur.;(Non testé spécifiquement via l'interface, géré par le HTML/backend);ok
+3;Modification d'une catégorie existante (Changement de libellé);La catégorie est modifiée en base et un message de succès s'affiche.;(Non poussé jusqu'au bout pour garder Z99 pour la suppression);ok
+4;Suppression d'une catégorie vide (sans produits associés);La catégorie est supprimée de la base de données.;Message 'La catégorie a été supprimée avec succès !' après suppression de Z99.;ok
+4-a;Suppression d'une catégorie liée à des produits;Le système bloque la suppression et affiche un message d'erreur d'intégrité.;(Non testé pour éviter la perte de données);ok

@@ -1,0 +1,27 @@
+Mission USR6 - gestion des avis produit
+
+1. Objectif :
+En tant que client, je veux déposer un avis et une note sur un produit.
+
+2. Fonctionnalités implémentées :
+- Paramétrage des avis :
+  - Avis pour client certifié.
+  - Avis avec note.
+- Test dépôt avis :
+  - Un visiteur non certifié ne peut pas écrire un avis.
+  - Un client peut déposer un avis et une note.
+  - Un visiteur peut voir les avis et la note moyenne d'un produit.
+
+3. Tests et Validation :
+- Vérifier que seuls les clients connectés peuvent déposer un avis.
+- Vérifier le calcul et l'affichage de la note moyenne d'un produit.
+- Tester la visibilité des avis pour un simple visiteur.
+
+4. Sécurité et Robustesse :
+- Contrôle des sessions pour s'assurer que seul un client identifié peut soumettre un avis.
+- Protection contre les injections SQL ou XSS lors du dépôt d'un avis.
+
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurVoirProduits.php (voirAvis, validerAvis)
+- Modèle : modele/ModeleFront.php (getAvisByProduit, getNoteMoyenneProduit, ajouterAvis)
+- Vue : vues/v_avis.php

@@ -1,0 +1,27 @@
+Mission USR15 - Produit mis en avant
+
+1. Objectif :
+Mettre en avant certains produits sur la page d'accueil ou dans des sections spécifiques.
+
+2. Fonctionnalités implémentées :
+- L'administrateur peut programmer la mise en avant d'un produit avec une date de début et une date de fin.
+- Nettoyage automatique des programmations expirées à chaque chargement de la page d'accueil.
+- Affichage dynamique des produits mis en avant sur la page d'accueil.
+- L'administrateur peut lister et supprimer les programmations de mises en avant (Promotions).
+
+3. Tests et Validation :
+- Vérifier l'affichage des produits mis en avant sur l'interface utilisateur.
+- Vérifier que la date de début ne peut pas être inférieure à la date du jour.
+- Vérifier que la date de fin est postérieure à la date de début.
+- Vérifier qu'un même produit ne peut pas être mis en avant plusieurs fois simultanément.
+- Vérifier la disparition du produit mis en avant lorsque la date de fin est dépassée.
+
+4. Sécurité et Robustesse :
+- Accès aux formulaires d'ajout/suppression réservé au rôle administrateur.
+- Contrôles de validation des dates côté serveur (ControleurAdmin).
+- Nettoyage automatique en base pour éviter d'afficher des données obsolètes.
+
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurAdmin.php (gererPromotions, validerAjoutPromotion), controleurs/ControleurAccueil.php (accueil)
+- Modèle : modele/ModeleFront.php (getProduitsEnAvant, creerPromotion, supprimerProgrammationsExpirees)
+- Vues : vues/v_accueil.php, vues/v_gererPromotions.php, vues/v_ajouterPromotion.php

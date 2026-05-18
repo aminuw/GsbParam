@@ -1,0 +1,7 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;Affichage du stock sur la page produit;Le visiteur voit la quantité disponible du produit.;La mention '18 restants' est affichée pour 'Laino Shampooing Douche au Thé Vert BIO';ok
+2;Le client ajoute une quantité au panier inférieure ou égale au stock;L'article est ajouté au panier avec succès.;Le produit est bien ajouté avec quantité 1.;ok
+2-a;Le client tente d'ajouter une quantité supérieure au stock disponible;Le système bloque l'ajout et affiche une alerte.;Le système affiche 'Stock insuffisant pour Laino Shampooing Douche au Thé Vert BIO. Quantité max : 18';ok
+3;Dans le panier, le client modifie la quantité pour dépasser le stock;Le système refuse la modification de quantité.;Le panier reste à 1 et l'alerte 'Stock insuffisant' s'affiche en haut de page.;ok
+4;L'administrateur modifie le stock manuellement depuis le back-office;La quantité en stock est mise à jour.;La modification est enregistrée en base sans erreur.;ok
+4-a;L'administrateur saisit une quantité négative;Le formulaire est rejeté.;Message d'erreur : 'La quantité en stock ne peut pas être négative.';ok

@@ -1,0 +1,23 @@
+Mission USR7 - Gestion Stock Produit simple
+
+1. Objectif :
+Gérer le stock pour un produit simple.
+
+2. Fonctionnalités implémentées :
+- Affichage du stock actuel du produit.
+- Contrôle de la quantité en stock lors de l'ajout au panier.
+- Empêcher l'ajout au panier si la quantité demandée dépasse le stock disponible.
+- Mise à jour manuelle du stock et du seuil de rupture par l'administrateur.
+
+3. Tests et Validation :
+- Vérifier qu'il est impossible d'ajouter un produit au panier avec une quantité supérieure au stock.
+- Tester la modification du stock d'un produit depuis le panel d'administration.
+
+4. Sécurité et Robustesse :
+- Vérification côté serveur avant chaque modification du panier pour éviter les dépassements de stock.
+- Protection contre la saisie de quantités négatives lors de la modification du produit.
+
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurGererPanier.php (ajouterAuPanier, modifierQuantiteProduit), controleurs/ControleurAdmin.php (validerAjoutProduit, validerModifProduit)
+- Modèle : modele/ModeleFront.php (getUnProduit)
+- Vues : vues/v_panier.php, vues/v_erreurs.php

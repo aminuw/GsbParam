@@ -1,0 +1,4 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;Le visiteur navigue sur n'importe quelle page du site;Le lien 'Mentions légales' est visible dans le footer (v_pied.html).;Le lien est bien affiché sous la forme 'Mentions Légales & Politique de Confidentialité (RGPD)';ok
+2;Le visiteur clique sur le lien 'Mentions légales';Redirection vers la page (uc=mentionsLegales);Affichage correct de la page via l'URL index.php?uc=mentionsLegales;ok
+3;Vérification du contenu de la page;La page contient les informations sur l'éditeur, l'hébergeur et les droits.;Le texte mentionne bien l'éditeur GSB (Paris), l'hébergeur Fictif SAS (Lyon) et la RGPD.;ok

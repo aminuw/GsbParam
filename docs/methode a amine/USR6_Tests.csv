@@ -1,0 +1,6 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;Un visiteur non connecté accède à la page d'un produit;Il voit les avis existants mais ne peut pas voir le formulaire d'ajout.;Les avis sont visibles, la note moyenne est affichée. Pas de formulaire d'ajout.;ok
+1-a;Le visiteur tente de forcer l'URL pour ajouter un avis;Redirection vers la page de connexion.;Le système renvoie vers 'index.php?uc=utilisateur&action=connexion'.;ok
+2;Un client connecté (certifié) accède à la page d'un produit;Il voit le formulaire de dépôt d'avis.;Affichage du formulaire avec champ 'Note' et 'Commentaire'.;ok
+3;Le client dépose un avis complet et valide;L'avis est enregistré, le message de succès apparaît, la note moyenne est recalculée.;Bandeau vert 'Votre avis a été ajouté avec succès.' et l'avis (5 étoiles, 'Super produit!') est affiché.;ok
+3-a;Le client tente de déposer un second avis sur le même produit;Le système empêche l'ajout car un client ne peut donner qu'un seul avis par produit.;Le formulaire disparaît et affiche 'Vous avez déjà donné votre avis sur ce produit. Merci pour votre contribution !'.;ok

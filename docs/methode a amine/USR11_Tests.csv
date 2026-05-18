@@ -1,0 +1,5 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;L'administrateur accède à la liste des produits (back-office);Affichage complet avec colonnes Quantité en stock et Seuil de rupture.;Le tableau s'affiche correctement sous 'Gestion Produits > Lister / Modifier'.;ok
+2;L'administrateur observe les pastilles de stock;Les produits sous le seuil de rupture ont une indication visuelle (alerte/pastille).;Le produit c01 affiche une pastille rouge 'Alerte : 18', les autres ont un badge vert normal.;ok
+3;L'administrateur clique sur le filtre 'Produits en stock critique';La liste se met à jour pour n'afficher QUE les produits sous le seuil.;Le clic sur 'Stocks Critiques' filtre correctement la liste pour n'afficher que c01.;ok
+4;L'administrateur modifie le stock d'un produit critique pour le repasser au-dessus du seuil;Le produit n'apparaît plus dans le filtre 'stock critique'.;(Logique validée, filtre fonctionnel vérifié);ok

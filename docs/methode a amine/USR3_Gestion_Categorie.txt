@@ -1,0 +1,28 @@
+Mission USR3 - Gestion Catégorie
+
+1. Objectif :
+En tant que responsable commercial, je veux que les produits de la boutique soient classés par catégorie.
+
+2. Fonctionnalités implémentées :
+- Créer les catégories
+- Modifier catégorie
+- Supprimer Catégorie :
+  - Une catégorie ne peut pas être supprimée si elle a des produits.
+- Catégoriser les produits :
+  - Ajouter un produit dans une catégorie.
+  - Modifier la catégorie d'un produit.
+  - Lister les produits par catégorie.
+
+3. Tests et Validation :
+- Tester la création, modification et suppression des catégories.
+- Vérifier l'impossibilité de supprimer une catégorie contenant des produits.
+- Valider la catégorisation des produits.
+
+4. Sécurité et Robustesse :
+- Accès réservé aux utilisateurs ayant les droits appropriés (ex: responsable commercial/administrateur).
+- Vérification de l'intégrité référentielle avant la suppression d'une catégorie.
+
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurCategories.php
+- Modèle : modele/ModeleFront.php
+- Vues : vues/v_listeCategorie.php, vues/v_choixCategorie.php, vues/v_ajouterCategorie.php, vues/v_modifierCategorie.php

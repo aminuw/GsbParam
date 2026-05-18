@@ -1,0 +1,22 @@
+Mission USR11 - Gestion des stocks
+
+1. Objectif :
+En tant que responsable des stocks, je veux gérer les stocks pour pouvoir passer des commandes de réapprovisionnement.
+
+2. Fonctionnalités implémentées :
+- Liste de tous les produits avec leurs stocks et seuils de rupture.
+- Filtre visuel (pastille rouge) et requête SQL pour isoler les "Stocks critiques" (quantité <= seuil de rupture).
+- Bouton pour basculer entre l'affichage de tous les produits et seulement ceux en stock critique.
+
+3. Tests et Validation :
+- Vérifier la mise à jour correcte des niveaux de stock lors d'une commande.
+- Tester le déclenchement des alertes (pastille rouge / filtre "stock critique") pour les réapprovisionnements.
+
+4. Sécurité et Robustesse :
+- Accès limité au rôle administrateur (vérifié par requireAdmin() dans le Routeur).
+- Requêtes préparées pour la récupération des produits critiques.
+
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurAdmin.php (listeProduitsModif)
+- Modèle : modele/ModeleFront.php (getProduitsStockCritique)
+- Vues : vues/v_listeProduitsModif.php
