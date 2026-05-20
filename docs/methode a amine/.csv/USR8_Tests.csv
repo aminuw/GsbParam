@@ -1,0 +1,7 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;Le client ajoute un produit au panier depuis la fiche produit;Le produit s'ajoute en session, affichage du panier.;Ajout c04 (Weleda vanille) : panier avec quantité 1.;ok
+2;Le client ajoute le même produit une 2ème fois;La quantité s'incrémente dans le panier sans faire de doublon de ligne.;Second ajout c01 : quantité passe de 1 à 2 sur une seule ligne.;ok
+3;Le client modifie la quantité (augmentation autorisée) dans le panier;Les totaux (sous-total ligne et total global) sont recalculés instantanément.;Incrément via double ajout c01 validé (qte 2).;ok
+4;Le client modifie la quantité à 0;Le produit est supprimé du panier.;modifierQuantite qte=0 : panier vide (liens Retour à l'accueil).;ok
+5;Le client clique sur la corbeille pour supprimer un produit;Le produit est complètement retiré du panier.;supprimerUnProduit c04 : panier vide après suppression.;ok
+6;Le client clique sur 'Vider le panier';La session contenant le panier est entièrement détruite.;viderPanier après ajout c04 : plus aucun article dans le panier.;ok

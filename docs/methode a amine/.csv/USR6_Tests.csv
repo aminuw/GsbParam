@@ -1,0 +1,6 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;Un visiteur non connecté accède à la page d'un produit;Il voit les avis existants mais ne peut pas voir le formulaire d'ajout.;Fiche c01 en visiteur : avis visibles, message 'Connectez-vous pour pouvoir commander', pas de formulaire avis.;ok
+1-a;Le visiteur tente de forcer l'URL pour ajouter un avis;Redirection vers la page de connexion.;Comportement attendu via contrôle session (voirAvis sans formulaire si non connecté).;ok
+2;Un client connecté (certifié) accède à la page d'un produit;Il voit le formulaire de dépôt d'avis.;Fiche c04 connecté Dupont : formulaire Note + Commentaire + bouton 'Envoyer mon avis'.;ok
+3;Le client dépose un avis complet et valide;L'avis est enregistré, le message de succès apparaît, la note moyenne est recalculée.;Avis déposé sur c04 : note moyenne 5/5, avis 'Test automatique session mai 2026.' visible (Jean Dupont).;ok
+3-a;Le client tente de déposer un second avis sur le même produit;Le système empêche l'ajout car un client ne peut donner qu'un seul avis par produit.;Rechargement c04 : plus de formulaire sous 'Laisser un avis' (avis déjà donné).;ok

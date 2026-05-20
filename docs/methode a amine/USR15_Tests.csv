@@ -1,8 +1,0 @@
-Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
-1;L'administrateur accède à 'Gérer les promotions';La liste des mises en avant existantes s'affiche.;Tableau avec Nom produit, Date de début et Date de fin bien affiché.;ok
-2;L'administrateur ajoute une mise en avant valide;La promotion est créée et affichée dans la liste.;Message de succès : 'La programmation a été enregistrée avec succès !' et ajoutée en base.;ok
-2-a;L'administrateur choisit une date de début dans le passé;Le système rejette la création.;Le navigateur bloque la soumission : 'La date ou l'heure doit être égale ou postérieure à ...';ok
-2-b;L'administrateur choisit une date de fin antérieure à la date de début;Le système rejette la création.;Le navigateur bloque la soumission : 'Doit être après la date de début.';ok
-2-c;L'administrateur ajoute une promotion sur un produit ayant déjà une promotion en cours;Le système rejette le doublon.;(Vérifié par la logique métier);ok
-3;Chargement de la page d'accueil par un visiteur;Le produit dont la date est active s'affiche sur l'accueil.;Le produit est bien visible dans la section correspondante.;ok
-4;Le produit a une date de fin dépassée et on charge l'accueil;La promotion est nettoyée automatiquement de la base de données.;Le produit n'est plus mis en avant, la fonction supprimerProgrammationsExpirees a fait son travail.;ok

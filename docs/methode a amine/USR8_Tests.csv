@@ -1,7 +1,0 @@
-Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
-1;Le client ajoute un produit au panier depuis la fiche produit;Le produit s'ajoute en session, affichage du panier.;Le panier affiche bien Weleda Kids 2in1 avec quantité 1.;ok
-2;Le client ajoute le même produit une 2ème fois;La quantité s'incrémente dans le panier sans faire de doublon de ligne.;(Non testé spécifiquement via l'interface lors de cette session, validé par logique);ok
-3;Le client modifie la quantité (augmentation autorisée) dans le panier;Les totaux (sous-total ligne et total global) sont recalculés instantanément.;Quantité mise à jour à 2 manuellement via le champ, total calculé sans erreur.;ok
-4;Le client modifie la quantité à 0;Le produit est supprimé du panier.;(Remplacé par le clic sur la corbeille);ok
-5;Le client clique sur la corbeille pour supprimer un produit;Le produit est complètement retiré du panier.;Le clic sur l'icône de suppression (poubelle) supprime bien Weleda Kids du panier.;ok
-6;Le client clique sur 'Vider le panier';La session contenant le panier est entièrement détruite.;Message : 'Le panier est vide !' et plus aucun article n'est affiché.;ok

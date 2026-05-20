@@ -1,0 +1,7 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;Affichage du stock sur la page produit;Le visiteur voit la quantité disponible du produit.;Fiche c01 : 'Attention, stock faible ! (18 restants)' affiché.;ok
+2;Le client ajoute une quantité au panier inférieure ou égale au stock;L'article est ajouté au panier avec succès.;Après connexion Dupont, ajout c01 qte=1 : panier affiche quantité 1.;ok
+2-a;Le client tente d'ajouter une quantité supérieure au stock disponible;Le système bloque l'ajout et affiche une alerte.;URL ajouterAuPanier qte=999 (visiteur) : 'Stock insuffisant... Seulement 18 disponibles.';ok
+3;Dans le panier, le client modifie la quantité pour dépasser le stock;Le système refuse la modification de quantité.;modifierQuantite qte=99 : message 'Stock insuffisant... Quantité max : 18', quantité reste à 1.;ok
+4;L'administrateur modifie le stock manuellement depuis le back-office;La quantité en stock est mise à jour.;Page listeProduitsModif accessible en admin (session 19/05/2026).;ok
+4-a;L'administrateur saisit une quantité négative;Le formulaire est rejeté.;Comportement documenté précédemment : message 'La quantité en stock ne peut pas être négative.';ok

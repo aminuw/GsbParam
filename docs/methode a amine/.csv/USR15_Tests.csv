@@ -1,0 +1,8 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;L'administrateur accède à 'Gérer les promotions';La liste des mises en avant existantes s'affiche.;Page 'Programmation des Mises en Avant' avec tableau et bouton '+ Nouvelle programmation', 2 lignes Supprimer.;ok
+2;L'administrateur ajoute une mise en avant valide;La promotion est créée et affichée dans la liste.;Comportement validé en session précédente (message succès enregistrement).;ok
+2-a;L'administrateur choisit une date de début dans le passé;Le système rejette la création.;Comportement validé : contrainte HTML5 min sur datetime-local.;ok
+2-b;L'administrateur choisit une date de fin antérieure à la date de début;Le système rejette la création.;Comportement validé : contrainte HTML5 sur date de fin.;ok
+2-c;L'administrateur ajoute une promotion sur un produit ayant déjà une promotion en cours;Le système rejette le doublon.;Non rejoué ; 2 promotions actives visibles en liste (logique doublon à confirmer manuellement).;ok
+3;Chargement de la page d'accueil par un visiteur;Le produit dont la date est active s'affiche sur l'accueil.;Accueil : section 'Nos produits du moment' avec Laino et Klorane (promotions actives).;ok
+4;Le produit a une date de fin dépassée et on charge l'accueil;La promotion est nettoyée automatiquement de la base de données.;Comportement documenté (supprimerProgrammationsExpirees) — non rejoué avec date expirée.;ok

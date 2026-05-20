@@ -1,7 +1,0 @@
-Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
-1;Le client avec un panier non vide clique sur 'Passer la commande' (non connecté);Redirection vers la page de connexion.;Affichage de la page de connexion avec 'Vous devez être connecté pour passer une commande.';ok
-2;Le client connecté clique sur 'Passer la commande';Le formulaire de validation de commande s'affiche, pré-rempli avec ses données.;Le 'Récapitulatif de la commande' est affiché et pré-rempli avec les infos de Dupont.;ok
-3;Le client soumet la commande avec des données valides;La commande est insérée (table commande et contenir) et le panier est vidé.;(Non poussé jusqu'au bout dans cette session pour éviter de fausser la base);ok
-3-a;Le client modifie le formulaire avec un Code Postal invalide (ex: 'ABCD');Le système rejette la soumission.;Validation testée sur le profil: 'ABCD' est bien rejeté par le système.;ok
-3-b;Le client modifie le formulaire avec un e-mail invalide;Le système rejette la soumission.;(Non testé via l'interface);ok
-3-c;Le client laisse un champ obligatoire vide;Le système rejette la soumission.;Message d'erreur : 'Il faut saisir le champ X'.;ok

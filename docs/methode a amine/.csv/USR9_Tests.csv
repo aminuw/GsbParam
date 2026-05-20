@@ -1,0 +1,7 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;Le client avec un panier non vide clique sur 'Passer la commande' (non connecté);Redirection vers la page de connexion.;Visiteur avec panier c04 : page Connexion + message 'Vous devez être connecté pour passer une commande.';ok
+2;Le client connecté clique sur 'Passer la commande';Le formulaire de validation de commande s'affiche, pré-rempli avec ses données.;Dupont : 'Récapitulatif de la commande' avec Nom Dupont Jean, adresse, mail dupont@login.com, total 4 €.;ok
+3;Le client soumet la commande avec des données valides;La commande est insérée (table commande et contenir) et le panier est vidé.;confirmerCommande : redirection succès 'La commande a été enregistrée avec succès', panier vidé.;ok
+3-a;Le client modifie le formulaire avec un Code Postal invalide (ex: 'ABCD');Le système rejette la soumission.;Profil monCompte : CP 'ABCD' rejeté, valeur conservée 75000 (message validation serveur).;ok
+3-b;Le client modifie le formulaire avec un e-mail invalide;Le système rejette la soumission.;Champ email type=email : soumission bloquée par le navigateur avec 'invalide-email'.;ok
+3-c;Le client laisse un champ obligatoire vide;Le système rejette la soumission.;Nom vidé (espace) : soumission bloquée par attribut HTML required sur le champ nom.;ok
