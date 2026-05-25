@@ -1,0 +1,19 @@
+Mission USR13 - mention legal
+
+1. Objectif :
+Afficher les mentions légales obligatoires du site.
+
+2. Fonctionnalités implémentées :
+- Page statique contenant les mentions légales, informations sur l'éditeur, hébergeur, etc.
+- Lien accessible depuis le pied de page (footer) sur toutes les pages du site.
+
+3. Tests et Validation :
+- Vérifier l'accessibilité de la page depuis le pied de page du site.
+- Vérifier la présence des informations légales obligatoires.
+
+4. Sécurité et Robustesse :
+- Page statique simple, pas de traitement de données sensibles.
+
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurAccueil.php (mentionsLegales)
+- Vues : vues/v_mentionsLegales.php, vues/v_pied.html

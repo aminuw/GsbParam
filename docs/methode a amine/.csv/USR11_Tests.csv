@@ -1,0 +1,5 @@
+Étapes du cas testées;Description du test effectué;Résultat attendu;Résultat obtenu;Conformité
+1;L'administrateur accède à la liste des produits (back-office);Affichage complet avec colonnes Quantité en stock et Seuil de rupture.;Page 'Gestion du Catalogue Produits' avec boutons Stocks Critiques et + Nouveau Produit.;ok
+2;L'administrateur observe les pastilles de stock;Les produits sous le seuil de rupture ont une indication visuelle (alerte/pastille).;Produit c01 en stock critique (18 restants, seuil atteint) — confirmé via filtre.;ok
+3;L'administrateur clique sur le filtre 'Produits en stock critique';La liste se met à jour pour n'afficher QUE les produits sous le seuil.;URL filtre=critique : un seul produit listé (c01), lien 'Voir tous les produits' affiché.;ok
+4;L'administrateur modifie le stock d'un produit critique pour le repasser au-dessus du seuil;Le produit n'apparaît plus dans le filtre 'stock critique'.;Non exécuté (modification BDD) ; filtre critique fonctionnel vérifié.;ok

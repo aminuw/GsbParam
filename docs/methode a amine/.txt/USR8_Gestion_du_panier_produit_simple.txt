@@ -1,0 +1,25 @@
+Mission USR8 - Gestion du panier - produit simple
+
+1. Objectif :
+Gérer l'ajout, la modification et la suppression de produits simples dans le panier client.
+
+2. Fonctionnalités implémentées :
+- Ajout au panier avec vérification du stock disponible.
+- Modification de la quantité d'un produit avec vérification du stock.
+- Suppression d'un produit du panier.
+- Calcul dynamique des quantités et de la valeur globale.
+
+3. Tests et Validation :
+- Tester l'ajout d'un produit en stock et hors stock.
+- Tester la modification de quantité (augmentation et diminution).
+- Vérifier les calculs du total du panier et le maintien en session.
+
+4. Sécurité et Robustesse :
+- Le stock demandé ne doit pas excéder le stock disponible.
+- La quantité ajoutée ou modifiée doit être valide (positive).
+- Session utilisée pour stocker le panier, sans dépendre du modèle de base de données avant confirmation.
+
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurGererPanier.php (ajouterAuPanier, modifierQuantiteProduit, supprimerUnProduit)
+- Modèle : modele/ModeleFront.php
+- Vues : vues/v_panier.php

@@ -1,0 +1,26 @@
+Mission USR9 - Passer la commande
+
+1. Objectif :
+Permettre au client de finaliser son panier et de passer une commande.
+
+2. Fonctionnalités implémentées :
+- Processus de commande à partir du panier.
+- Formulaire de commande pré-rempli si le client est connecté.
+- Validation des champs (nom, rue, ville, cp, mail).
+- Enregistrement en base de données de la commande et de son contenu (table commande et contenir).
+- Vidage du panier une fois la commande confirmée.
+
+3. Tests et Validation :
+- Tester le processus de commande complet de l'ajout au panier jusqu'à la validation.
+- Vérifier la création correcte de la commande en base avec l'état initial.
+- Vérifier les messages d'erreur si les informations du formulaire sont invalides (code postal, mail).
+
+4. Sécurité et Robustesse :
+- L'utilisateur doit être connecté pour passer une commande (redirection vers connexion sinon).
+- Validation de la saisie (regex pour email et code postal).
+- Requêtes préparées pour la création de la commande et ses lignes.
+
+5. Fichiers concernés :
+- Contrôleur : controleurs/ControleurGererPanier.php (passerCommande, confirmerCommande)
+- Modèle : modele/ModeleFront.php (creerCommande)
+- Vues : vues/v_commande.php, vues/v_message.php
